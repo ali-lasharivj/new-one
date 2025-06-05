@@ -1,4 +1,6 @@
-const {
+const axios = require('axios')
+	const config = require('./config')
+		const {
   default: makeWASocket,
     useMultiFileAuthState,
     DisconnectReason,
@@ -29,7 +31,6 @@ const {
   const fs = require('fs')
   const ff = require('fluent-ffmpeg')
   const P = require('pino')
-  const config = require('./config')
   const GroupEvents = require('./lib/groupevents');
   const qrcode = require('qrcode-terminal')
   const StickersTypes = require('wa-sticker-formatter')
@@ -40,7 +41,6 @@ const {
   const { registerGroupMessages } = require('./plugins/groupMessages')
   const FileType = require('file-type');
   const { File } = require('megajs');
-  const axios = require('axios')
   const { fromBuffer } = require('file-type')
   const bodyparser = require('body-parser')
   const os = require('os')
