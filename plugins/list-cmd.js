@@ -68,7 +68,7 @@ cmd({
         }
 
         menuText += `\n📝 *Note*: Use ${config.PREFIX}help <command> for detailed help\n`
-        menuText += `> ${config.DESCRIPTION}`
+        menuText += `> ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅᴀᴠɪᴅx`
 
         await conn.sendMessage(
             from,
