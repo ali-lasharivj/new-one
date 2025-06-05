@@ -20,7 +20,7 @@ let goodbyeSettings = settings.goodbye || {};   // { groupJid: { enabled: true/f
 
  */
 
-const defaultWelcomeMessage = "Welcome @user to @group! We're glad to have you here\n\nRead desc ⤵️\n\n@Gdesc.";
+const defaultWelcomeMessage = "Welcome @user to @group! We're glad to have you here\n\nRead desc ⤵️\n\n@desc.";
 
 const defaultGoodbyeMessage = "Goodbye @user. We'll miss you in @group.";
 
@@ -32,7 +32,7 @@ const defaultGoodbyeMessage = "Goodbye @user. We'll miss you in @group.";
 
 function formatMessage(template, userMention, groupName, groupDesc) {
 
-  return template.replace("@user", userMention).replace("@group", groupName).replace("@Gdesc", groupDesc);
+  return template.replace("@user", userMention).replace("@group", groupName).replace("@desc", groupDesc);
 
 }
 
