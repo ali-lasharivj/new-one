@@ -32,7 +32,7 @@ const defaultGoodbyeMessage = "Goodbye @user. We'll miss you in @group.";
 
 function formatMessage(template, userMention, groupName, groupDesc) {
 
-  return template.replace("@user", userMention).replace("@group", groupName).replace("@desc", groupDesc);
+  return template.replace("@user", userMention).replace("@desc", groupName).replace("@group", groupDesc);
 
 }
 
