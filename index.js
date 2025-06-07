@@ -75,7 +75,7 @@ const {
 if (!fs.existsSync(__dirname + '/sessions/creds.json')) {
   if (!config.SESSION_ID) return console.log('Please add your session to SESSION_ID env !!');
   const sessdata = config.SESSION_ID.replace("XBOT-MD**", '');
-  const url = `https://xmanager.apis-nothing.xyz/files/${sessdata}.json`;
+  const url = `https://dave-auth-manager.onrender.com/files/${sessdata}.json`;
 
   https.get(url, (res) => {
     let data = '';
