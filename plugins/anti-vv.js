@@ -80,130 +80,57 @@ cmd({
 });
 
 cmd({
-  pattern: "antiviewonce",
-  desc: "Configure ANTIVIEWONCE system with menu",
-  category: "owner",
-  react: "🛡️",
-  filename: __filename
-}, async (conn, mek, m, { from, isCreator, reply }) => {
-  try {
-    if (!isCreator) return reply("*Sorry but you ain't permitted to use this command!*");
+    pattern: "tovv",
+    desc: "Convert media to a view once message.",
+    category: "utility",
+    filename: __filename
+}, async (conn, mek, m, { quoted, reply }) => {
+    try {
+        // Ensure the command is used in reply to a media message.
+        if (!m.quoted) return reply("Please reply to a media message!");
 
-    const currentMode =
-      config.ANTIVIEW_ONCE === "all"
-        ? "All Chats"
-        : config.ANTIVIEW_ONCE === "private"
-        ? "Private Only"
-        : config.ANTIVIEW_ONCE === "group"
-        ? "Groups Only"
-        : "Disabled";
-
-    const text = `> *ANTIVIEWONCE SETTINGS*\n\n> Current Mode: *${currentMode}*\n\nReply with:\n\n*1.* Enable AntiViewOnce => All Chats\n*2.* Enable AntiViewOnce => Private Only\n*3.* Enable AntiViewOnce => Groups Only\n*4.* Disable AntiViewOnce\n\n╭────────────────\n│ *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅᴀᴠɪᴅx ᴛᴇᴄʜ*\n╰─────────────────◆`;
-
-    const sentMsg = await conn.sendMessage(from, {
-      image: { url: "https://files.catbox.moe/06cgye.jpg" },
-      caption: text
-    }, { quoted: mek });
-
-    const messageID = sentMsg.key.id;
-
-    const handler = async (msgData) => {
-      try {
-        const receivedMsg = msgData.messages[0];
-        if (!receivedMsg?.message || !receivedMsg.key?.remoteJid) return;
-
-        const quotedId = receivedMsg.message?.extendedTextMessage?.contextInfo?.stanzaId;
-        const isReply = quotedId === messageID;
-        if (!isReply) return;
-
-        const replyText =
-          receivedMsg.message?.conversation ||
-          receivedMsg.message?.extendedTextMessage?.text || "";
-
-        const sender = receivedMsg.key.remoteJid;
-
-        if (replyText === "1") {
-          config.ANTIVIEW_ONCE = "all";
-          await conn.sendMessage(sender, { text: "✅ AntiViewOnce enabled for *All Chats*." }, { quoted: receivedMsg });
-        } else if (replyText === "2") {
-          config.ANTIVIEW_ONCE = "private";
-          await conn.sendMessage(sender, { text: "✅ AntiViewOnce enabled for *Private Chats only*." }, { quoted: receivedMsg });
-        } else if (replyText === "3") {
-          config.ANTIVIEW_ONCE = "group";
-          await conn.sendMessage(sender, { text: "✅ AntiViewOnce enabled for *Groups only*." }, { quoted: receivedMsg });
-        } else if (replyText === "4") {
-          config.ANTIVIEW_ONCE = "off";
-          await conn.sendMessage(sender, { text: "❌ AntiViewOnce has been *disabled*." }, { quoted: receivedMsg });
-        } else {
-          await conn.sendMessage(sender, { text: "❌ Invalid option. Please reply with 1, 2, 3, or 4." }, { quoted: receivedMsg });
+        // Extract the media from the quoted message.
+        const qmessage = m.message.extendedTextMessage.contextInfo.quotedMessage;
+        const mediaMessage = qmessage.imageMessage ||
+                             qmessage.videoMessage ||
+                             qmessage.audioMessage;
+        if (!mediaMessage) {
+            return reply("No media found in replied message!");
         }
 
-        conn.ev.off("messages.upsert", handler);
-      } catch (err) {
-        console.log("AntiViewOnce handler error:", err);
-      }
-    };
+        try {
+            // Retrieve the media buffer and caption.
+            const buff = await m.quoted.getbuff;
+            const cap = mediaMessage.caption || '';
 
-    conn.ev.on("messages.upsert", handler);
-
-    setTimeout(() => {
-      conn.ev.off("messages.upsert", handler);
-    }, 600000); // 10 دقیقه
-  } catch (e) {
-    reply(`❗ Error: ${e.message}`);
-  }
-});
-
-cmd({
-  on: "body"
-}, async (conn, m, store, { from, isGroup }) => {
-  try {
-    const mode = config.ANTIVIEW_ONCE;
-
-    if (mode === "off") return;
-    if (mode === "private" && isGroup) return;
-    if (mode === "group" && !isGroup) return;
-
-    const msg = m.message;
-    if (!msg?.viewOnceMessage?.message) return;
-
-    const viewOnceContent = msg.viewOnceMessage.message;
-    const mtype = Object.keys(viewOnceContent)[0];
-    const content = viewOnceContent[mtype];
-
-    // دانلود کامل محتوا مثل vv
-    const buffer = await conn.downloadMediaMessage({ message: viewOnceContent });
-    if (!buffer) return;
-
-    const caption = content?.caption || "";
-    const sendOptions = { quoted: m };
-
-    // ارسال دقیقا مثل vv
-    if (mtype === "imageMessage") {
-      await conn.sendMessage(from, {
-        image: buffer,
-        caption: caption,
-        mimetype: content.mimetype || "image/jpeg"
-      }, sendOptions);
-    } else if (mtype === "videoMessage") {
-      await conn.sendMessage(from, {
-        video: buffer,
-        caption: caption,
-        mimetype: content.mimetype || "video/mp4"
-      }, sendOptions);
-    } else if (mtype === "audioMessage") {
-      await conn.sendMessage(from, {
-        audio: buffer,
-        mimetype: content.mimetype || "audio/mp4",
-        ptt: content.ptt || false
-      }, sendOptions);
-    } else {
-      await conn.sendMessage(from, {
-        text: "❌ Only image, video, and audio view-once messages are supported."
-      }, sendOptions);
+            // Send the media back with the "viewOnce" flag set to true.
+            if (mediaMessage.mimetype.startsWith('image')) {
+                await conn.sendMessage(m.chat, {
+                    image: buff,
+                    caption: cap,
+                    viewOnce: true
+                });
+            } else if (mediaMessage.mimetype.startsWith('video')) {
+                await conn.sendMessage(m.chat, {
+                    video: buff,
+                    caption: cap,
+                    viewOnce: true
+                });
+            } else if (mediaMessage.mimetype.startsWith('audio')) {
+                await conn.sendMessage(m.chat, {
+                    audio: buff,
+                    ptt: mediaMessage.ptt || false,
+                    viewOnce: true
+                });
+            } else {
+                return reply("Unsupported media type.");
+            }
+        } catch (error) {
+            console.error(error);
+            reply(`${error}`);
+        }
+    } catch (e) {
+        console.error(e);
+        reply(`${e}`);
     }
-
-  } catch (err) {
-    console.error("AntiViewOnce Auto Error:", err);
-  }
 });
