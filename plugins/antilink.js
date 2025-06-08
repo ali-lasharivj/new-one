@@ -6,8 +6,9 @@ cmd({
     desc: "Manage anti-link settings in a group.",
     category: "moderation",
     filename: __filename
-}, async (conn, mek, m, { from, args, isGroup, isAdmins, reply }) => {
+}, async (conn, mek, m, { from, args, isGroup, isAdmins, isBotAdmins, reply }) => {
     if (!isGroup) return reply("*This command can only be used in groups!*");
+    if (!isBotAdmins) return reply("*Promote me as admin to use this feature*");
     if (!isAdmins) return reply("*You must be an admin to use this command!*");
 
     const mode = args[0]?.toLowerCase();
