@@ -63,7 +63,7 @@ async (conn, mek, m, { from, pushname: _0x1279c5, reply }) => {
 
         await conn.sendMessage(from, {
             image: { url: `https://i.postimg.cc/rFV2pJW5/IMG-20250603-WA0017.jpg` },
-            caption: menuText.trim()
+            ai: true, caption: menuText.trim()
         }, { quoted: mek });
 
         await conn.sendMessage(from, {
