@@ -68,7 +68,7 @@ cmd({
         if (data && data.status && data.BK9) {
             await conn.sendMessage(from, {
                 text: data.BK9
-            }, ai: true, { quoted: m });
+            }, { ai: true, quoted: m });
         } else {
             reply("*No response from chatbot*.");
         }
