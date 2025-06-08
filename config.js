@@ -25,6 +25,8 @@ WELCOME: process.env.WELCOME || "true",
 ADMIN_EVENTS: process.env.ADMIN_EVENTS || "false",
 // make true to know who dismiss or promoted a member in group
 ANTI_LINK: process.env.ANTI_LINK || "false",
+//anticall integration 
+ANTI_CALL: getConfig("ANTI_CALL") || "true",
 // make anti link true,false for groups 
 MENTION_REPLY: process.env.MENTION_REPLY || "false",
 // make true if want auto voice reply if someone menetion you 
