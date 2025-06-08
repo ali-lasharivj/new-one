@@ -8,7 +8,7 @@ const config = require("../config");
 const prefix = config.PREFIX;
 
 cmd({
-  pattern: "igimgdl",
+  pattern: "igimg",
   alias: ["instagramimages", "igimages","igimage"],
   react: '📥',
   desc: "Download Instagram posts (images or videos).",
