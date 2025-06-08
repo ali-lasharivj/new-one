@@ -13,13 +13,14 @@ cmd(
   {
     pattern: "antic",
     desc: "Configure anti‑newsletter mode: delete, warn, kick, off",
-    category: "group",
+    category: "moderation",
     filename: __filename,
   },
-  async (conn, mek, m, { from, args, reply, isGroup, isBotAdmins }) => {
+  async (conn, mek, m, { from, args, reply, isGroup, isBotAdmins, isAdmins }) => {
     try {
       if (!isGroup) return reply("This command can only be used in groups.");
-      if (!isBotAdmins) return reply("I'm not admin.");
+      if (!isBotAdmins) return reply("*Promote me as admin to use this feature*");
+      if (!isAdmins) return reply("*You must be an admin to use this command!*"); 
 
       if (args.length === 0) {
         const currentMode = antinewsletterSettings[from] || "off";
