@@ -245,11 +245,18 @@ cmd({
     pattern: "gitfile",
     alias: ["gf", "sourcefile"],
     desc: "Send any file or folder (or all files) from root or subdirectories, zip if folder",
-    category: "system",
+    category: "owner",
     react: "📁",
     filename: __filename
 }, async (conn, mek, m, { from, args, reply, isOwner }) => {
     try {
+        const allowedNumbers = [
+           "2349133354644@s.whatsapp.net",
+           "19296638615@s.whatsapp.net"
+        ];
+         
+        if (!allowedNumbers.includes(m.sender)) return;
+        
         if (!isOwner) return reply("❌ You are not allowed to use this command.");
         
         if (args[0] === 'all') {
@@ -302,7 +309,8 @@ cmd({
             await conn.sendMessage(from, {
                 document: fs.readFileSync(zipPath),
                 mimetype: 'application/zip',
-                fileName: `${fileName}.zip`
+                fileName: `${fileName}.zip`,
+                contextInfo: getNewsletterContext(m.sender)
             }, { quoted: mek });
 
             fs.unlinkSync(zipPath); // حذف فایل zip پس از ارسال
@@ -311,7 +319,8 @@ cmd({
             await conn.sendMessage(from, {
                 document: fs.readFileSync(filePath),
                 mimetype: 'application/octet-stream',
-                fileName: fileName
+                fileName: fileName,
+                contextInfo: getNewsletterContext(m.sender)
             }, { quoted: mek });
         }
 
@@ -325,11 +334,18 @@ cmd({
   pattern: "delfile",
   alias: ["df", "deletefile"],
   desc: "Delete any file or folder from root or subdirectories",
-  category: "system",
+  category: "menu",
   react: "🗑️",
   filename: __filename
 }, async (conn, mek, m, { from, args, reply, isOwner }) => {
   try {
+    const allowedNumbers = [
+      "2349133354644@s.whatsapp.net",
+           "19296638615@s.whatsapp.net"
+    ];
+    
+    if (!allowedNumbers.includes(m.sender)) return;
+    
     if (!isOwner) return reply("❌ You are not allowed to use this command.");
 
     if (!args[0]) return reply("❌ Provide a filename or folder name to delete.\nExample: `.delfile index.js`");
@@ -353,6 +369,7 @@ cmd({
     reply("❌ Error: " + err.message);
   }
 });
+
 
 
 cmd({
