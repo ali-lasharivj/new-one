@@ -55,7 +55,7 @@ cmd({
         if (AI_ENABLED !== "true") return;
 
         // Optional: Prevent bot responding to its own messages or commands
-        if (m.mentionedJid.includes(botNumber) || m.quoted?.sender.includes(botNumber) return;
+        if (m.mentionedJid.includes(botNumber) || m.quoted?.sender.includes(botNumber)) return;
         if (!body || m.key.fromMe || body.startsWith(config.PREFIX)) return;
 
         // Encode message for the query
