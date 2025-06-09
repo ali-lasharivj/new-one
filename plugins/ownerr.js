@@ -958,6 +958,143 @@ cmd({
 //--------------------------------------------
 //  ANI-DELETE COMMANDS
 //--------------------------------------------
+  cmd({
+  pattern: "antibot",
+  desc: "Configure AntiBot System (No DB)",
+  category: "moderation",
+  react: "🤖",
+  filename: __filename,
+}, async (conn, mek, m, { from, isCreator, reply }) => {
+  try {
+    if (!isCreator) return reply("*This Command Can Only Be Used By My Owner*");
+
+    const { getAntibot, setAntibot } = require("../data/antibot");
+    const current = getAntibot();
+
+    const menuText = `> *ANTIBOT SETTINGS*
+
+> Current Mode: *${current.toUpperCase()}*
+
+Reply with:
+
+*1.* Enable Warn (3 warnings, then silent delete)  
+*2.* Enable Delete (remove bot command messages)  
+*3.* Enable Kick (remove user from group)  
+*4.* Disable all Off (disable anti-bot)
+
+╭─────────────────◆
+│ *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅᴀᴠɪᴅx ᴛᴇᴄʜ*
+╰─────────────────◆`;
+
+    const sentMsg = await conn.sendMessage(from, {
+      image: { url: "https://i.postimg.cc/G3k8H6gC/IMG-20250603-WA0017.jpg" },
+      caption: menuText,
+      contextInfo: getNewsletterContext(m.sender),
+    }, { quoted: mek });
+
+    const messageID = sentMsg.key.id;
+
+    const handler = async (msgData) => {
+      try {
+        const receivedMsg = msgData.messages[0];
+        if (!receivedMsg?.message || !receivedMsg.key?.remoteJid) return;
+
+        const quotedId = receivedMsg.message?.extendedTextMessage?.contextInfo?.stanzaId;
+        if (quotedId !== messageID) return;
+
+        const replyText =
+          receivedMsg.message?.conversation ||
+          receivedMsg.message?.extendedTextMessage?.text ||
+          receivedMsg.message?.imageMessage?.caption ||
+          "";
+
+        const text = replyText.trim();
+        const sender = receivedMsg.key.remoteJid;
+
+        let mode = null;
+        if (text === "1") mode = "warn";
+        else if (text === "2") mode = "delete";
+        else if (text === "3") mode = "kick";
+        else if (text === "4") mode = "off";
+
+        if (!mode) {
+          await conn.sendMessage(sender, { text: "❗ Invalid option. Reply with *1*, *2*, *3*, or *4*." }, { quoted: receivedMsg });
+        } else {
+          setAntibot(mode);
+          await conn.sendMessage(sender, { text: `✅ AntiBot Mode set to: *${mode.toUpperCase()}*` }, { quoted: receivedMsg });
+        }
+
+        conn.ev.off("messages.upsert", handler);
+      } catch (err) {
+        console.error("AntiBot CMD error:", err);
+      }
+    };
+
+    conn.ev.on("messages.upsert", handler);
+    setTimeout(() => conn.ev.off("messages.upsert", handler), 600000); // 10min
+
+  } catch (e) {
+    reply(`❗ Error: ${e.message}`);
+  }
+});
+
+cmd({
+  on: "body"
+}, async (conn, m, store, {
+  from,
+  body,
+  sender,
+  isGroup,
+  isAdmins,
+  isBotAdmins,
+  reply
+}) => {
+  try {
+    if (!isGroup || isAdmins || !isBotAdmins) return;
+
+    const { getAntibot } = require("../data/antibot");
+    const mode = getAntibot(); // off, warn, delete, kick
+
+    if (mode === "off") return;
+    if (!body || !body.startsWith(config.PREFIX)) return;
+
+    if (["delete", "warn", "kick"].includes(mode)) {
+      await conn.sendMessage(from, { delete: m.key });
+
+      if (mode === "warn") {
+        global.botWarnings = global.botWarnings || {};
+        global.botWarnings[sender] = (global.botWarnings[sender] || 0) + 1;
+
+        const count = global.botWarnings[sender];
+        if (count < 4) {
+          await conn.sendMessage(from, {
+            text: `⚠️ *Warning ${count}/3*\nUsing bot commands is not allowed here!\n@${sender.split("@")[0]}`,
+            mentions: [sender]
+          }, { quoted: m });
+        } else {
+          await conn.sendMessage(from, {
+            text: `❌ *@${sender.split("@")[0]} has been removed (too many warnings)*`,
+            mentions: [sender]
+          }, { quoted: m });
+          await conn.groupParticipantsUpdate(from, [sender], "remove");
+          delete global.botWarnings[sender];
+        }
+      }
+
+      if (mode === "kick") {
+        await conn.sendMessage(from, {
+          text: `❌ *@${sender.split("@")[0]} removed — Bot usage not allowed!*`,
+          mentions: [sender]
+        }, { quoted: m });
+        await conn.groupParticipantsUpdate(from, [sender], "remove");
+      }
+    }
+
+  } catch (err) {
+    console.error("❌ AntiBot handler error:", err);
+  }
+});
+
 
       cmd({
   pattern: "antidelete",
