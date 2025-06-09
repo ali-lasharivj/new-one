@@ -44,6 +44,7 @@ cmd({
     from,
     body,
     sender,
+    botNumber,
     isGroup,
     isBotAdmins,
     isAdmins,
