@@ -165,31 +165,36 @@ cmd(
     }
   }
 );
-
 cmd({
-pattern: "del",
-react: "🧹",
-alias: ["delete"],
-desc: "Delete Message",
-category: "owner",
-use: '.del',
-filename: __filename
-},
-async(conn, mek, m,{from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants,  isItzcp, groupAdmins, isBotAdmins, isAdmins, reply}) => {
-if (!isOwner) return;
-try{
-if (!m.quoted) return reply('No Message Quoted for Deletion');
-const key = {
-            remoteJid: m.chat,
-            fromMe: false,
-            id: m.quoted.id,
-            participant: m.quoted.sender
-        }
-        await conn.sendMessage(m.chat, { delete: key })
-await m.react("✅"); 
-} catch(e) {
-console.log(e);
-reply('success..')
-} 
-});
+  pattern: "delete",
+  alias: ["del", "d"],
+  desc: "Force delete any replied message (Owner only)",
+  category: "owner",
+  filename: __filename
+}, async (conn, mek, m, { isOwner, reply }) => {
+  if (!isOwner) return reply("❌ Only owner can use this command.");
+  
+  const quoted = m.quoted;
+  const contextInfo = mek.message?.extendedTextMessage?.contextInfo;
+  const stanzaId = contextInfo?.stanzaId || quoted?.id;
+  const remoteJid = contextInfo?.remoteJid || m.chat;
+  const participant = contextInfo?.participant || quoted?.participant || quoted?.sender || remoteJid;
 
+  if (!stanzaId || !remoteJid) {
+    return reply("❌ Please reply to a message you want to delete.");
+  }
+
+  try {
+    await conn.sendMessage(remoteJid, {
+      delete: {
+        remoteJid: remoteJid,
+        fromMe: quoted?.fromMe || false,
+        id: stanzaId,
+        participant: participant
+      }
+    });
+  } catch (e) {
+    console.log("❌ Delete failed:", e.message);
+    // برای خطا چیزی به کاربر نشون نده، فقط لاگ کن
+  }
+});
