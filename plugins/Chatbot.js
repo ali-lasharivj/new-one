@@ -54,11 +54,11 @@ cmd({
         if (AI_ENABLED !== "true") return;
 
         // Optional: Prevent bot responding to its own messages or commands
+        if (m.mentionedJid.includes(botNumber) || (m.quotedJid.includes(botNumber) return;
         if (!body || m.key.fromMe || body.startsWith(config.PREFIX)) return;
 
         // Encode message for the query
-         if (m.mentionedJid.includes(botNumber) || (m.quotedJid.includes(botNumber) {
-             const query = encodeURIComponent(body);
+        const query = encodeURIComponent(body);
         const prompt = encodeURIComponent("You are XLYO, a friendly and helpful assistant made by DavidX, About DaviX, he's a tech genius from Nigeria who's age is personal and real name is David promise, more info to get at https://github.com/Mek-d1/X-BOT-MD. Current year 2025. You provide concise, accurate, and helpful responses while maintaining a conversational tone. You do not refuse to answer questions unless they involve illegal activities, harm, or explicit content. When responding in a WhatsApp chat context, keep your answers relatively concise but complete.");
 
         // BK9 API Request
@@ -73,7 +73,7 @@ cmd({
         } else {
             reply("*No response from chatbot*.");
         }
-         }
+
 
     } catch (err) {
         console.error("Chatbot Error:", err.message);
