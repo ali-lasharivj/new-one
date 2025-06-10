@@ -65,7 +65,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
   try {
     // Ensure there is text
     if (!q) {
-      return reply("Please provide text for conversion! Usage: `.tts2 <text>`");
+      return reply("Please provide text for conversion! Usage: `.itta <text>`");
     }
 
     // Set default language
