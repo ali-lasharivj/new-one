@@ -399,7 +399,7 @@ async (conn, mek, m, { from, prefix, quoted, body, isCmd, command, args, q, isGr
             || (m.quoted?.sender ?? null)
             || (args[0]?.replace(/[^0-9]/g, '') + "@s.whatsapp.net");
 
-        if (!target) return reply("*Please provide a number or tag/reply a user.*");
+        if (!targetJid) return reply("*Please provide a number or tag/reply a user.*");
 
         // Get the profile picture URL
         let ppUrl;
