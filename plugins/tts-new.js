@@ -2,7 +2,7 @@ const { cmd } = require("../command");
 const googleTTS = require('google-tts-api'); 
 
 cmd({
-  pattern: "tts2",
+  pattern: "tts",
   desc: "Convert text to speech with different voices.",
   category: "convert",
   react: "🔊",
@@ -55,7 +55,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 
 
 cmd({
-  pattern: "tts3",
+  pattern: "itta",
   desc: "Convert text to speech with different voices.",
   category: "convert",
   react: "🔊",
@@ -78,7 +78,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 
     // Generate the URL for the TTS audio
     const url = googleTTS.getAudioUrl(q, {
-      lang: voiceLanguage,  // Choose language based on input
+      lang: 'ja',  // Choose language based on input
       slow: false,  // Normal speed for the speech
       host: 'https://translate.google.com'
     });
