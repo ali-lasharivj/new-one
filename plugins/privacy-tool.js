@@ -160,7 +160,7 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
     }
 });
 
-cmd({
+/*cmd({
     pattern: "setpp",
     desc: "Set bot profile picture.",
     category: "privacy",
@@ -187,7 +187,7 @@ async (conn, mek, m, { from, isOwner, quoted, reply }) => {
         console.error("Error updating profile picture:", error);
         reply(`❌ Error updating profile picture: ${error.message}`);
     }
-});
+});*/
 
 cmd({
     pattern: "setmyname",
@@ -296,7 +296,7 @@ async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, 
         l(e);
     }
 });
-cmd({
+/*cmd({
     pattern: "getpp",
     desc: "Fetch the profile picture of a tagged or replied user.",
     category: "owner",
@@ -323,5 +323,175 @@ cmd({
         reply("❌ An error occurred while fetching the profile picture. Please try again later.");
     }
 });
+*/
+const Jimp = require("jimp");
 
+cmd({
+  pattern: "fullpp",
+  alias: ["setpp", "setdp", "pp"],
+  react: "🖼️",
+  desc: "Set full image as bot's profile picture",
+  category: "tools",
+  filename: __filename
+}, async (client, message, match, { from, isCreator }) => {
+  try {
+    // Get bot's JID (two possible methods)
+    const botJid = client.user?.id || (client.user.id.split(":")[0] + "@s.whatsapp.net");
+    
+    // Allow both bot owner and bot itself to use the command
+    if (message.sender !== botJid && !isCreator) {
+      return await client.sendMessage(from, {
+        text: "*📛 This command can only be used by the bot or its owner.*"
+      }, { quoted: message });
+    }
+
+    if (!message.quoted || !message.quoted.mtype || !message.quoted.mtype.includes("image")) {
+      return await client.sendMessage(from, {
+        text: "*Please reply to an image to set as profile picture*"
+      }, { quoted: message });
+    }
+
+    await client.sendMessage(from, {
+      text: "*⏳ Processing image, please wait...*"
+    }, { quoted: message });
+
+    const imageBuffer = await message.quoted.download();
+    const image = await Jimp.read(imageBuffer);
+
+    // Image processing pipeline
+    const blurredBg = image.clone().cover(640, 640).blur(10);
+    const centeredImage = image.clone().contain(640, 640);
+    blurredBg.composite(centeredImage, 0, 0);
+    const finalImage = await blurredBg.getBufferAsync(Jimp.MIME_JPEG);
+
+    // Update profile picture
+    await client.updateProfilePicture(botJid, finalImage);
+
+    await client.sendMessage(from, {
+      text: "*✅ User profile picture updated successfully!*"
+    }, { quoted: message });
+
+  } catch (error) {
+    console.error("fullpp Error:", error);
+    await client.sendMessage(from, {
+      text: `*❌ Error updating profile picture:*\n${error.message}`
+    }, { quoted: message });
+  }
+});
+
+cmd({
+    pattern: "getpp",
+    alias: ["stealpp"],
+    react: "🖼️",
+    desc: "Sends the profile picture of a user by phone number (owner only)",
+    category: "owner",
+    use: ".getpp <phone number>",
+    filename: __filename
+},
+async (conn, mek, m, { from, prefix, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
+    try {
+        // Check if the user is the bot owner
+        if (!isOwner) return reply("🛑 This command is only for the bot owner!");
+
+        // Format the phone number to JID
+        let targetJid = m.mentionedJid?.[0] 
+            || (m.quoted?.sender ?? null)
+            || (args[0]?.replace(/[^0-9]/g, '') + "@s.whatsapp.net");
+
+        if (!target) return reply("*Please provide a number or tag/reply a user.*");
+
+        // Get the profile picture URL
+        let ppUrl;
+        try {
+            ppUrl = await conn.profilePictureUrl(targetJid, "image");
+        } catch (e) {
+            return reply("🖼️ This user has no profile picture or it cannot be accessed!");
+        }
+
+        // Get the user's name or number for the caption
+        let userName = targetJid.split("@")[0]; // Default to phone number
+        try {
+            const contact = await conn.getContact(targetJid);
+            userName = contact.notify || contact.vname || userName;
+        } catch {
+            // Fallback to phone number if contact info is unavailable
+        }
+
+        // Send the profile picture
+        await conn.sendMessage(from, { 
+            image: { url: ppUrl }, 
+            caption: `📌 Profile picture of ${userName}` 
+        });
+
+        // Send a reaction to the command message
+        await conn.sendMessage(from, { react: { text: "✅", key: mek.key } });
+
+    } catch (e) {
+        // Reply with a generic error message and log the error
+        reply("🛑 An error occurred while fetching the profile picture! Please try again later.");
+        l(e); // Log the error for debugging
+    }
+});
           
+
+cmd({
+    pattern: "csave",
+    react: "💾",
+    desc: "Automatically save contact from inbox message using WhatsApp profile name",
+    category: "utility",
+    use: "Auto saves contact on inbox message",
+    filename: __filename
+},
+async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, isAdmins, reply }) => {
+    try {
+        // Check if the message is from a private chat (not a group)
+        if (isGroup) return;
+
+        // Get sender's profile details
+        let userProfile = await conn.fetchStatus(sender).catch(() => ({ status: pushname || null }));
+        let contactName = pushname || userProfile.status; // Prioritize pushname, then status
+        if (!contactName) throw new Error('No WhatsApp profile name available'); // Ensure profile name exists
+        let phoneNumber = sender.split("@")[0]; // Extract phone number from sender ID
+
+        // Fetch profile picture
+        let profilePicUrl;
+        try {
+            profilePicUrl = await conn.profilePictureUrl(sender, 'image');
+        } catch (e) {
+            profilePicUrl = null; // Fallback if no profile picture
+        }
+
+        // Create vCard with WhatsApp profile name
+        let vcard = `BEGIN:VCARD\nVERSION:3.0\nFN:${contactName}\nTEL;type=CELL;type=VOICE;waid=${phoneNumber}:+${phoneNumber}\nEND:VCARD\n`;
+
+        // Save vCard to file
+        let nmfilect = './new_contact.vcf';
+        fs.writeFileSync(nmfilect, vcard.trim());
+
+        // Send vCard with caption
+        await conn.sendMessage(from, {
+            document: fs.readFileSync(nmfilect),
+            mimetype: 'text/vcard',
+            fileName: `${contactName}.vcf`,
+            caption: `📋 *Contact Saved!*\nName: *${contactName}*\nNumber: *+${phoneNumber}*\n\nYo bro, I saved you! Save me too! 😎`
+        }, { ephemeralExpiration: 86400, quoted: m });
+
+        // Send profile picture as a separate message if available
+        if (profilePicUrl) {
+            await conn.sendMessage(from, {
+                image: { url: profilePicUrl },
+                caption: `Here's your profile pic! 😎`
+            }, { ephemeralExpiration: 86400, quoted: m });
+        }
+
+        // Clean up temporary file
+        fs.unlinkSync(nmfilect);
+
+        // Send success reaction
+        await conn.sendMessage(from, { react: { text: `✅`, key: mek.key } });
+
+    } catch (e) {
+        reply('*Oops, something went wrong! 😕*');
+        l(e); // Log error for debugging
+    }
+});
