@@ -14,10 +14,10 @@ cmd({
 async (conn, mek, m, { from, q, reply }) => {
     try {
         const args = q.split(' ');
-        if (args.length < 2) return reply("❗ Please provide a language code and text. Usage: .translate [language code] [text]");
+        if (args[0]) return reply("*Please provide a language code and text or quote a text. Usage: .trt [language code] [text] && reply to a message with .trt en*");
 
         const targetLang = args[0];
-        const textToTranslate = args.slice(1).join(' ');
+        const textToTranslate = args.slice(1).join(' ') || m.quoted;
 
         const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate)}&langpair=en|${targetLang}`;
 
@@ -41,17 +41,17 @@ async (conn, mek, m, { from, q, reply }) => {
 
 //____________________________TTS___________________________
 cmd({
-    pattern: "tts",
+    pattern: "dit",
     desc: "download songs",
     category: "download",
-    react: "👧",
+    react: "👄",
     filename: __filename
 },
 async(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply}) => {
 try{
 if(!q) return reply("Need some text.")
     const url = googleTTS.getAudioUrl(q, {
-  lang: 'hi-IN',
+  lang: 'fr',
   slow: false,
   host: 'https://translate.google.com',
 })
