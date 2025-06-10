@@ -3,6 +3,7 @@ const config = require("../config");
 const { cmd, commands } = require("../command");
 const path = require('path');
 const axios = require("axios");
+const l = console.log;
 
 
 cmd({
@@ -388,7 +389,7 @@ cmd({
     use: ".getpp <phone number>",
     filename: __filename
 },
-async (conn, mek, m, { from, prefix, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
+async (conn, mek, m, { from, prefix, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
     try {
         // Check if the user is the bot owner
         if (!isOwner) return reply("🛑 This command is only for the bot owner!");
@@ -442,7 +443,7 @@ cmd({
     use: "Auto saves contact on inbox message",
     filename: __filename
 },
-async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, isAdmins, reply }) => {
+async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, isAdmins, reply }) => {
     try {
         // Check if the message is from a private chat (not a group)
         if (isGroup) return;
