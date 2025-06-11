@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+/*const fetch = require("node-fetch");
 const config = require('../config');
 const { getConfig, setConfig } = require('../lib/configdb');
 const axios = require("axios");
@@ -123,3 +123,4 @@ Reply With:
     reply("🚫 An error occurred.", null, );
   }
 });
+*/
