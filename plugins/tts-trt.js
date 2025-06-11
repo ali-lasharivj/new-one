@@ -14,7 +14,7 @@ cmd({
 async (conn, mek, m, { from, q, reply }) => {
     try {
         const args = q.split(' ');
-        if (!args) return reply("*Please provide a language code and text or quote a text. Usage: .trt [language code] , [text] && reply to a message with .trt en*");
+        if (!args) return reply("*reply to a message with .trt [language code]*");
 
         const targetLang = args[0];
         const textToTranslate = m.quoted.text || args.slice(1).join(', ');
