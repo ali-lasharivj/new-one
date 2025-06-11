@@ -1,8 +1,9 @@
-/*const fetch = require("node-fetch");
+const fetch = require("node-fetch");
 const config = require('../config');
 const { getConfig, setConfig } = require('../lib/configdb');
 const axios = require("axios");
 const { fetchJson } = require("../lib/functions");
+const { ytsearch } = require('@dark-yasiya/yt-dl.js');
 const cheerio = require("cheerio");
 const { cmd, commands } = require('../command');
 const yts = require('yt-search');
@@ -16,10 +17,10 @@ cmd({
   filename: __filename
 }, async (conn, mek, m, { from, reply, q }) => {
   try {
-    if (!q) return reply("🎵 Please provide a song name or YouTube link.", null,
+    if (!q) return reply("🎵 Please provide a song name or YouTube link.", null, );
 
-    const yt = await yts(q);
-    if (!yt.results.length) return reply("No results found!", null,
+    const yt = await ytsearch(q);
+    if (!yt.results.length) return reply("❌ No results found!", null, );
 
     const song = yt.results[0];
     const cacheKey = `song:${song.title.toLowerCase()}`;
@@ -31,7 +32,7 @@ cmd({
       const res = await fetch(apiUrl);
       const data = await res.json();
 
-      if (!data?.result?.downloadUrl) return reply("⛔ Download failed.", null );
+      if (!data?.result?.downloadUrl) return reply("⛔ Download failed.", null, );
 
       downloadUrl = data.result.downloadUrl;
 
@@ -71,8 +72,7 @@ Reply With:
 
     const sentMsg = await conn.sendMessage(from, {
       image: { url: song.thumbnail },
-      caption
-    }, { quoted: mek });
+      caption}, { quoted: mek });
 
     const messageID = sentMsg.key.id;
 
@@ -89,7 +89,7 @@ Reply With:
 
         const text = msg.message?.conversation || msg.message?.extendedTextMessage?.text || "";
         const songCache = getConfig(cacheKey);
-        if (!songCache) return reply("⚠️ Song cache not found.", null );
+        if (!songCache) return reply("⚠️ Song cache not found.", null, );
 
         const songData = JSON.parse(songCache);
 
@@ -105,8 +105,7 @@ Reply With:
             fileName: `${songData.title}.mp3`}, { quoted: msg });
         } else {
           await conn.sendMessage(from, {
-            text: "❌ Invalid option. Reply with 1 or 2."
-          }, { quoted: msg });
+            text: "❌ Invalid option. Reply with 1 or 2."}, { quoted: msg });
         }
 
         conn.ev.off("messages.upsert", handler);
@@ -123,4 +122,3 @@ Reply With:
     reply("🚫 An error occurred.", null, );
   }
 });
-*/
