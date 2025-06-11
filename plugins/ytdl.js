@@ -1,7 +1,11 @@
+const fetch = require("node-fetch");
 const config = require('../config');
-const { cmd } = require('../command');
+const { getConfig, setConfig } = require('../lib/configdb');
+const axios = require("axios");
+const { fetchJson } = require("../lib/functions");
+const cheerio = require("cheerio");
+const { cmd, commands } = require('../command');
 const yts = require('yt-search');
-const { setConfig, getConfig } = require('../lib/configdb');
 
 cmd({
   pattern: "music",
