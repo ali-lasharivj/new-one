@@ -24,13 +24,7 @@ async (conn, mek, m, { from, q, reply }) => {
         const response = await axios.get(url);
         const translation = response.data.responseData.translatedText;
 
-        const translationMessage = `> *X-BOT-MD-TRANSLATION*
-
-> 🔤 *Original*: ${textToTranslate}
-
-> 🔠 *Translated*: ${translation}
-
-> 🌐 *Language*: ${targetLang.toUpperCase()}`;
+        const translationMessage = `${translation}`;
 
         return reply(translationMessage);
     } catch (e) {
