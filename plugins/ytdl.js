@@ -1,6 +1,7 @@
 const config = require('../config');
 const { cmd } = require('../command');
 const yts = require('yt-search');
+const { setConfig, getConfig } = require('../lib/configdb');
 
 cmd({
   pattern: "music",
@@ -26,9 +27,7 @@ cmd({
       const res = await fetch(apiUrl);
       const data = await res.json();
 
-      if (!data?.result?.downloadUrl) return reply("⛔ Download failed.", null, {
-        contextInfo: getNewsletterContext(m.sender)
-      });
+      if (!data?.result?.downloadUrl) return reply("⛔ Download failed.", null, );
 
       downloadUrl = data.result.downloadUrl;
 
@@ -68,8 +67,7 @@ Reply With:
 
     const sentMsg = await conn.sendMessage(from, {
       image: { url: song.thumbnail },
-      caption,
-      contextInfo: getNewsletterContext(m.sender)
+      caption
     }, { quoted: mek });
 
     const messageID = sentMsg.key.id;
@@ -87,9 +85,7 @@ Reply With:
 
         const text = msg.message?.conversation || msg.message?.extendedTextMessage?.text || "";
         const songCache = getConfig(cacheKey);
-        if (!songCache) return reply("⚠️ Song cache not found.", null, {
-          contextInfo: getNewsletterContext(m.sender)
-        });
+        if (!songCache) return reply("⚠️ Song cache not found.", null, );
 
         const songData = JSON.parse(songCache);
 
@@ -97,20 +93,15 @@ Reply With:
           await conn.sendMessage(from, {
             audio: { url: songData.url },
             mimetype: "audio/mpeg",
-            ptt: false, // جلوگیری از voice
-            contextInfo: getNewsletterContext(m.sender)
-          }, { quoted: msg });
+            ptt: false}, { quoted: msg });
         } else if (text.trim() === "2") {
           await conn.sendMessage(from, {
             document: { url: songData.url },
             mimetype: "audio/mpeg",
-            fileName: `${songData.title}.mp3`,
-            contextInfo: getNewsletterContext(m.sender)
-          }, { quoted: msg });
+            fileName: `${songData.title}.mp3`}, { quoted: msg });
         } else {
           await conn.sendMessage(from, {
-            text: "❌ Invalid option. Reply with 1 or 2.",
-            contextInfo: getNewsletterContext(m.sender)
+            text: "❌ Invalid option. Reply with 1 or 2."
           }, { quoted: msg });
         }
 
@@ -125,8 +116,6 @@ Reply With:
 
   } catch (err) {
     console.error(err);
-    reply("🚫 An error occurred.", null, {
-      contextInfo: getNewsletterContext(m.sender)
-    });
+    reply("🚫 An error occurred.", null, );
   }
 });
