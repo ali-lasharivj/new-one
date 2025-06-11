@@ -134,10 +134,16 @@ const port = process.env.PORT || 9090;
   } else if (connection === 'open') {
   console.log('🧬 Installing Plugins')
   const path = require('path');
-  fs.readdirSync("./plugins/").forEach((plugin) => {
-  if (path.extname(plugin).toLowerCase() == ".js") {
-  require("./plugins/" + plugin);
-  }
+  const pluginsPath = path.join(__dirname, "plugins");
+
+  fs.readdirSync(pluginsPath).forEach((plugin) => {
+    if (path.extname(plugin).toLowerCase() === ".js") {
+      try {
+        require(path.join(pluginsPath, plugin));
+      } catch (err) {
+        console.error(`Plugin error in "${plugin}":`, err.message);
+      }
+    }
   });
   console.log('Plugins installed successful ✅')
   console.log('Bot connected to whatsapp ✅')
