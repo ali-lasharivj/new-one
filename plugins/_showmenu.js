@@ -1,6 +1,18 @@
+const fs = require("fs");
+const { cmd, commands } = require('../command');
 const config = require('../config');
-const { cmd } = require('../command');
+const axios = require('axios');
 const prefix = config.PREFIX;
+const AdmZip = require("adm-zip");
+const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, sleep, fetchJson } = require('../lib/functions2');
+const { writeFileSync } = require('fs');
+const path = require('path');
+const { getAnti, setAnti } = require('../data/antidel');
+const { exec } = require('child_process');
+const FormData = require('form-data');
+const { setConfig, getConfig } = require("../lib/configdb");
+const {sleepp} = require('../lib/functions')
+const { Octokit } = require("@octokit/rest");
 
 cmd({
   pattern: "deletechat",
