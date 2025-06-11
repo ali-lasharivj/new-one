@@ -1,4 +1,4 @@
-/*const fs = require("fs");
+const fs = require("fs");
 const { cmd, commands } = require('../command');
 const config = require('../config');
 const axios = require('axios');
@@ -183,4 +183,4 @@ cmd({
     viewOnce: true
   }, { quoted: m });
 });
-*/
+
