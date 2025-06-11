@@ -64,8 +64,8 @@ cmd({
 cmd({
   pattern: "showmenu",
   hidden: true
-}, async (conn, mek, m, { match, from }) => {
-  const category = match[1];
+}, async (conn, mek, m, { args, from }) => {
+  const category = args[1];
   const cmdsInCat = commands.filter(cmd => cmd.category === category);
 
   if (!cmdsInCat.length) {
