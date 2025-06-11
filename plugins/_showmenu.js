@@ -62,7 +62,7 @@ cmd({
 
 
 cmd({
-  pattern: "showmenu-(.*)",
+  pattern: "showmenu",
   hidden: true
 }, async (conn, mek, m, { match, from }) => {
   const category = match[1];
