@@ -79,7 +79,7 @@ cmd({
   const picUrl = "https://i.postimg.cc/G3k8H6gC/IMG-20250603-WA0017.jpg";
 
   const filtered = commands.filter(cmd =>
-    !["menu", "nothing", "misc"].includes(cmd.category)
+    !["menu", "xbot", "misc"].includes(cmd.category)
   );
 
   const categories = [...new Set(filtered.map(cmd => cmd.category))];
@@ -106,7 +106,7 @@ cmd({
 
   // اگر پیام دکمه‌ای هست، همینجا هندل کن
   const buttonText = m.text?.toLowerCase();
-  if (buttonText === "ping" || buttonText === ".ping") {
+  if (buttonText === "ping" || buttonText === `${prefix}ping`) {
     const start = new Date().getTime();
 
     const reactionEmojis = ['🔥', '⚡', '🚀', '💨', '🎯', '🎉', '🌟', '💥', '🕐', '🔹'];
@@ -125,18 +125,16 @@ cmd({
     const end = new Date().getTime();
     const responseTime = (end - start) / 1000;
 
-    const text = `> *BEN-BOT SPEED: ${responseTime.toFixed(2)}ms ${reactionEmoji}*`;
+    const text = `> *XBOT-MD SPEED: ${responseTime.toFixed(2)}ms ${reactionEmoji}*`;
 
     return await conn.sendMessage(from, {
-      text: text,
-      contextInfo: getNewsletterContext(m.sender)
+      text: text
     }, { quoted: mek });
   }
 
-  if (buttonText === "alive" || buttonText === ".alive") {
+  if (buttonText === "alive" || buttonText === `${prefix}alive`) {
     return await conn.sendMessage(from, {
-      text: "*✅ I am alive and ready to serve you!*",
-      contextInfo: getNewsletterContext(m.sender)
+      text: "*✅ I am alive and ready to serve you!*"
     }, { quoted: mek });
   }
 
@@ -147,23 +145,23 @@ cmd({
     footer: "> New menu - 2025",
     buttons: [
       {
-        buttonId: '.ping',
+        buttonId: `${prefix}ping`,
         buttonText: { displayText: 'PING' },
         type: 1
       },
       {
-        buttonId: '.alive',
+        buttonId: `${prefix}alive`,
         buttonText: { displayText: 'ALIVE' },
         type: 1
       },
       {
-        buttonId: 'flow-menu',
+        buttonId: `${prefix}flow-menu`,
         buttonText: { displayText: '📋 Show Categories' },
         type: 4,
         nativeFlowInfo: {
           name: 'single_select',
           paramsJson: JSON.stringify({
-            title: 'Select BEN BOT Menu',
+            title: 'Select Menu',
             sections: sections
           })
         }
