@@ -17,7 +17,7 @@ async (conn, mek, m, { from, q, reply }) => {
         if (!args) return reply("*Please provide a language code and text or quote a text. Usage: .trt [language code], [text] && reply to a message with .trt en*");
 
         const targetLang = args[0];
-        const textToTranslate = args.slice(1).join(', ') || m.quoted.text;
+        const textToTranslate = args.slice(1).join(', ') || m.quoted;
 
         const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate)}&langpair=en|${targetLang}`;
 
