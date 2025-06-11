@@ -18,12 +18,11 @@ cmd(
         use: '<reply media or URL>',
         filename: __filename,
     },
-    async (conn, mek, m, { quoted, args, q, reply, from }) => {
+    async (conn, mek, m, { quoted, args, q, pushname, reply, from }) => {
         if (!mek.quoted) return reply(`*Reply to any sticker.*`);
-        if (!q) return reply(`*Please provide a pack name using .take <packname>*`);
 
         let mime = mek.quoted.mtype;
-        let pack = q;
+        let pack = `${pushname}` || q;
 
         if (mime === "imageMessage" || mime === "stickerMessage") {
             let media = await mek.quoted.download();
