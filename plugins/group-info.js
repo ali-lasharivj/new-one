@@ -3,7 +3,7 @@ const { cmd } = require('../command')
 const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep } = require('../lib/functions')
 
    cmd({
-  pattern: "getinfo ?(.*)",
+  pattern: "ginfo",
   category: "group",
   desc: "Get group info by invite link or current group",
   filename: __filename
