@@ -1,4 +1,4 @@
-/*const fetch = require("node-fetch");
+const fetch = require("node-fetch");
 const config = require('../config');
 const { getConfig, setConfig } = require('../lib/configdb');
 const axios = require("axios");
@@ -31,7 +31,7 @@ cmd({
       const res = await fetch(apiUrl);
       const data = await res.json();
 
-      if (!data?.result?.downloadUrl) return reply("⛔ Download failed.", null, );
+      if (!data?.result?.downloadUrl) return reply("⛔ Download failed.", null );
 
       downloadUrl = data.result.downloadUrl;
 
@@ -89,7 +89,7 @@ Reply With:
 
         const text = msg.message?.conversation || msg.message?.extendedTextMessage?.text || "";
         const songCache = getConfig(cacheKey);
-        if (!songCache) return reply("⚠️ Song cache not found.", null, );
+        if (!songCache) return reply("⚠️ Song cache not found.", null );
 
         const songData = JSON.parse(songCache);
 
