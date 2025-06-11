@@ -156,23 +156,6 @@ setupLinkDetection(conn);
 
 registerAntiNewsletter(conn);
 
-
-const newsletterJids = [
-    "120363348038810906@newsletter"
-  ];
-  const emojis = ["❤️", "👍", "😯"];
-
-  if (mek.key && newsletterJids.includes(mek.key.remoteJid)) {
-    try {
-      const serverId = mek.newsletterServerId;
-      if (serverId) {
-      const emoji = emojis[Math.floor(Math.random() * emojis.length)];
-        await conn.newsletterReactMessage(mek.key.remoteJid, serverId.toString(), emoji);
-      }
-    } catch (e) 
-    {
-    
-    
 	  
   //=============readstatus=======
         
