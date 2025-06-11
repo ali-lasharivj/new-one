@@ -2,53 +2,61 @@ const config = require('../config')
 const { cmd } = require('../command')
 const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep } = require('../lib/functions')
 
-   cmd({
-  pattern: "ginfo",
-  category: "group",
-  desc: "Get group info by invite link or current group",
-  filename: __filename
-}, async (conn, m, msg, { isGroup, match, reply }) => {
-  try {
-    let code = match?.trim();
+   
+cmd({
+    pattern: "ginfo",
+    react: "🥏",
+    alias: ["groupinfo"],
+    desc: "Get group information.",
+    category: "group",
+    use: '.ginfo',
+    filename: __filename
+},
+async (conn, mek, m, {
+    from, quoted, isCmd, isGroup, sender, isBotAdmins,
+    isAdmins, isDev, reply, groupMetadata, participants
+}) => {
+    try {
+        // Requirements
+        if (!isGroup) return reply(`This command only works in group chats.`);
+        if (!isAdmins && !isDev) return reply(`Only *Group Admins*  can use this.`);
+        if (!isBotAdmins) return reply(`I need *admin* rights to fetch group details.`);
 
-    // If used in a group and no code is given, show current group info
-    if (!code && isGroup) {
-      const metadata = await conn.groupMetadata(m.chat);
-      const inviteCode = await conn.groupInviteCode(m.chat);
-      const groupOwner = metadata.owner || "Not available";
-      const groupDesc = metadata.desc || "No description";
+        const fallbackPpUrls = [
+            'https://i.ibb.co/KhYC4FY/1221bc0bdd2354b42b293317ff2adbcf-icon.png',
+            'https://i.ibb.co/KhYC4FY/1221bc0bdd2354b42b293317ff2adbcf-icon.png',
+        ];
+        let ppUrl;
+        try {
+            ppUrl = await conn.profilePictureUrl(from, 'image');
+        } catch {
+            ppUrl = fallbackPpUrls[Math.floor(Math.random() * fallbackPpUrls.length)];
+        }
 
-      return reply(
-        `📛 Name: ${metadata.subject}\n` +
-        `📝 Description: ${groupDesc}\n` +
-        `👑 Owner: ${groupOwner}\n` +
-        `👥 Participants: ${metadata.participants.length}\n` +
-        `🆔 Group ID: ${m.chat}\n` +
-        `🔗 Invite Link: https://chat.whatsapp.com/${inviteCode}`
-      );
+        const metadata = await conn.groupMetadata(from);
+        const groupAdmins = participants.filter(p => p.admin);
+        const listAdmin = groupAdmins.map((v, i) => `${i + 1}. @${v.id.split('@')[0]}`).join('\n');
+        const owner = metadata.owner || groupAdmins[0]?.id || "unknown";
+
+        const gdata = `*「 Group Information 」*\n
+*Group Name* : ${metadata.subject}
+*Group ID* : ${metadata.id}
+*Participants* : ${metadata.size}
+*Group Creator* : @${owner.split('@')[0]}
+*Description* : ${metadata.desc?.toString() || 'No description'}\n
+*Admins (${groupAdmins.length})*:\n${listAdmin}`
+
+        await conn.sendMessage(from, {
+            image: { url: ppUrl },
+            caption: gdata,
+            mentions: groupAdmins.map(v => v.id).concat([owner])
+        }, { quoted: mek });
+
+    } catch (e) {
+        console.error(e);
+        await conn.sendMessage(from, { react: { text: '❌', key: mek.key } });
+        reply(`❌ An error occurred:\n\n${e}`);
     }
-
-    // Extract invite code from full URL if needed
-    if (code.includes("chat.whatsapp.com/")) {
-      code = code.split("chat.whatsapp.com/")[1].trim();
-    }
-
-    if (!code) return reply("❌ Please provide a valid invite link or code.");
-
-    const info = await conn.groupGetInviteInfo(code);
-
-    return reply(
-      `📛 Name: ${info.subject}\n` +
-      `📝 Description: ${info.desc || "No description"}\n` +
-      `👑 Owner: ${info.owner || "Not available"}\n` +
-      `👥 Participants: ${info.size}\n` +
-      `🆔 Group ID: ${info.id}\n` +
-      `🔗 Invite Link: https://chat.whatsapp.com/${code}`
-    );
-  } catch (e) {
-    console.error(e);
-    reply("❌ Failed to fetch group info. Make sure the invite code is valid and not expired.");
-  }
 });
 
 cmd({
