@@ -57,7 +57,7 @@ cmd({
     type: "wcg",
     players: [sender],
     words: [],
-    turn: 0, // index of current player
+    turn: 0,
     waiting: true,
     finished: false,
     wordLimit: 3
@@ -71,7 +71,6 @@ cmd({
     { mentions: [sender] }
   );
 
-  // Start 40 sec timer to wait for others to join
   clearStartTimer(from);
   startTimers[from] = setTimeout(() => {
     const db = loadDB();
@@ -79,8 +78,7 @@ cmd({
     const game = db[from];
     if (game.waiting) {
       game.waiting = false;
-      game.turn = 0; // first player start
-      // Choose random first letter
+      game.turn = 0;
       const randomLetter = String.fromCharCode(97 + Math.floor(Math.random() * 26));
       game.requiredFirstLetter = randomLetter;
 
@@ -93,7 +91,6 @@ cmd({
 
       clearStartTimer(from);
 
-      // Start turn timer for first player
       clearTurnTimer(from);
       timers[from] = setTimeout(() => handleTimeout(conn, from), 40 * 1000);
     }
@@ -115,10 +112,8 @@ cmd({
   if (game.players.length >= 20) return reply("⚠️ Player limit reached (20).");
 
   game.players.push(sender);
-
   saveDB(db);
 
-  // Announce join
   reply(
     `🙌 @${sender.split("@")[0]} joined the game! (${game.players.length} player(s) now)\n⏳ 40 seconds after first joiner the game will start.`,
     null,
@@ -149,9 +144,8 @@ cmd({
     );
   }
 
-  if (game.waiting) return; // Ignore other messages while waiting
+  if (game.waiting) return;
 
-  // Validate turn
   const currentPlayer = game.players[game.turn];
   if (currentPlayer !== sender) return;
 
@@ -172,61 +166,17 @@ cmd({
   }
 
   game.words.push(text);
-
-  // Advance turn cyclically
   game.turn = (game.turn + 1) % game.players.length;
-
-  // Increase word limit but max 7 for challenge (can be changed)
   game.wordLimit = Math.min(game.wordLimit + 1, 7);
-
   game.lastMoveTime = Date.now();
 
-  // Clear previous timer and set new one for next player
   clearTurnTimer(from);
   timers[from] = setTimeout(() => handleTimeout(conn, from), 40 * 1000);
 
   saveDB(db);
 
-  // Check if 10 words reached -> game over
-  if (game.words.length >= 10) {
-    game.finished = true;
-
-    // Score calculation - simplistic: rank by who said most words (even distribution)
-    // Here just rank by number of words spoken (approximate)
-
-    // Count words per player
-    const counts = {};
-    game.players.forEach(p => counts[p] = 0);
-    game.words.forEach((w, i) => {
-      const playerIndex = i % game.players.length;
-      counts[game.players[playerIndex]]++;
-    });
-
-    // Sort players by word count desc
-    const ranking = [...game.players].sort((a, b) => counts[b] - counts[a]);
-
-    let msg = `🏁 *Game Over!*\n\n*Ranking:*\n`;
-    ranking.forEach((p, i) => {
-      const pos = i + 1;
-      if (pos <= 3) {
-        msg += `🥇🥈🥉`.charAt(i) + ` *${pos}.* @${p.split("@")[0]} — ${counts[p]} words\n`;
-      } else {
-        msg += `❌ *${pos}.* @${p.split("@")[0]} — ${counts[p]} words (Lost)\n`;
-      }
-    });
-
-    reply(msg, null, { mentions: game.players });
-
-    clearTurnTimer(from);
-    clearStartTimer(from);
-
-    delete db[from];
-    saveDB(db);
-    return;
-  }
-
   reply(
-    `✅ *${text}* accepted!\n🧮 Word *${game.words.length}* of 10.\n🔠 Next word must start with *${text[text.length - 1].toUpperCase()}*\n➡️ @${game.players[game.turn].split("@")[0]}, your turn!\n📏 Min word length: *${game.wordLimit}*\n⏳ You have *40 seconds* to respond.`,
+    `✅ *${text}* accepted!\n🧮 Total words so far: *${game.words.length}*\n🔠 Next word must start with *${text[text.length - 1].toUpperCase()}*\n➡️ @${game.players[game.turn].split("@")[0]}, your turn!\n📏 Min word length: *${game.wordLimit}*\n⏳ You have *40 seconds* to respond.`,
     null,
     { mentions: game.players }
   );
@@ -239,17 +189,38 @@ async function handleTimeout(conn, from) {
   if (game.finished) return;
 
   const loser = game.players[game.turn];
-  // Winner(s) all others
-  const winners = game.players.filter(p => p !== loser);
+  game.players.splice(game.turn, 1);
 
   await conn.sendMessage(from, {
-    text: `⌛ *Timeout!*\n@${loser.split("@")[0]} took too long.\n🏆 Winner(s): ${winners.map(w => "@" + w.split("@")[0]).join(", ")}`,
-    mentions: game.players
+    text: `⌛ *Timeout!*\n@${loser.split("@")[0]} did not respond and was eliminated.`,
+    mentions: [loser]
   });
 
-  game.finished = true;
+  if (game.players.length === 1) {
+    game.finished = true;
+    await conn.sendMessage(from, {
+      text: `🏆 *Game Over!*\n🎉 Winner: @${game.players[0].split("@")[0]}`,
+      mentions: game.players
+    });
+    clearTurnTimer(from);
+    clearStartTimer(from);
+    delete db[from];
+    saveDB(db);
+    return;
+  }
+
+  if (game.turn >= game.players.length) game.turn = 0;
+
+  const lastWord = game.words[game.words.length - 1];
+  const nextLetter = lastWord[lastWord.length - 1];
+
   clearTurnTimer(from);
-  clearStartTimer(from);
-  delete db[from];
+  timers[from] = setTimeout(() => handleTimeout(conn, from), 40 * 1000);
+
   saveDB(db);
+
+  await conn.sendMessage(from, {
+    text: `➡️ It's @${game.players[game.turn].split("@")[0]}'s turn\n🔠 Word must start with *${nextLetter.toUpperCase()}*\n📏 Minimum length: *${game.wordLimit}*\n⏳ You have 40 seconds.`,
+    mentions: [game.players[game.turn]]
+  });
 }
