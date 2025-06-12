@@ -59,7 +59,7 @@ cmd({
   }
 
   if (db[from] && db[from].waiting) {
-    return reply("⚠️ A game is already waiting for the second player. Send 'join' to join the game.");
+    return reply("⚠️ A game is already waiting for the second player. Send 'join-ttt' to join the game.");
   }
 
   db[from] = {
@@ -71,7 +71,7 @@ cmd({
   };
   saveDB(db);
 
-  reply(`🎮 *Tic-Tac-Toe* game started!\n\n👤 Player 1: @${sender.split("@")[0]}\n⏳ Waiting for player 2 to join...\n\n✉️ Send *join* to join the game!\n\nor send cancel for cancel game and leave for leave game`, null, { mentions: [sender] });
+  reply(`🎮 *Tic-Tac-Toe* game started!\n\n👤 Player 1: @${sender.split("@")[0]}\n⏳ Waiting for player 2 to join...\n\n✉️ Send *join-ttt* to join the game!\n\nor send cancel for cancel game and leave for leave game`, null, { mentions: [sender] });
 });
 
 // خروج از بازی
@@ -139,7 +139,7 @@ const waitingTimeouts = {};
 
 cmd({
   on: "body"
-}, async (conn, mek, m, { from, body, sender, reply }) => {
+}, async (conn, mek, m, { from, body, pushname: _0x1279c5, sender, reply }) => {
   const db = loadDB();
   const text = body.trim().toLowerCase();
 
@@ -159,7 +159,7 @@ cmd({
     saveDB(db);
 
     // پیام شروع بازی و انتظار برای جوین
-    await reply(`🎮 *Tic-Tac-Toe* game started!\n\n👤 Player 1: @${sender.split("@")[0]}\n⏳ Waiting for player 2 to join...\n\n✉️ Send *join* to join the game!`, null, { mentions: [sender] });
+    await reply(`🎮 *Tic-Tac-Toe* game started!\n\n👤 Player 1: @${_0x1279c5 || "User"} \n⏳ Waiting for player 2 to join...\n\n✉️ Send *join-ttt* to join the game!`, null, { mentions: [sender] });
 
     // پاک کردن تایمرهای قبلی اگر بود
     if (waitingIntervals[from]) clearInterval(waitingIntervals[from]);
@@ -167,7 +167,7 @@ cmd({
 
     // تایمر پیام یادآوری هر 1 دقیقه
     waitingIntervals[from] = setInterval(() => {
-      conn.sendMessage(from, { text: "⏳ Waiting for player 2 to join... Send 'join' to join the game." });
+      conn.sendMessage(from, { text: "⏳ Waiting for player 2 to join... Send 'join-ttt' to join the game." });
     }, 60 * 1000);
 
     // تایمر حذف بازی پس از 10 دقیقه اگر جوین نشد
@@ -189,9 +189,9 @@ cmd({
   }
 
   // جوین به بازی
-  if (text === "join") {
+  if (text === "join-ttt") {
     if (!db[from] || !db[from].waiting) {
-      return reply("⚠️ No Tic-Tac-Toe game is waiting for players here. Start a game with 'ttt'.");
+      return reply("⚠️ No Tic-Tac-Toe game is waiting for players here. Start a game with '.ttt'.");
     }
 
     if (db[from].players.includes(sender)) {
