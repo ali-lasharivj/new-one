@@ -103,7 +103,7 @@ cmd({
           header: 'Menu',
           title: cat.charAt(0).toUpperCase() + cat.slice(1),
           description: `Click for Menu ${cat.charAt(0).toUpperCase() + cat.slice(1)}`,
-          id: `showmenu-${cat}`
+          id: `${prefix}showmenu ${cat}`
         }
       ]
     };
@@ -118,7 +118,7 @@ cmd({
 
   // اگر پیام دکمه‌ای هست، همینجا هندل کن
   const buttonText = m.text?.toLowerCase();
-  if (buttonText === "ping" || buttonText === `${prefix}ping`) {
+  if (buttonText === "💯ping" || buttonText === `${prefix}ping`) {
     const start = new Date().getTime();
 
     const reactionEmojis = ['🔥', '⚡', '🚀', '💨', '🎯', '🎉', '🌟', '💥', '🕐', '🔹'];
@@ -144,7 +144,7 @@ cmd({
     }, { quoted: mek });
   }
 
-  if (buttonText === "alive" || buttonText === `${prefix}alive`) {
+  if (buttonText === "Alive" || buttonText === `${prefix}alive`) {
     return await conn.sendMessage(from, {
       text: "*✅ I am alive and ready to serve you!*"
     }, { quoted: mek });
