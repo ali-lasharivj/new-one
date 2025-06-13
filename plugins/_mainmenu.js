@@ -17,7 +17,7 @@ cmd({
     pattern: "menu",
     alias: ["help", "commands"],
     desc: "Show all menu categories",
-    category: "menu",
+    category: "main",
     react: "⏬",
     filename: __filename
 },
