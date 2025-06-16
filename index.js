@@ -37,6 +37,7 @@ const { setupLinkDetection } = require("./lib/events/antilinkDetection")
   const util = require('util')
   const { sms, downloadMediaMessage, AntiDelete } = require('./lib')
   const { registerAntiNewsletter } = require('./plugins/antinewsletter')
+ const { updateActivity } = require('./lib/activity')
   const FileType = require('file-type');
   const { File } = require('megajs')
   const { fromBuffer } = require('file-type')
