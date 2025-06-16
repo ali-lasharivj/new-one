@@ -347,20 +347,8 @@ registerAntiNewsletter(conn);
             return;
         }
 
-   //=========BAN SUDO=============
-	// --- Ban and Sudo Utility Code for index.js ---
- 
- //=============DEV REACT==============
-    
-  if(senderNumber.includes("263719064805")){
-  if(isReact) return
-  m.react("🫟")
-   }
-/*if (senderNumber.includes(config.DEV)) {
-  ireturn m.react("🫟");
-}
+
 	  
-*/	  
   //==========public react============//
   // Auto React 
   if (!isReact && config.AUTO_REACT === 'true') {
