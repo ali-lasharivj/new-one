@@ -31,6 +31,7 @@ const {
   const ff = require('fluent-ffmpeg')
   const P = require('pino')
   const GroupEvents = require('./lib/groupevents');
+const { setupLinkDetection } = require("./lib/events/antilinkDetection")
   const qrcode = require('qrcode-terminal')
   const StickersTypes = require('wa-sticker-formatter')
   const util = require('util')
@@ -83,8 +84,6 @@ if (!fs.existsSync(sessionDir)) {
     fs.mkdirSync(sessionDir, { recursive: true });
 }
 
-const SESSIONS_BASE_URL = 'https://dave-auth-manager.onrender.com'; 
-
 async function loadSession() {
     try {
         if (!config.SESSION_ID) {
@@ -96,10 +95,10 @@ async function loadSession() {
         console.log('Downloading session data...');
 
         // If SESSION_ID starts with "SUBZERO-MD~" - use Koyeb download
-        if (config.SESSION_ID.startsWith('XBOT-MD-MD**')) {
+        if (config.SESSION_ID.startsWith('XBOT-MD**')) {
             console.log('Downloading Xcall session...');
             const sessdata = config.SESSION_ID.replace("XBOT-MD**", '');
-            const response = await axios.get(`${SESSIONS_BASE_URL}/files/${sessdata}.json`,
+            const response = await axios.get(`https://dave-auth-manager.onrender.com/files/${sessdata}.json`,
             );
 
             if (!response.data) {
@@ -232,14 +231,12 @@ async function connectToWA() {
     }
   });
 //===============
-	
-registerGroupMessages(conn);
+	registerGroupMessages(conn);
 
 setupLinkDetection(conn);
 
 registerAntiNewsletter(conn);
-
-
+	
  /// READ STATUS       
   conn.ev.on('messages.upsert', async(mek) => {
     mek = mek.messages[0]
