@@ -229,7 +229,7 @@ async function connectToWA() {
     }
   });
 //===============
-	registerGroupMessages(conn);
+	
 
 setupLinkDetection(conn);
 
