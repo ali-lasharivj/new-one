@@ -992,7 +992,7 @@ app.get("/", (req, res) => {
       </html>
     `);
   });
-  app.listen(port, () => console.log(`Service active and running on Port ${port}`));
+  app.listen(port, () => console.log(`Service active and running please give some credits 🙂`));
   setTimeout(() => {
   connectToWA()
   }, 4000);
