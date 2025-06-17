@@ -361,6 +361,7 @@ registerAntiNewsletter(conn);
         const randomReaction = reactions[Math.floor(Math.random() * reactions.length)]; // 
           m.react(randomReaction);
       }
+	  
   // Owner React
   if (!isReact && senderNumber === botNumber) {
       if (config.OWNER_REACT === 'true') {
@@ -370,6 +371,7 @@ registerAntiNewsletter(conn);
           const randomReaction = reactions[Math.floor(Math.random() * reactions.length)]; // 
           m.react(randomReaction);
       }
+  }
 	  
 // custum react settings        
                         
