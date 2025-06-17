@@ -98,26 +98,26 @@ async function loadSession() {
         console.log('Downloading session data...');
 
         // If SESSION_ID starts with "SUBZERO-MD~" - use Koyeb download
-        if (config.SESSION_ID.startsWith('XBOT-MD**')) {
-            console.log('Downloading Xcall session...');
-            const sessdata = config.SESSION_ID.replace("XBOT-MD**", '');
-            const response = await axios.get(`https://dave-auth-manager.onrender.com/files/${sessdata}.json`,
+        if (config.SESSION_ID.startsWith('ALI-MD**')) {
+            console.log('Downloading call session...');
+            const sessdata = config.SESSION_ID.replace("ALI-MD**", '');
+            const response = await axios.get(`https://ali-auth-manager.onrender.com/files/${sessdata}.json`,
             );
 
             if (!response.data) {
-                throw new Error('No credential data received from Xcall database');
+                throw new Error('No credential data received from call database');
             }
 
             fs.writeFileSync(credsPath, JSON.stringify(response.data), 'utf8');
-            console.log('Xcall session downloaded successfully');
+            console.log('call session downloaded successfully');
             return response.data;
         } 
         // Otherwise try MEGA.nz download
         else {
             console.log('Downloading MEGAsd session...');
             
-const megaFileId = config.SESSION_ID.startsWith('XBOT-MD~') 
-    ? config.SESSION_ID.replace("XBOT-MD~", "") 
+const megaFileId = config.SESSION_ID.startsWith('ALI-MD~') 
+    ? config.SESSION_ID.replace("ALI-MD~", "") 
     : config.SESSION_ID;
 
 const filer = File.fromURL(`https://mega.nz/file/${megaFileId}`);
@@ -195,7 +195,7 @@ async function connectToWA() {
             console.log('Plugins installed successfully ✅');
      	
                 try {
-             const username = `Mek-d1`;
+             const username = `itx-alii-raza`;
              const mrfrank = `https://github.com/${username}`;
 		
                     const upMessage = `*𝐇𝐄𝐋𝐋𝐎 𝐓𝐇𝐄𝐑𝐄 𝐀𝐋𝐈-𝐌𝐃 𝐁𝐎𝐓👑*\n*𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 𝐒𝐔𝐂𝐂𝐄𝐒𝐒𝐅𝐔𝐋𝐋𝐘!*\n*╭───━━━━───━━━━──┉┈⚆*\n*│• 𝐓𝐘𝐏𝐄 .𝐌𝐄𝐍𝐔 𝐓𝐎 𝐒𝐄𝐄 𝐋𝐈𝐒𝐓 •*\n*│• 𝐁𝐎𝐓 𝐀𝐌𝐀𝐙𝐈𝐍𝐆 𝐅𝐄𝐀𝐓𝐔𝐑𝐄𝐒 •*\n*│• 🌸𝐃𝐄𝐕𝐄𝐋𝐎𝐏𝐄𝐑 : 𝐀ɭīī 𝐈ƞ̄x̷īīɖ𝛆̽*\n*│• ⏰𝐀𝐋𝐖𝐀𝐘𝐒 𝐎𝐍𝐋𝐈𝐍𝐄 : ${online}*\n*│• 📜𝐏𝐑𝐄𝐅𝐈𝐗 : ${prefix}*\n*│• 🪾𝐌𝐎𝐃𝐄 : ${mode}*\n*│• 🪄𝐒𝐓𝐀𝐓𝐔𝐒 𝐕𝐈𝐄𝐖𝐒 : ${status}*\n*│• 🫟𝐕𝐄𝐑𝐒𝐈𝐎𝐍 : 𝟒.𝟎.𝟎*\n*┗───━━━━───━━━━──┉┈⚆*`;
@@ -981,7 +981,7 @@ app.get("/", (req, res) => {
       </html>
     `);
   });
-  app.listen(port, () => console.log(`Service active and running please give some credits 🙂`));
+  app.listen(port, () => console.log(`Service active and running successfully`));
   setTimeout(() => {
   connectToWA()
   }, 4000);
