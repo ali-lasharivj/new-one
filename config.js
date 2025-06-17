@@ -1,4 +1,7 @@
 const fs = require('fs');
+const path = require('path');
+const { getConfig } = require("./lib/configdb");
+
 if (fs.existsSync('config.env')) require('dotenv').config({ path: './config.env' });
 
 function convertToBool(text, fault = 'true') {
@@ -22,7 +25,9 @@ BOT_NAME: process.env.BOT_NAME || "ALI-MD",
 STICKER_NAME: process.env.STICKER_NAME || "ALI-MD",
 // type sticker pack name 
 CUSTOM_REACT: process.env.CUSTOM_REACT || "false",
-// make this true for custum emoji react    
+// make this true for custum emoji react 
+VPS: process.env.VPS || "",
+// for vps
 OWNER_REACT: process.env.OWNER_REACT || "false",
 // make this true for owner emoji react    
 CUSTOM_REACT_EMOJIS: process.env.CUSTOM_REACT_EMOJIS || "💝,💖,💗,❤️‍🩹,❤️,🧡,💛,💚,💙,💜,🤎,🖤,🤍",
