@@ -1,4 +1,4 @@
-const { delay } = require("@whiskeysockets/baileys");
+const { delay } = require("baileys");
 const { cmd } = require("../command");
 
 cmd({
