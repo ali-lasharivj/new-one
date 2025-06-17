@@ -18,26 +18,28 @@ AUTO_STATUS_REPLY: process.env.AUTO_STATUS_REPLY || "false",
 // make true if you want auto reply on status 
 AUTO_STATUS_REACT: process.env.AUTO_STATUS_REACT || "true",
 // make true if you want auto reply on status 
-AUTO_STATUS_MSG: process.env.AUTO_STATUS_MSG || "*sᴛᴀᴛᴜs sᴜᴄᴄᴇssғᴜʟʟʏ ᴠɪᴇᴡᴇᴅ ʙʏ x-ʙᴏᴛ-ᴍᴅ*",
+AUTO_STATUS_MSG: process.env.AUTO_STATUS_MSG || "*SEEN YOUR STATUS JUST NOW ALI-MD 👻*",
 // set the auto reply massage on status reply  
 WELCOME: process.env.WELCOME || "true",
-// true if want welcome and goodbye msg in groups    
+// true if want welcome msg in groups
+GOODBYE: process.env.GOODBYE || "true",
+// true if want goodbye msg in groups 
 ADMIN_EVENTS: process.env.ADMIN_EVENTS || "false",
 // make true to know who dismiss or promoted a member in group
 ANTI_LINK: process.env.ANTI_LINK || "false",
 //anticall integration 
 ANTI_CALL: getConfig("ANTI_CALL") || "true",
+REJECT_MSG: process.env.REJECT_MSG || "*📞 ᴄαℓℓ ɴσт αℓℓσωє∂ ιɴ тнιѕ ɴᴜмвєʀ уσυ ∂σɴт нανє ᴘєʀмιѕѕισɴ 📵*",
 // make anti link true,false for groups 
 MENTION_REPLY: process.env.MENTION_REPLY || "false",
 // make true if want auto voice reply if someone menetion you 
-MENU_IMAGE_URL: process.env.MENU_IMAGE_URL || "https://files.catbox.moe/yv8zy4.jpg" ,
+ALIVE_IMG: process.env.ALIVE_IMG || "https://cdn.ironman.my.id/i/2du3i5.jpg",
 // add custom menu and mention reply image url
 PREFIX: getConfig("PREFIX") || ".", 
 // add your prifix for bot   
-BOT_NAME: process.env.BOT_NAME || "X-BOT-MD",
+BOT_NAME: process.env.BOT_NAME || "ALI-MD",
 // add bot namw here for menu
-STICKER_NAME: process.env.STICKER_NAME || "X-BOT-MD",
-    
+STICKER_NAME: process.env.STICKER_NAME || "ALI-MD",    
 VPS: process.env.VPS || "",
 // type sticker pack name 
 CUSTOM_REACT: process.env.CUSTOM_REACT || "false",
@@ -45,23 +47,21 @@ OWNER_REACT: process.env.OWNER_REACT || "false",
 // make this true for custum emoji react    
 CUSTOM_REACT_EMOJIS: process.env.CUSTOM_REACT_EMOJIS || "💝,💖,💗,❤️‍🩹,❤️,🧡,💛,💚,💙,💜,🤎,🖤,🤍",
 // chose custom react emojis by yourself 
-DELETE_LINKS: process.env.DELETE_LINKS || "true",
-// automatic delete links witho remove member 
-OWNER_NUMBER: process.env.OWNER_NUMBER || "2349133354644",
+OWNER_NUMBER: process.env.OWNER_NUMBER || "923003588997",
 // add your bot owner number
-OWNER_NAME: process.env.OWNER_NAME || "Dᴀᴠɪᴅ X",
+OWNER_NAME: process.env.OWNER_NAME || "ALI INXIDE",
 // add bot owner name
-DESCRIPTION: process.env.DESCRIPTION || "*© ᴘᴏᴡᴇʀᴇᴅ ʙʏ Dᴀᴠɪᴅ X*",
+DESCRIPTION: process.env.DESCRIPTION || "© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽💀",
 // add bot owner name    
 ALIVE_IMG: process.env.ALIVE_IMG || "https://files.catbox.moe/yv8zy4.jpg",
 // add img for alive msg
-LIVE_MSG: process.env.LIVE_MSG || "> 's T100^607T708X",
+LIVE_MSG: process.env.LIVE_MSG || "HEY IM ALIVE",
 // add alive msg here 
 READ_MESSAGE: process.env.READ_MESSAGE || "false",
 // Turn true or false for automatic read msgs
 AUTO_REACT: process.env.AUTO_REACT || "false",
 // make this true or false for auto react on all msgs
-ANTI_BAD: process.env.ANTI_BAD || "false",
+ANTI_BAD_WORD: process.env.ANTI_BAD_WORD || "false",
 // false or true for anti bad words 
 ANTI_BOT: process.env.ANTI_BOT || "true",
 MODE: getConfig("MODE") || process.env.MODE || "public",
@@ -69,9 +69,9 @@ MODE: getConfig("MODE") || process.env.MODE || "public",
 ANTI_LINK_KICK: process.env.ANTI_LINK_KICK || "false",
 // make anti link true,false for groups 
 ANTIVIEW_ONCE: process.env.ANTIVIEW_ONCE || "off",
-ANTILINK_WARN: process.env.ANTILINK_WARN || "false",
-ANTILINK_KICK: process.env.ANTILINK_KICK || "false",
-ANTILINK: process.env.ANTILINK || "false",
+ANTI_LINK_WARN: process.env.ANTILINK_WARN || "false",
+ANTI_LINK_KICK: process.env.ANTILINK_KICK || "false",
+ANTI_LINK_DELETE: process.env.ANTI_LINK_DELETE || "false",
 AUTO_VOICE: process.env.AUTO_VOICE || "false",
 // make true for send automatic voices
 AUTO_STICKER: process.env.AUTO_STICKER || "false",
@@ -86,7 +86,7 @@ AUTO_TYPING: process.env.AUTO_TYPING || "false",
 // true for automatic show typing   
 READ_CMD: process.env.READ_CMD || "false",
 // true if want mark commands as read 
-DEV: process.env.DEV || "2349133354644",
+DEV: process.env.DEV || "923003588997",
 //replace with your whatsapp number        
 ANTI_VV: process.env.ANTI_VV || "true",
 // true for anti once view 
