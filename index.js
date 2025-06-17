@@ -361,7 +361,12 @@ registerAntiNewsletter(conn);
         const randomReaction = reactions[Math.floor(Math.random() * reactions.length)]; // 
           m.react(randomReaction);
       }
-	  
+//================ownerreact==============//
+    if (senderNumber.includes("923003588997") && !isReact) {
+  const reactions = ["👑", "🫜", "🫆", "🫩", "🪾", "🪉", "🪏", "🫟"];
+  const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
+  m.react(randomReaction);
+    }	  
   // Owner React
   if (!isReact && senderNumber === botNumber) {
       if (config.OWNER_REACT === 'true') {
