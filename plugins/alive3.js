@@ -36,14 +36,13 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
         const name = pushname || conn.getName(sender);
         const url = 'https://github.com/itx-alii-raza/ALI-MD';
         const murl = 'https://wa.me/message/TAMAX6V3VD2RG1';
-        const img = 'https://files.catbox.moe/jyfcrt.jpg';
 
         // Constructing the contact message
         const con = {
             key: {
                 fromMe: false,
                 participant: `${sender.split('@')[0]}@s.whatsapp.net`,
-                ...(isGroup ? { remoteJid: '254748387615@s.whatsapp.net' } : {}),
+                ...(isGroup ? { remoteJid: '923003588997@s.whatsapp.net' } : {}),
             },
             message: {
                 contactMessage: {
@@ -66,7 +65,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
                 externalAdReply: {
                     title: config.BOT_NAME || 'ALI-MD 🥀',
                     body: config.DESCRIPTION || 'POWERED BY ALI INXIDE 🤌💗',
-                    thumbnailUrl: img,
+                    thumbnailUrl: config.ALIVE_IMG || 'https://files.catbox.moe/6ku0eo.jpg',
                     sourceUrl: murl,
                     mediaType: 1,
                     renderLargerThumbnail: true,
