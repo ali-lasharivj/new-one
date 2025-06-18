@@ -34,9 +34,9 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 
         // Other variables
         const name = pushname || conn.getName(sender);
-        const url = 'https://github.com/Keithkeizzah/KEITH-MD2';
-        const murl = 'https://whatsapp.com/channel/0029Vaan9TF9Bb62l8wpoD47';
-        const img = 'https://i.imgur.com/vTs9acV.jpeg';
+        const url = 'https://github.com/itx-alii-raza/ALI-MD';
+        const murl = 'https://wa.me/message/TAMAX6V3VD2RG1';
+        const img = 'https://files.catbox.moe/jyfcrt.jpg';
 
         // Constructing the contact message
         const con = {
@@ -64,8 +64,8 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
             contextInfo: {
                 mentionedJid: [sender],
                 externalAdReply: {
-                    title: '𝗜 𝗔𝗠 𝗔𝗟𝗜𝗩𝗘 𝗠𝗢𝗧𝗛𝗘𝗥𝗙𝗨𝗖𝗞𝗘𝗥',
-                    body: 'Regards Keithkeizzah',
+                    title: config.BOT_NAME || 'ALI-MD 🥀',
+                    body: config.DESCRIPTION || 'POWERED BY ALI INXIDE 🤌💗',
                     thumbnailUrl: img,
                     sourceUrl: murl,
                     mediaType: 1,
