@@ -163,3 +163,70 @@ cmd({
 
 
  
+cmd({
+    pattern: "mod",
+    alias: ["setmode"],
+    react: "🔐",
+    desc: "Set bot mode to private or public.",
+    category: "settings",
+    filename: __filename,
+}, async (conn, mek, m, { args, isCreator, reply }) => {
+    if (!isCreator) return reply("*📛 Only the owner can use this command!*");
+
+    const currentMode = getConfig("MODE") || "public";
+
+    if (!args[0]) {
+        return reply(`📌 Current mode: *${currentMode}*\n\nUsage: .mode private OR .mode public`);
+    }
+
+    const modeArg = args[0].toLowerCase();
+
+    if (["private", "public"].includes(modeArg)) {
+        setConfig("MODE", modeArg);
+        await reply(`✅ Bot mode is now set to *${modeArg.toUpperCase()}*.\n\n♻ Restarting bot to apply changes...`);
+
+        exec("pm2 restart all", (error, stdout, stderr) => {
+            if (error) {
+                console.error("Restart error:", error);
+                return;
+            }
+            console.log("PM2 Restart:", stdout || stderr);
+        });
+    } else {
+        return reply("❌ Invalid mode. Please use `.mode private` or `.mode public`.");
+    }
+});
+
+cmd({
+    pattern: "auto-react",
+    alias: ["autoreact"],
+    react: "🍧",
+    desc: "Set bot mode to private or public.",
+    category: "settings",
+    filename: __filename,
+}, async (conn, mek, m, { args, isCreator, reply }) => {
+    if (!isCreator) return reply("*📛 Only the owner can use this command!*");
+
+    const currentMode = getConfig("AUTO_REACT") || "false";
+
+    if (!args[0]) {
+        return reply(`📌 Current mode: *${currentMode}*\n\nUsage: .mode private OR .mode public`);
+    }
+
+    const modeArg = args[0].toLowerCase();
+
+    if (["true", "false"].includes(modeArg)) {
+        setConfig("AUTO_REACT", modeArg);
+        await reply(`✅ Bot mode is now set to *${modeArg.toUpperCase()}*.\n\n♻ Restarting bot to apply changes...`);
+
+        exec("pm2 restart all", (error, stdout, stderr) => {
+            if (error) {
+                console.error("Restart error:", error);
+                return;
+            }
+            console.log("PM2 Restart:", stdout || stderr);
+        });
+    } else {
+        return reply("❌ Invalid mode. Please use `.mode private` or `.mode public`.");
+    }
+});
