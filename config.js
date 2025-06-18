@@ -53,7 +53,7 @@ OWNER_NAME: process.env.OWNER_NAME || "ALI INXIDE",
 // add bot owner name
 DESCRIPTION: process.env.DESCRIPTION || "© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽💀",
 // add bot owner name    
-ALIVE_IMG: process.env.ALIVE_IMG || "https://files.catbox.moe/yv8zy4.jpg",
+ALIVE_IMG: getConfig("ALIVE_IMG") || "https://files.catbox.moe/yv8zy4.jpg",  // Bot's "alive" menu mention image
 // add img for alive msg
 LIVE_MSG: process.env.LIVE_MSG || "HEY IM ALIVE",
 // add alive msg here 
