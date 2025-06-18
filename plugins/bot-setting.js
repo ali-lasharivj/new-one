@@ -11,17 +11,19 @@ const axios = require('axios');
 const FormData = require('form-data');
 const { setConfig, getConfig } = require("../lib/configdb");
 
+
+
 // SET BOT IMAGE
 cmd({
   pattern: "setbotimage",
-  alias: ["botdp", "botpic", "botimage"],
+  alias: ["botdp","botpp"],
   desc: "Set the bot's image URL",
   category: "owner",
   react: "✅",
   filename: __filename
 }, async (conn, mek, m, { args, isCreator, reply }) => {
   try {
-    if (!isCreator) return reply("❗ Only the bot owner can use this command.");
+    if (!isCreator) return reply("*📛 σɴℓу тнє σωɴɴɴєʀ ¢αɴ υѕє тнιѕ ¢σммαɴ∂!*");
 
     let imageUrl = args[0];
 
@@ -29,7 +31,7 @@ cmd({
     if (!imageUrl && m.quoted) {
       const quotedMsg = m.quoted;
       const mimeType = (quotedMsg.msg || quotedMsg).mimetype || '';
-      if (!mimeType.startsWith("image")) return reply("❌ Please reply to an image.");
+      if (!mimeType.startsWith("image")) return reply("*🖼️ ρℓєαѕє ʀєρℓу тσ αɴ ιмαgє*");
 
       const mediaBuffer = await quotedMsg.download();
       const extension = mimeType.includes("jpeg") ? ".jpg" : ".png";
@@ -59,7 +61,7 @@ cmd({
 
     await setConfig("ALIVE_IMG", imageUrl);
 
-    await reply(`✅ Bot image updated.\n\n*New URL:* ${imageUrl}\n\n♻️ Restarting...`);
+    await reply(`*✅ вσт ιмαgє υρ∂αтє∂*`);
     setTimeout(() => exec("pm2 restart all"), 2000);
 
   } catch (err) {
@@ -71,73 +73,93 @@ cmd({
 // SET PREFIX
 cmd({
   pattern: "setprefix",
-  alias: ["prefix", "prifix"],
+  alias: ["prefix"],
   desc: "Set the bot's command prefix",
   category: "owner",
   react: "✅",
   filename: __filename
 }, async (conn, mek, m, { args, isCreator, reply }) => {
-  if (!isCreator) return reply("❗ Only the bot owner can use this command.");
+  if (!isCreator) return reply("*📛 σɴℓу тнє σωɴɴɴєʀ ¢αɴ υѕє тнιѕ ¢σммαɴ∂!*");
   const newPrefix = args[0]?.trim();
-  if (!newPrefix || newPrefix.length > 2) return reply("❌ Provide a valid prefix (1–2 characters).");
+  if (!newPrefix || newPrefix.length > 2) return reply("*🛠️ ρʀσνι∂є α ναℓι∂ ρʀєfιχ*).");
 
   await setConfig("PREFIX", newPrefix);
 
-  await reply(`✅ Prefix updated to: *${newPrefix}*\n\n♻️ Restarting...`);
+  await reply(`*✅ ρʀєfιχ υρ∂αтє∂ тσ:*${newPrefix}*`);
   setTimeout(() => exec("pm2 restart all"), 2000);
 });
-
-
 
 // SET BOT NAME
 cmd({
   pattern: "setbotname",
-  alias: ["botname"],
   desc: "Set the bot's name",
   category: "owner",
   react: "✅",
   filename: __filename
 }, async (conn, mek, m, { args, isCreator, reply }) => {
-  if (!isCreator) return reply("❗ Only the bot owner can use this command.");
+  if (!isCreator) return reply("*📛 σɴℓу тнє σωɴɴɴєʀ ¢αɴ υѕє тнιѕ ¢σммαɴ∂!*");
   const newName = args.join(" ").trim();
-  if (!newName) return reply("❌ Provide a bot name.");
+  if (!newName) return reply("*🔖 ρʀσνι∂є α вσт ɴαмє*");
 
   await setConfig("BOT_NAME", newName);
 
-  await reply(`✅ Bot name updated to: *${newName}*\n\n♻️ Restarting...`);
+  await reply(`*✅ вσт ɴαмє υρ∂αтє∂ тσ: ${newName}*`);
   setTimeout(() => exec("pm2 restart all"), 2000);
 });
 
-    cmd({
-    pattern: "mode",
-    alias: ["setmode"],
-    react: "🔐",
-    desc: "Set bot mode to private or public.",
-    category: "settings",
-    filename: __filename,
-}, async (conn, mek, m, { args, isCreator, reply }) => {
-    if (!isCreator) return reply("*📛 Only the owner can use this command!*");
+let antibotAction = "off"; // Default action is off
+let warnings = {}; // Store warning counts per user
 
-    const currentMode = getConfig("MODE") || "public";
-
-    if (!args[0]) {
-        return reply(`📌 Current mode: *${currentMode}*\n\nUsage: .mode private OR .mode public`);
+cmd({
+    pattern: "antibot",
+    react: "🫟",
+    alias: ["antibot"],
+    desc: "Enable Antibot and set action (off/warn/delete/kick)",
+    category: "group",
+    filename: __filename
+}, async (conn, mek, m, { q, reply }) => {
+    if (!q) {
+        return reply(`*📛 єχαмρℓє .αɴтιвσт ωαʀɴ/∂єℓєтє/кι¢к*`);
     }
 
-    const modeArg = args[0].toLowerCase();
-
-    if (["private", "public"].includes(modeArg)) {
-        setConfig("MODE", modeArg);
-        await reply(`✅ Bot mode is now set to *${modeArg.toUpperCase()}*.\n\n♻ Restarting bot to apply changes...`);
-
-        exec("pm2 restart all", (error, stdout, stderr) => {
-            if (error) {
-                console.error("Restart error:", error);
-                return;
-            }
-            console.log("PM2 Restart:", stdout || stderr);
-        });
+    const action = q.toLowerCase();
+    if (["off", "warn", "delete", "kick"].includes(action)) {
+        antibotAction = action;
+        return reply(`*✅αɴтιвσт α¢тισɴ ѕєт тσ: ${action.toUpperCase()}*`);
     } else {
-        return reply("❌ Invalid mode. Please use `.mode private` or `.mode public`.");
+        return reply("*📛 єχαмρℓє .αɴтιвσт ωαʀɴ/∂єℓєтє/кι¢к*");
     }
 });
+
+cmd({
+    on: "body"
+}, async (conn, mek, m, { from, isGroup, sender, isBotAdmins, isAdmins, reply }) => {
+    if (!isGroup || antibotAction === "off") return; // Check if antibot is enabled
+
+    const messageId = mek.key.id;
+    if (!messageId || !messageId.startsWith("31F")) return; // Detect bot-generated messages
+
+    if (!isBotAdmins) return reply("*📛 ι ɴєє∂ тσ вє αɴ α∂мιɴ тσ ᴜѕє тнιѕ ᴄσммαɴ∂.*");
+    if (isAdmins) return; // Ignore admins
+
+    await conn.sendMessage(from, { delete: mek.key }); // Delete the detected bot message
+
+    switch (antibotAction) {
+        case "kick":
+            await conn.groupParticipantsUpdate(from, [sender], "remove");
+            break;
+
+        case "warn":
+            warnings[sender] = (warnings[sender] || 0) + 1;
+            if (warnings[sender] >= 3) {
+                delete warnings[sender]; // Reset warning count after kicking
+                await conn.groupParticipantsUpdate(from, [sender], "remove");
+            } else {
+                return reply(`*🤖 вσт αʀє ɴσт αℓℓσωє∂ 🤖*\n*╭────⬡ ᴡαʀɴιɴg ⬡────*\n*├▢ ᴜsєʀ :* @${sender.split("@")[0]}!\n*├▢ ᴄσᴜɴᴛ : ${warnings[sender]}*\n*├▢ ʀєαѕσɴ : вσт ɴσт αℓℓσωє∂*\n*├▢ ᴡαʀɴ ℓιмιт : 3*\n*╰────────────────*`, { mentions: [sender] });
+            }
+            break;
+    }
+});
+
+
+ 
