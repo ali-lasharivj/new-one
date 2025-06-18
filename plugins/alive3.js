@@ -47,12 +47,11 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
             },
             message: {
                 contactMessage: {
-                    displayName: mek,
+                    displayName: name,
                     vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;a,;;;\nFN:${name}\nitem1.TEL;waid=${sender.split('@')[0]}:${sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
                 },
             },
         };
-
         // Audio file message with external ad reply info
         const doc = {
             audio: {
