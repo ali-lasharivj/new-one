@@ -33,11 +33,11 @@ REJECT_MSG: process.env.REJECT_MSG || "*📞 ᴄαℓℓ ɴσт αℓℓσωє�
 // make anti link true,false for groups 
 MENTION_REPLY: process.env.MENTION_REPLY || "false",
 // make true if want auto voice reply if someone menetion you 
-ALIVE_IMG: process.env.ALIVE_IMG || "https://cdn.ironman.my.id/i/2du3i5.jpg",
+ALIVE_IMG: getConfig("ALIVE_IMG") || "https://cdn.ironman.my.id/i/2du3i5.jpg",
 // add custom menu and mention reply image url
 PREFIX: getConfig("PREFIX") || ".", 
 // add your prifix for bot   
-BOT_NAME: process.env.BOT_NAME || "ALI-MD",
+BOT_NAME: getConfig("BOT_NAME") || "ALI-MD",
 // add bot namw here for menu
 STICKER_NAME: process.env.STICKER_NAME || "ALI-MD",    
 VPS: process.env.VPS || "",
@@ -64,7 +64,7 @@ AUTO_REACT: process.env.AUTO_REACT || "false",
 ANTI_BAD_WORD: process.env.ANTI_BAD_WORD || "false",
 // false or true for anti bad words 
 ANTI_BOT: process.env.ANTI_BOT || "true",
-MODE: getConfig("MODE") || process.env.MODE || "public",
+MODE: getConfig("MODE") || "public",
 // make bot public-private-inbox-group 
 ANTI_LINK_KICK: process.env.ANTI_LINK_KICK || "false",
 // make anti link true,false for groups 
