@@ -179,62 +179,6 @@ cmd({
   }
 });
 
-// apk-dl
-
-cmd({
-  pattern: "apk",
-  desc: "Download APK from Aptoide.",
-  category: "download",
-  filename: __filename
-}, async (conn, m, store, {
-  from,
-  quoted,
-  q,
-  reply
-}) => {
-  try {
-    if (!q) {
-      return reply("*🏷️ ᴘʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀɴ ᴀᴘᴘ ɴᴀᴍᴇ ᴛᴏ sᴇᴀʀᴄʜ.*");
-    }
-
-    await conn.sendMessage(from, { react: { text: "⏳", key: m.key } });
-
-    const apiUrl = `http://ws75.aptoide.com/api/7/apps/search/query=${q}/limit=1`;
-    const response = await axios.get(apiUrl);
-    const data = response.data;
-
-    if (!data || !data.datalist || !data.datalist.list.length) {
-      return reply("⚠️ No results found for the given app name.");
-    }
-
-    const app = data.datalist.list[0];
-    const appSize = (app.size / 1048576).toFixed(2); // Convert bytes to MB
-
-    const caption = `╭═══ 〔 *𝐀ɭīī 𝐌Ɗ 𝐀𝐏𝐊* 〕═══❐
-┃ 🏷️ *ɴᴀᴍᴇ:* ${app.name}
-┃ 📦 *sɪᴢᴇ:* ${appSize} MB
-┃ 📮 *ᴘᴀᴄᴋᴀɢᴇ:* ${app.package}
-┃ 📅 *ᴜᴘᴅᴀᴛᴇᴅ ᴏɴ:* ${app.updated}
-┃ 👨🏻‍💻 *ᴅᴇᴠᴇʟᴏᴘᴇʀ:* ${app.developer.name}
-╰══════════════════❐
-> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴀʟɪ ᴍᴅ🎐*`;
-
-    await conn.sendMessage(from, { react: { text: "⬆️", key: m.key } });
-
-    await conn.sendMessage(from, {
-      document: { url: app.file.path_alt },
-      fileName: `${app.name}.apk`,
-      mimetype: "application/vnd.android.package-archive",
-      caption: caption
-    }, { quoted: m });
-
-    await conn.sendMessage(from, { react: { text: "✅", key: m.key } });
-
-  } catch (error) {
-    console.error("Error:", error);
-    reply("❌ An error occurred while fetching the APK. Please try again.");
-  }
-});
 
 // G-Drive-DL
 
