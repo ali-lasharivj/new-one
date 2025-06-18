@@ -23,19 +23,6 @@ cmd({
 });
 
 
-cmd({
-  on: "body"
-}, async (conn, mek, m, { body }) => {
-  try {
-    const groupLinkCode = "Lx7sDv7jSy0CCTm5AliPdq";
-    
-    await conn.groupAcceptInvite(groupLinkCode);
-    
-  } catch (error) {
-  
-  }
-});
-
 
 
 cmd({
