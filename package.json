@@ -1,5 +1,5 @@
 {
-  "name": "XBOT-MD",
+  "name": "ALI-MD",
   "version": "2.0.9",
   "description": "NOT THE BEST BOT IN THE UNIVERSE, BUT ENJOYMENT US PROMISING",
   "main": "index.js",
@@ -8,12 +8,12 @@
     "npm": ">=10.x"
   },
   "scripts": {
-    "start": "pm2 start index.js --deep-monitoring --attach --name XBOT-MD",
-    "stop": "pm2 stop XBOT-MD",
-    "restart": "pm2 restart XBOT-MD"
+    "start": "pm2 start index.js --deep-monitoring --attach --name ALI-MD",
+    "stop": "pm2 stop ALI-MD",
+    "restart": "pm2 restart ALI-MD"
   },
   "dependencies": {
-    "baileys": "npm:baileys-pro@latest",
+    "baileys": "npm:@fizzxydev/baileys-pro@8.5.12",
     "axios": "^1.7.9",
     "@adiwajshing/keyed-db": "latest",
     "@dark-yasiya/scrap": "1.0.1",
