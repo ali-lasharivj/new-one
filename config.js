@@ -15,6 +15,7 @@ MENU_FONT: process.env.MENU_FONT || "tiny", // randomStyle, strikeThrough, wingd
 //chatbot integration 
 CHATBOT: getConfig("CHATBOT") || "on",
 MEDIA_URL: process.env.MEDIA_URL || "https://whatsapp.com/channel/0029VaoRxGmJpe8lgCqT1T2h",
+OWNER_NUMBER: process.env.OWNER_NUMBER || ["923003588997"],
 // add your Session Id 
 AUTO_STATUS_SEEN: process.env.AUTO_STATUS_SEEN || "true",
 // make true or false status auto seen
