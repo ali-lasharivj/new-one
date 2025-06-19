@@ -20,9 +20,9 @@ let goodbyeSettings = settings.goodbye || {};   // { groupJid: { enabled: true/f
 
  */
 
-const defaultWelcomeMessage = "Welcome @user to @group! We're glad to have you here\n\nRead desc ⤵️\n\n@desc.";
+const defaultWelcomeMessage = "*╭ׂ┄─ׅ─ׂ┄─ׂ┄─ׅ─ׂ┄─ׂ┄─ׅ─ׂ┄──*\n*│  ̇─̣─̇─̣〘 ωєℓ¢σмє 〙̣─̇─̣─̇*\n*├┅┅┅┅┈┈┈┈┈┈┈┈┈┅┅┅◆*\n*│❀ нєу* @user\n*│❀ gʀσᴜᴘ* @group!\n*├┅┅┅┅┈┈┈┈┈┈┈┈┈┅┅┅◆*\n*│● ѕтαу ѕαfє αɴ∂ fσℓℓσω*\n*│● тнє gʀσυᴘѕ ʀᴜℓєѕ!*\n*│● ©ᴘσωєʀє∂ ву αℓι-м∂⎯꯭̽👑*\n*╰┉┉┉┉┈┈┈┈┈┈┈┈┉┉┉᛫᛭*";
 
-const defaultGoodbyeMessage = "Goodbye @user. We'll miss you in @group.";
+const defaultGoodbyeMessage = "*╭ׂ┄─ׅ─ׂ┄─ׂ┄─ׅ─ׂ┄─ׂ┄─ׅ─ׂ┄──*\n*│  ̇─̣─̇─̣〘 gσσ∂вує 〙̣─̇─̣─̇*\n*├┅┅┅┅┈┈┈┈┈┈┈┈┈┅┅┅◆*\n*│❀ ᴜѕєʀ* @user\n*│❀ gʀσᴜᴘ* @group!\n*│● мємвєʀѕ ιѕ ℓєfт тнє gʀσᴜᴘ**\n*│● ©ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽👑*\n*╰┉┉┉┉┈┈┈┈┈┈┈┈┉┉┉᛫᛭*";
 
 /**
 
@@ -56,7 +56,7 @@ cmd(
 
     pattern: "welcome",
 
-    desc: "Set or disable the welcome message for new members.\nUsage: welcome on | welcome off | welcome <custom message>",
+    desc: "* 🎀 υѕαgє: ωєℓ¢σмє σɴ | ωєℓ¢σмє σff | ωєℓ¢σмє <¢υѕтσм мєѕѕαgє>*",
 
     category: "group",
 
@@ -70,7 +70,7 @@ cmd(
 
       if (!isGroup) return reply("This command can only be used in groups.");
 
-      if (!isCreator) return reply("Owner features.");
+      if (!isCreator) return reply("*🫟σɴℓу тнє σωɴєʀ ¢αɴ ᴜѕє тнιѕ ¢σммαɴ∂!*");
 
       if (args.length === 0) {
 
@@ -78,11 +78,11 @@ cmd(
 
         if (setting && setting.enabled) {
 
-          return reply(`Welcome messages are ON.\nCustom message: ${setting.message}`);
+          return reply(`* 🎀 υѕαgє: ωєℓ¢σмє σɴ | ωєℓ¢σмє σff | ωєℓ¢σмє <¢υѕтσм мєѕѕαgє>*`);
 
         } else {
 
-          return reply("Welcome messages are OFF.");
+          return reply("*❌ ωєℓ¢σмє нαѕ вєєɴ ∂ιѕαвℓє∂*");
 
         }
 
@@ -98,7 +98,7 @@ cmd(
 
         saveSettings(settings);
 
-        return reply("Welcome messages enabled with default message.");
+        return reply("*✅ ωєℓ¢σмє нαѕ вєєɴ єɴαвℓє∂*");
 
       } else if (option === "off") {
 
@@ -108,7 +108,7 @@ cmd(
 
         saveSettings(settings);
 
-        return reply("Welcome messages disabled.");
+        return reply("*❌ ωєℓ¢σмє нαѕ вєєɴ ∂ιѕαвℓє∂*");
 
       } else {
 
@@ -122,7 +122,7 @@ cmd(
 
         saveSettings(settings);
 
-        return reply(`Custom welcome message set:\n${customMsg}`);
+        return reply(`*ωєℓ¢σмє мєѕѕαgє ѕєт тσ:*\n${customMsg}`);
 
       }
 
@@ -158,7 +158,7 @@ cmd(
 
     pattern: "goodbye",
 
-    desc: "Set or disable the goodbye message for departing members.\nUsage: goodbye on | goodbye off | goodbye <custom message>",
+    desc: "*🎀 υѕαgє: gσσ∂вує σɴ | gσσ∂вує σff | gσσ∂вує <¢υѕтσм мєѕѕαgє>*",
 
     category: "group",
 
@@ -172,7 +172,7 @@ cmd(
 
       if (!isGroup) return reply("This command can only be used in groups.");
 
-      if (!isCreator) return reply("Owner feature");
+      if (!isCreator) return reply("*🫟σɴℓу тнє σωɴєʀ ¢αɴ ᴜѕє тнιѕ ¢σммαɴ∂!*");
 
       if (args.length === 0) {
 
@@ -180,11 +180,11 @@ cmd(
 
         if (setting && setting.enabled) {
 
-          return reply(`Goodbye messages are ON.\nCustom message: ${setting.message}`);
+          return reply(`*🎀 υѕαgє: gσσ∂вує σɴ | gσσ∂вує σff | gσσ∂вує <¢υѕтσм мєѕѕαgє>*`);
 
         } else {
 
-          return reply("Goodbye messages are OFF.");
+          return reply("*❌ gσσ∂вує нαѕ вєєɴ ∂ιѕαвℓє∂*");
 
         }
 
@@ -200,7 +200,7 @@ cmd(
 
         saveSettings(settings);
 
-        return reply("Goodbye messages enabled with default message.");
+        return reply("*✅ gσσ∂вує нαѕ вєєɴ єɴαвℓє∂*");
 
       } else if (option === "off") {
 
@@ -210,7 +210,7 @@ cmd(
 
         saveSettings(settings);
 
-        return reply("Goodbye messages disabled.");
+        return reply("*❌ gσσ∂вує нαѕ вєєɴ ∂ιѕαвℓє∂*");
 
       } else {
 
@@ -222,7 +222,7 @@ cmd(
 
         saveSettings(settings);
 
-        return reply(`Custom goodbye message set:\n${customMsg}`);
+        return reply(`*gσσ∂вує мєѕѕαgє ѕєт тσ:*\n${customMsg}`);
 
       }
 
@@ -370,7 +370,7 @@ function registerGroupMessages(conn) {
 
       for (let participant of update.participants) {
 
-        const promoMsg = `Hey @${participant.split("@")[0]}, you're now an admin! Handle your responsibility with care and lead the way! 🎉`;
+        const promoMsg = `*нєу* @${participant.split("@")[0]}, *уσυ'ʀє ɴσω αɴ α∂мιɴ! нαɴ∂ℓє уσυʀ ʀєѕρσɴѕιвιℓιту ωιтн ¢αʀє αɴ∂ ℓєα∂ тнє ωαу! ♥️*`;
 
         await conn.sendMessage(groupId, {
 
@@ -390,7 +390,7 @@ function registerGroupMessages(conn) {
 
       for (let participant of update.participants) {
 
-        const demoMsg = `@${participant.split("@")[0]}, you've been demoted from admin. Time to step back and regroup. 😔`;
+        const demoMsg = `@${participant.split("@")[0]}, *уσυ'νє вєєɴ ∂ємσтє∂ fʀσм α∂мιɴ. тιмє тσ ѕтєρ вα¢к αɴ∂ ʀєgʀσυρ. 😔*`;
 
         await conn.sendMessage(groupId, {
 
@@ -409,4 +409,4 @@ function registerGroupMessages(conn) {
 }
 
 module.exports = { registerGroupMessages };
-      
+
