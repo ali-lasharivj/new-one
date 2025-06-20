@@ -12,19 +12,22 @@ let warnCounts = {};
 cmd(
   {
     pattern: "antic",
+    alias: ["anti-channel","antichannel"],
+    react: "🔐",
     desc: "Configure anti‑newsletter mode: delete, warn, kick, off",
     category: "moderation",
     filename: __filename,
   },
   async (conn, mek, m, { from, args, reply, isGroup, isBotAdmins, isAdmins }) => {
     try {
-      if (!isGroup) return reply("This command can only be used in groups.");
-      if (!isBotAdmins) return reply("*Promote me as admin to use this feature*");
-      if (!isAdmins) return reply("*You must be an admin to use this command!*"); 
+   // Check for group, bot admin, and user admin permissions
+    if (!isGroup) return reply('This command can only be used in a group.');
+    if (!isBotAdmins) return reply('*📛 ι ɴєє∂ тσ вє αɴ α∂мιɴ тσ ᴜѕє тнιѕ ᴄσммαɴ∂.*');
+    if (!isAdmins) return reply('*📛 σɴℓʏ gʀσᴜᴘ α∂мιɴs σʀ тнє σωɴєʀ ᴄαɴ ᴜsє тнιѕ ᴄσммαɴ∂.*');
 
       if (args.length === 0) {
         const currentMode = antinewsletterSettings[from] || "off";
-        return reply(`Current anti‑newsletter mode is: ${currentMode}`);
+        return reply(`*¢υʀʀєɴт αɴтι‑ɴєωѕℓєттєʀ мσ∂є ιѕ: ${currentMode}*`);
       }
 
       const mode = args[0].toLowerCase();
@@ -83,7 +86,7 @@ async function handleAntiNewsletter(conn, m, { from, sender, groupMetadata }) {
         await conn.sendMessage(
           from,
           {
-            text: `@${sender.split("@")[0]}, you have been kicked for repeatedly sharing forwarded channel messages.`,
+            text: `*⌈🐍 ¢нαɴɴєℓ fσʀωαʀ∂ ∂єтє¢тє∂ ⌋*\n*╭────────────────┄┈┈*\n*│🫩 υѕєʀ:* @${sender.split('@')[0]}\n*│🛩️ кι¢кє∂: ѕυ¢¢єѕѕfυℓℓу!*\n*│📑 ʀєαѕσɴ: ¢нαɴɴєℓ fσʀωαʀ∂*\n*╰────────────────┄┈┈*`,
             mentions: [sender],
           },
           { quoted: m }
@@ -96,7 +99,8 @@ async function handleAntiNewsletter(conn, m, { from, sender, groupMetadata }) {
         await conn.sendMessage(
           from,
           {
-            text: `@${sender.split("@")[0]}, sharing forwarded channel messages is not allowed. Warning ${warnCounts[warnKey]}/3.`,
+            text: `*⌈⚠️ ¢нαɴɴєℓ fσʀωαʀ∂ ∂єтє¢тє∂ ⌋*\n*╭────────────────┄┈┈*\n*│🫩 υѕєʀ:* @${sender.split("@")[0]},
+*│📑 ʀєαѕσɴ: ¢нαɴɴєℓ fσʀωαʀ∂*\n*│🛩️ ωαʀɴѕ: ${warnCounts[warnKey]}1/3 ▰▰▱*\n*╰────────────────┄┈┈*`,
             mentions: [sender],
           },
           { quoted: m }
@@ -107,7 +111,7 @@ async function handleAntiNewsletter(conn, m, { from, sender, groupMetadata }) {
       await conn.sendMessage(
         from,
         {
-          text: `@${sender.split("@")[0]}, you are being removed for sharing forwarded channel messages.`,
+          text: `@${sender.split("@")[0]}, *нαѕ вєєи ʀємσνє∂ ᴡαʀɴ ℓιмιт єχᴄєє∂є∂!*`,
           mentions: [sender],
         },
         { quoted: m }
@@ -145,4 +149,3 @@ function registerAntiNewsletter(conn) {
 }
 
 module.exports = { registerAntiNewsletter };
-        
