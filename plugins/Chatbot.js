@@ -41,15 +41,7 @@ cmd({
 cmd({
     on: "body"
 }, async (conn, m, store, {
-    from,
-    body,
-    sender,
-    botNumber,
-    isGroup,
-    isBotAdmins,
-    isAdmins,
-    reply
-}) => {
+    from, args, q, isGroup, senderNumber, botNumber, reply }) => {
     try {
         // Check if AI is disabled
         if (AI_ENABLED !== "true") return;
