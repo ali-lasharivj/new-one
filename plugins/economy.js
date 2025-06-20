@@ -98,7 +98,7 @@ cmd({
   const user = m.sender;
   const data = await getUser(econ, user);
   return conn.sendMessage(m.chat, {
-    text: `👛 *@${user.split("@")[0]}'s Wallet*\n\n💰 Balance: *₦${data.balance}*`,
+    text: `👛 *@${user.split("@")[0]}'s Wallet*\n\n💰 Balance: *$${data.balance}*`,
     mentions: [user],
   }, { quoted: m });
 });
@@ -136,7 +136,7 @@ cmd({
   await econ.updateOne({ user: sender }, { $inc: { balance: -amount } });
   await econ.updateOne({ user: mentioned }, { $inc: { balance: amount } });
   return conn.sendMessage(m.chat, {
-    text: `💸 @${sender.split("@")[0]} sent ₦${amount} to @${mentioned.split("@")[0]}!`,
+    text: `💸 @${sender.split("@")[0]} sent $${amount} to @${mentioned.split("@")[0]}!`,
     mentions: [sender, mentioned]
   }, { quoted: m });
 });
@@ -151,11 +151,11 @@ cmd({
 }, async (conn, mek, m) => {
   const shopText = `
 🛍️ Welcome to the Platinum Shop!
-1. 🎁 Lucky Box - ₦500
+1. 🎁 Lucky Box - $500
 
-2. 🧃 Energy Drink - ₦200
+2. 🧃 Energy Drink - $200
 
-3. 🎟️ Gamble Ticket - ₦1000
+3. 🎟️ Gamble Ticket - $1000
 
 More coming soon!
 `;
@@ -196,11 +196,11 @@ cmd({
     const multiplier = Math.random() * (maxMultiplier - minMultiplier) + minMultiplier;
     // Calculate reward: multiply the bet by the multiplier (always greater than the bet)
     result = Math.floor(amount * multiplier);
-    message = `🎉 You won ₦${result}! (Multiplier: ${multiplier.toFixed(2)}x)`;
+    message = `🎉 You won $${result}! (Multiplier: ${multiplier.toFixed(2)}x)`;
   } else {
     // Loss: subtract the bet amount
     result = -amount;
-    message = `😢 You lost ₦${amount}. Better luck next time.`;
+    message = `😢 You lost $${amount}. Better luck next time.`;
   }
   // Update the user's economy balance
   await econ.updateOne({ user }, { $inc: { balance: result } });
@@ -228,7 +228,7 @@ cmd({
   }
   await econ.updateOne({ user }, { $set: { balance } });
   return conn.sendMessage(m.chat, {
-    text: `⚙️ Set the balance of @${user.split("@")[0]} to ₦${balance}.`,
+    text: `⚙️ Set the balance of @${user.split("@")[0]} to $${balance}.`,
     mentions: [user],
   }, { quoted: m });
 });
@@ -252,7 +252,7 @@ cmd({
   }
   await econ.updateOne({ user }, { $inc: { balance: amount } });
   return conn.sendMessage(m.chat, {
-    text: `⚙️ Added ₦${amount} to @${user.split("@")[0]}'s balance.`,
+    text: `⚙️ Added $${amount} to @${user.split("@")[0]}'s balance.`,
     mentions: [user],
   }, { quoted: m });
 });
@@ -275,7 +275,7 @@ cmd({
   }
   await econ.updateOne({ user }, { $set: { balance: 500 } });
   return conn.sendMessage(m.chat, {
-    text: `⚙️ Reset @${user.split("@")[0]}'s balance to ₦500.`,
+    text: `⚙️ Reset @${user.split("@")[0]}'s balance to $500.`,
     mentions: [user],
   }, { quoted: m });
 });
@@ -350,7 +350,6 @@ cmd({
   const earned = chosenJob.earnings[Math.floor(Math.random() * chosenJob.earnings.length)];
   await econ.updateOne({ user }, { $set: { lastDaily: now }, $inc: { balance: earned } });
   return conn.sendMessage(m.chat, {
-    text: `💼 You worked as a ${chosenJob.job} and earned ₦${earned}.`,
+    text: `💼 You worked as a ${chosenJob.job} and earned $${earned}.`,
   }, { quoted: m });
 });
-    
