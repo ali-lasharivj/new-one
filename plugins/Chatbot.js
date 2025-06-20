@@ -41,7 +41,15 @@ cmd({
 cmd({
     on: "body"
 }, async (conn, m, store, {
-    from, args, q, isGroup, senderNumber, botNumber, reply }) => {
+    from,
+    body,
+    sender,
+    botNumber,
+    isGroup,
+    isBotAdmins,
+    isAdmins,
+    reply
+}) => {
     try {
         // Check if AI is disabled
         if (AI_ENABLED !== "true") return;
@@ -73,4 +81,3 @@ cmd({
         reply("Charbot error");
     }
 });
-  
