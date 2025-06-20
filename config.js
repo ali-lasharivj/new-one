@@ -33,8 +33,8 @@ REJECT_MSG: process.env.REJECT_MSG || "*📞 ᴄαℓℓ ɴσт αℓℓσωє�
 // make anti link true,false for groups 
 MENTION_REPLY: process.env.MENTION_REPLY || "false",
 // make true if want auto voice reply if someone menetion you 
-ALIVE_IMG: getConfig("ALIVE_IMG") || "https://cdn.ironman.my.id/i/2du3i5.jpg",
-// add custom menu and mention reply image url
+ALIVE_IMG: getConfig("ALIVE_IMG") || "https://qu.ax/zrqFX.jpg",
+// add custom menu image url
 PREFIX: getConfig("PREFIX") || ".", 
 // add your prifix for bot   
 BOT_NAME: getConfig("BOT_NAME") || "ALI-MD",
@@ -52,9 +52,7 @@ OWNER_NUMBER: process.env.OWNER_NUMBER || "923003588997",
 OWNER_NAME: process.env.OWNER_NAME || "ALI INXIDE",
 // add bot owner name
 DESCRIPTION: process.env.DESCRIPTION || "© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽💀",
-// add bot owner name    
-ALIVE_IMG: getConfig("ALIVE_IMG") || "https://files.catbox.moe/yv8zy4.jpg",  // Bot's "alive" menu mention image
-// add img for alive msg
+// add bot desp name    
 LIVE_MSG: process.env.LIVE_MSG || "HEY IM ALIVE",
 // add alive msg here 
 READ_MESSAGE: process.env.READ_MESSAGE || "false",
