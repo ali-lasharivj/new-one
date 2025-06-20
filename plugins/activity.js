@@ -4,6 +4,7 @@ const { getActivityList } = require("../lib/activity");
 cmd(
   {
     pattern: "tagactive",
+    alias: ["active"],
     desc: "Mentions the most active members in the group 📊",
     category: "group",
     filename: __filename,
@@ -30,7 +31,8 @@ cmd(
 
 cmd(
   {
-    pattern: "listgc",
+    pattern: "topactive",
+    alias: ["activelist"],
     desc: "Lists all group members with their message count 📋",
     category: "group",
     filename: __filename,
@@ -42,7 +44,7 @@ cmd(
       let activityList = getActivityList(from);
       if (activityList.length === 0) return reply("⚠️ *No messages have been recorded yet!*");
 
-      let list = activityList.map((u, i) => `🔹 *${i + 1}.* @${u.user.split("@")[0]} - ${u.count} msgs`).join("\n");
+      let list = activityList.map((u, i) => `🎀 *${i + 1}.* @${u.user.split("@")[0]} - ${u.count} msgs`).join("\n");
 
       let text = `📋 *Group Activity List:*\n\n${list}\n\n💬 *Keep chatting!*`;
 
