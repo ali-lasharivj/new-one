@@ -149,7 +149,7 @@ cmd({
   const currentPlayer = game.players[game.turn];
   if (currentPlayer !== sender) return;
 
-  if (!/^[a-z]{2,}$/.test(text)) return reply("⚠️ Only alphabetic English words are allowed.");
+ // if (!/^[a-z]{2,}$/.test(text)) return reply("⚠️ Only alphabetic English words are allowed.");
   if (text.length < game.wordLimit) return reply(`📏 Word must be at least *${game.wordLimit}* letters.`);
   if (game.words.includes(text)) return reply("♻️ Word already used!");
   if (!(await isValidWord(text))) return reply("❌ Not a valid English word!");
