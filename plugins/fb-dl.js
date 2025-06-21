@@ -52,8 +52,7 @@ cmd({
     // Send the video with details
     await conn.sendMessage(from, {
       video: videoBuffer,
-      caption: `*🎡 fв νι∂єσ ∂σωиℓσα∂є∂*\n` +
-        `> *© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽🐍*`,
+      caption: `*🎡 fв νι∂єσ ∂σωиℓσα∂є∂*\n> *© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽🐍*`,
       contextInfo: {
         mentionedJid: [m.sender],
         forwardingScore: 999,
