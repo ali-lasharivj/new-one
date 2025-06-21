@@ -31,7 +31,6 @@ const {
   const ff = require('fluent-ffmpeg')
   const P = require('pino')
   const GroupEvents = require('./lib/groupevents');
-const { setupLinkDetection } = require("./lib/events/antilinkDetection")
   const qrcode = require('qrcode-terminal')
   const StickersTypes = require('wa-sticker-formatter')
   const util = require('util')
