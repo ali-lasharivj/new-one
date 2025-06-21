@@ -59,38 +59,23 @@ async (conn, mek, m, { from, reply }) => {
 \n> *© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽🐍*`;
 
         // Send an image with the formatted info as a caption and context info
-        if (!config.ALIVE_IMG.includes('mp4')) {
-await conn.sendMessage(from,{image:{url: config.ALIVE_IMG},caption:formattedInfo,
-                             contextInfo: {
-    mentionedJid: [m.sender],
-    forwardingScore: 999,
-    isForwarded: true,
-    forwardedNewsletterMessageInfo: {
-      newsletterJid: '120363318387454868@newsletter',
-      newsletterName: config.BOT_NAME,
-      serverMessageId: 999
-    }
-  }
+        await conn.sendMessage(from, { 
+    image: { url: config.ALIVE_IMG || 'https://files.catbox.moe/6ku0eo.jpg' }, 
+    caption: formattedInfo, 
+    contextInfo: { 
+        mentionedJid: [m.sender], 
+        forwardingScore: 999, 
+        isForwarded: true, 
+        forwardedNewsletterMessageInfo: { 
+            newsletterJid: '120363318387454868@newsletter', 
+            newsletterName: config.BOT_NAME, 
+            serverMessageId: 143 
+        } 
+    } 
 }, { quoted: mek });
-} else {
-await conn.sendMessage(from,{video:{url: config.ALIVE_IMG},caption:formattedInfo,
-                             contextInfo: {
-    mentionedJid: [m.sender],
-    forwardingScore: 999,
-    isForwarded: true,
-    forwardedNewsletterMessageInfo: {
-      newsletterJid: '120363318387454868@newsletter',
-      newsletterName: config.BOT_NAME,
-      serverMessageId: 999
-    }
-  }
-}, { quoted: mek });
-}
-} catch (e) {
-console.log(e)
-reply(`${e}`)
-}
-})
 
-
-                
+} catch (e) { 
+    console.log(e); 
+    reply(`Error: ${e}`); 
+} 
+});
