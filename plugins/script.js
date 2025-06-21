@@ -85,11 +85,12 @@ await conn.sendMessage(from,{video:{url: config.ALIVE_IMG},caption:formattedInfo
     }
   }
 }, { quoted: mek });
+}
+} catch (e) {
+console.log(e)
+reply(`${e}`)
+}
+})
 
-    } catch (error) {
-        console.error("Error in repo command:", error);
-        reply("Sorry, something went wrong while fetching the repository information. Please try again later.");
-    }
-});
 
                 
