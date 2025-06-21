@@ -1,6 +1,6 @@
-name: Xbot-md
+name: ali-md
 services:
-  - name: X-bot-md-service
+  - name: ali-md-service
     type: web
     ports:
       - 5000
