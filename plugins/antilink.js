@@ -1,2 +1,339 @@
-// ALI PROPERTY DON'T TOUCH IT OTHERWISE YOU WILL BE FAMOUS IN THE DEPLOYERS AS A CODE THEIF AND JUNIOR DEVELOPER 🌚💀
-const _0x4feb5e=_0x3fe9;function _0x3fe9(_0x329e51,_0x495fde){const _0x2f69bd=_0x2f69();return _0x3fe9=function(_0x3fe9e1,_0x4aae2e){_0x3fe9e1=_0x3fe9e1-0x139;let _0x15d236=_0x2f69bd[_0x3fe9e1];return _0x15d236;},_0x3fe9(_0x329e51,_0x495fde);}(function(_0x540918,_0x5ce2ab){const _0x90983b=_0x3fe9,_0x43d215=_0x540918();while(!![]){try{const _0x54c115=parseInt(_0x90983b(0x186))/0x1+parseInt(_0x90983b(0x184))/0x2*(parseInt(_0x90983b(0x16a))/0x3)+parseInt(_0x90983b(0x154))/0x4+parseInt(_0x90983b(0x167))/0x5+parseInt(_0x90983b(0x157))/0x6+-parseInt(_0x90983b(0x139))/0x7*(parseInt(_0x90983b(0x15a))/0x8)+-parseInt(_0x90983b(0x172))/0x9*(parseInt(_0x90983b(0x13b))/0xa);if(_0x54c115===_0x5ce2ab)break;else _0x43d215['push'](_0x43d215['shift']());}catch(_0x1c44cf){_0x43d215['push'](_0x43d215['shift']());}}}(_0x2f69,0xca92d));const fs=require('fs'),{cmd,commands}=require(_0x4feb5e(0x181)),config=require('../config'),axios=require(_0x4feb5e(0x158)),prefix=config[_0x4feb5e(0x14e)],AdmZip=require(_0x4feb5e(0x16b)),{getBuffer,getGroupAdmins,getRandom,h2k,isUrl,Json,sleep,fetchJson}=require('../lib/functions2'),{writeFileSync}=require('fs'),path=require('path');function _0x2f69(){const _0x5a8de2=['split','*⌈⚠️\x20ℓιɴк\x20∂єтє¢тє∂\x20⌋*\x0a*╭────────────────┄┈┈*\x0a*│🫩\x20υѕєʀ:*\x20@','ANTI_LINK_DELETE','❌\x20An\x20error\x20occurred\x20while\x20processing\x20the\x20message.','warnings','4641095dnJeHj','!\x0a*├▢\x20ᴄσᴜɴᴛ\x20:\x20','body','147lWXADo','adm-zip','*✅\x20αɴтι-ℓιɴк\x20∂єℓєтє\x20нαѕ\x20вєєи\x20єɴαвℓє∂*','*⚠️\x20вα∂\x20ωσя∂ѕ\x20иσт\x20αℓℓσωє∂\x20ιи\x20🚫*','wtf','remoteJid','https://files.catbox.moe/33hd05.jpg','off','54eAacRW','\x0a*│🛩️\x20кι¢кє∂:\x20ѕυ¢¢єѕѕfυℓℓу!*\x0a*│📑\x20ʀєαѕσɴ:\x20ℓιɴкѕ\x20ɴσт\x20αℓℓσωє∂*\x0a*╰────────────────┄┈┈*','_*❗This\x20Command\x20Can\x20Only\x20Be\x20Used\x20By\x20My\x20Owner\x20!*_','کون','enable\x20or\x20disable\x20antibad.','pakaya','error','test','message','extendedTextMessage','antilink','remove','Anti-link\x20error:','ANTI_BAD_WORD','conversation','../command','true','∂ιѕαвℓє∂','19546OfPavI','ωαʀɴ','13864xzkOQq','Link\x20detected\x20from\x20','Failed\x20to\x20delete\x20message:','56rxiJjs','antibadword','928090GwwDln','stanzaId','messages.upsert','*📛\x20σɴℓʏ\x20gʀσᴜᴘ\x20α∂мιɴs\x20σʀ\x20тнє\x20σωɴєʀ\x20ᴄαɴ\x20ᴜsє\x20тнιѕ\x20ᴄσммαɴ∂.*','hutto','🛡️','‎*⚠️\x20ℓιɴкѕ\x20αʀє\x20ɴσт\x20αℓℓσωє∂\x20⚠️*\x0a*╭────⬡\x20ᴡαʀɴιɴg\x20⬡────*\x0a*├▢\x20ᴜsєʀ\x20:*\x20@','false','porn','boobs','mia','*⌈\x20ీ𝐀𝐍𝐓𝐈-𝐋𝐈𝐍𝐊\x20𝐂𝐌𝐃\x20𝐆𝐔𝐈𝐃𝐄ీ\x20⌋*\x0a‎*╭──────────────────✑*\x0a‎*┋*\x20*⬡\x20☇\x20*¢ᴜʀʀєɴᴛ\x20мσ∂є:','sendMessage','anti-bad','کوس','❌\x20An\x20error\x20occurred\x20while\x20processing\x20the\x20anti-link\x20command.','*\x0a*├▢\x20ʀєαѕσɴ\x20:\x20ℓιɴᴋ\x20ѕєɴ∂ιɴg*\x0a*├▢\x20ᴡαʀɴ\x20ℓιмιт\x20:\x203*\x0a*╰────────────────*','\x20*нαѕ\x20вєєи\x20ʀємσνє∂\x20ᴡαʀɴ\x20ℓιмιт\x20єχᴄєє∂є∂!*','text','PREFIX','*🏷️\x20єχαмρℓє:\x20αɴтι-вα∂\x20σɴ/σff*','owner','messages','ANTI_LINK_KICK','*❌\x20αɴтι-ℓιɴк\x20all\x20нαѕ\x20вєєи\x20∂ιѕαвℓє∂*','809376qwSsKv','Message\x20deleted:\x20','toLowerCase','7625298EJmYQB','axios','*✅\x20αитι-вα∂\x20ωσя∂ѕ\x20нαѕ\x20вєєи\x20єɴαвℓє∂*','1507592thgVia','some','This\x20command\x20can\x20only\x20be\x20used\x20in\x20a\x20group.','*⛔\x20ιɴναℓι∂\x20σρтισɴ.\x20ρℓєαѕє\x20ʀєρℓу\x20ωιтн\x201,\x202,\x203,\x20σʀ\x204.*','key','log','includes','غین'];_0x2f69=function(){return _0x5a8de2;};return _0x2f69();}cmd({'pattern':_0x4feb5e(0x17c),'desc':'Configure\x20ANTILINK\x20system\x20with\x20menu','category':_0x4feb5e(0x150),'react':_0x4feb5e(0x140),'filename':__filename},async(_0x1f28ab,_0x2f72cd,_0x25d693,{from:_0x2c1cf6,l:_0x2976db,quoted:_0x270a80,body:_0x121b8d,isCmd:_0x1766d5,command:_0x2e075e,args:_0x355e14,q:_0x5cd87a,isGroup:_0x3a4c65,sender:_0x4ef57e,senderNumber:_0x584e48,botNumber2:_0x4bb88b,botNumber:_0x483adc,pushname:_0x1306ae,isMe:_0x11a35d,isCreator:_0x2978ba,groupMetadata:_0x33eb52,groupName:_0x1aa02c,participants:_0x528681,groupAdmins:_0x391262,isBotAdmins:_0x47f314,isAdmins:_0x1db1e5,reply:_0x51c221})=>{const _0x45fd08=_0x4feb5e;try{if(!_0x3a4c65)return _0x51c221(_0x45fd08(0x15c));if(!_0x47f314)return _0x51c221('*📛\x20ι\x20ɴєє∂\x20тσ\x20вє\x20αɴ\x20α∂мιɴ\x20тσ\x20ᴜѕє\x20тнιѕ\x20ᴄσммαɴ∂.*');if(!_0x1db1e5)return _0x51c221(_0x45fd08(0x13e));const _0x3c8348=config['ANTI_LINK_KICK']===_0x45fd08(0x182)?'кι¢к':config['ANTI_LINK_WARN']===_0x45fd08(0x182)?_0x45fd08(0x185):config['ANTI_LINK_DELETE']==='true'?'∂єℓєтє':_0x45fd08(0x183),_0x12eb5c=_0x45fd08(0x146)+_0x3c8348+'*\x0a‎*┋*\x20*⬡\x20𝟏:\x20αɴтι-ℓιɴк\x20ωαʀɴ*\x0a‎*┋*\x20*⬡\x20𝟐:\x20αɴтι-ℓιɴк\x20∂єℓєтє*\x0a*┋*\x20*⬡\x20𝟑:\x20αɴтι-ℓιɴк\x20кι¢к*\x0a‎*┋*\x20*⬡\x20𝟒:\x20αɴтι-ℓιɴк\x20αℓℓ\x20∂ιѕαвℓє∂*\x0a‎*╰──────────────────✑*\x0a>\x20*©\x20ᴘσωєʀє∂\x20ву\x20αℓι\x20м∂⎯꯭̽💀🐍*',_0x431c68=await _0x1f28ab[_0x45fd08(0x147)](_0x2c1cf6,{'image':{'url':_0x45fd08(0x170)},'caption':_0x12eb5c},{'quoted':_0x2f72cd}),_0x197d78=_0x431c68[_0x45fd08(0x15e)]['id'],_0x50d8c7=async _0x3b6171=>{const _0x5cfb9a=_0x45fd08;try{const _0x2a44f5=_0x3b6171[_0x5cfb9a(0x151)][0x0];if(!_0x2a44f5?.['message']||!_0x2a44f5['key']?.[_0x5cfb9a(0x16f)])return;const _0x3c9ebe=_0x2a44f5['message']?.[_0x5cfb9a(0x17b)]?.['contextInfo']?.[_0x5cfb9a(0x13c)],_0xe11332=_0x3c9ebe===_0x197d78;if(!_0xe11332)return;const _0x2586a3=_0x2a44f5[_0x5cfb9a(0x17a)]?.[_0x5cfb9a(0x180)]||_0x2a44f5['message']?.[_0x5cfb9a(0x17b)]?.[_0x5cfb9a(0x14d)]||'',_0x3ba4ef=_0x2a44f5[_0x5cfb9a(0x15e)][_0x5cfb9a(0x16f)];config[_0x5cfb9a(0x164)]=_0x5cfb9a(0x142),config['ANTI_LINK_WARN']=_0x5cfb9a(0x142),config[_0x5cfb9a(0x152)]=_0x5cfb9a(0x142);if(_0x2586a3==='1')config['ANTI_LINK_WARN']=_0x5cfb9a(0x182),await _0x1f28ab[_0x5cfb9a(0x147)](_0x3ba4ef,{'text':'*✅\x20αɴтι-ℓιɴк\x20ωαʀɴ\x20нαѕ\x20вєєи\x20єɴαвℓє∂*'},{'quoted':_0x2a44f5});else{if(_0x2586a3==='2')config['ANTI_LINK_DELETE']=_0x5cfb9a(0x182),await _0x1f28ab[_0x5cfb9a(0x147)](_0x3ba4ef,{'text':_0x5cfb9a(0x16c)},{'quoted':_0x2a44f5});else{if(_0x2586a3==='3')config['ANTI_LINK_KICK']='true',await _0x1f28ab[_0x5cfb9a(0x147)](_0x3ba4ef,{'text':'*✅\x20αɴтι-ℓιɴк\x20кι¢к\x20нαѕ\x20вєєи\x20єɴαвℓє∂*'},{'quoted':_0x2a44f5});else _0x2586a3==='4'?await _0x1f28ab[_0x5cfb9a(0x147)](_0x3ba4ef,{'text':_0x5cfb9a(0x153)},{'quoted':_0x2a44f5}):await _0x1f28ab['sendMessage'](_0x3ba4ef,{'text':_0x5cfb9a(0x15d)},{'quoted':_0x2a44f5});}}_0x1f28ab['ev'][_0x5cfb9a(0x171)](_0x5cfb9a(0x13d),_0x50d8c7);}catch(_0x2decf5){console[_0x5cfb9a(0x15f)]('Antilink\x20handler\x20error:',_0x2decf5);}};_0x1f28ab['ev']['on'](_0x45fd08(0x13d),_0x50d8c7),setTimeout(()=>{_0x1f28ab['ev']['off']('messages.upsert',_0x50d8c7);},0x927c0);}catch(_0x2ef3a4){_0x51c221('❗\x20Error:\x20'+_0x2ef3a4[_0x45fd08(0x17a)]);}}),cmd({'on':'body'},async(_0x11af07,_0x2e65e9,_0x3ab3ca,{from:_0x132962,body:_0x41dedd,sender:_0x465a89,isGroup:_0x246753,isAdmins:_0x430982,isBotAdmins:_0x2e3e8e})=>{const _0xc1b12d=_0x4feb5e;try{if(!_0x246753||_0x430982||!_0x2e3e8e)return;const _0x35a3f1=[/https?:\/\/(?:chat\.whatsapp\.com|wa\.me)\/\S+/gi,/^https?:\/\/(www\.)?whatsapp\.com\/channel\/([a-zA-Z0-9_-]+)$/,/wa\.me\/\S+/gi,/https?:\/\/(?:t\.me|telegram\.me)\/\S+/gi,/https?:\/\/(?:www\.)?youtube\.com\/\S+/gi,/https?:\/\/youtu\.be\/\S+/gi,/https?:\/\/(?:www\.)?twitter\.com\/\S+/gi,/https?:\/\/(?:www\.)?linkedin\.com\/\S+/gi,/https?:\/\/(?:www\.)?snapchat\.com\/\S+/gi,/https?:\/\/(?:www\.)?pinterest\.com\/\S+/gi,/https?:\/\/(?:www\.)?reddit\.com\/\S+/gi,/https?:\/\/ngl\/\S+/gi,/https?:\/\/(?:www\.)?discord\.com\/\S+/gi,/https?:\/\/(?:www\.)?twitch\.tv\/\S+/gi,/https?:\/\/(?:www\.)?vimeo\.com\/\S+/gi,/https?:\/\/(?:www\.)?dailymotion\.com\/\S+/gi,/https?:\/\/(?:www\.)?medium\.com\/\S+/gi],_0x738d82=_0x35a3f1['some'](_0x2cf0b7=>_0x2cf0b7['test'](_0x41dedd));_0x738d82&&config[_0xc1b12d(0x164)]===_0xc1b12d(0x182)&&(await _0x11af07[_0xc1b12d(0x147)](_0x132962,{'delete':_0x2e65e9['key']},{'quoted':_0x2e65e9}),await _0x11af07[_0xc1b12d(0x147)](_0x132962,{'text':'*⚠️\x20ℓιɴкѕ\x20αʀє\x20ɴσт\x20αℓℓσωє∂\x20ιɴ\x20тнιѕ\x20gʀσυρ*\x20@'+_0x465a89['split']('@')[0x0]+'̄⁩\x20*ρℓєαѕє\x20ανσι∂\x20ѕєɴ∂ιиg\x20ℓιɴкѕ.🚫*','mentions':[_0x465a89]},{'quoted':_0x2e65e9}));}catch(_0x362751){console[_0xc1b12d(0x178)](_0x362751);}}),cmd({'on':'body'},async(_0x1b9c7e,_0xe9ebf3,_0x2c488e,{from:_0x5e2494,body:_0x5a0401,sender:_0x57410f,isGroup:_0x1abbda,isAdmins:_0x2443e2,isBotAdmins:_0x3d7263,reply:_0x177082})=>{const _0x1d50d8=_0x4feb5e;try{!global[_0x1d50d8(0x166)]&&(global['warnings']={});if(!_0x1abbda||_0x2443e2||!_0x3d7263)return;const _0x2812aa=[/https?:\/\/(?:chat\.whatsapp\.com|wa\.me)\/\S+/gi,/^https?:\/\/(www\.)?whatsapp\.com\/channel\/([a-zA-Z0-9_-]+)$/,/wa\.me\/\S+/gi,/https?:\/\/(?:t\.me|telegram\.me)\/\S+/gi,/https?:\/\/(?:www\.)?youtube\.com\/\S+/gi,/https?:\/\/youtu\.be\/\S+/gi,/https?:\/\/(?:www\.)?twitter\.com\/\S+/gi,/https?:\/\/(?:www\.)?linkedin\.com\/\S+/gi,/https?:\/\/(?:www\.)?snapchat\.com\/\S+/gi,/https?:\/\/(?:www\.)?pinterest\.com\/\S+/gi,/https?:\/\/(?:www\.)?reddit\.com\/\S+/gi,/https?:\/\/ngl\/\S+/gi,/https?:\/\/(?:www\.)?discord\.com\/\S+/gi,/https?:\/\/(?:www\.)?twitch\.tv\/\S+/gi,/https?:\/\/(?:www\.)?vimeo\.com\/\S+/gi,/https?:\/\/(?:www\.)?dailymotion\.com\/\S+/gi,/https?:\/\/(?:www\.)?medium\.com\/\S+/gi],_0x19753e=_0x2812aa[_0x1d50d8(0x15b)](_0x18222f=>_0x18222f[_0x1d50d8(0x179)](_0x5a0401));if(_0x19753e&&config['ANTI_LINK_WARN']===_0x1d50d8(0x182)){console['log'](_0x1d50d8(0x187)+_0x57410f+':\x20'+_0x5a0401);try{await _0x1b9c7e[_0x1d50d8(0x147)](_0x5e2494,{'delete':_0xe9ebf3[_0x1d50d8(0x15e)]}),console[_0x1d50d8(0x15f)](_0x1d50d8(0x155)+_0xe9ebf3[_0x1d50d8(0x15e)]['id']);}catch(_0x17b88c){console['error'](_0x1d50d8(0x188),_0x17b88c);}global[_0x1d50d8(0x166)][_0x57410f]=(global[_0x1d50d8(0x166)][_0x57410f]||0x0)+0x1;const _0x1c19da=global['warnings'][_0x57410f];_0x1c19da<0x4?await _0x1b9c7e[_0x1d50d8(0x147)](_0x5e2494,{'text':_0x1d50d8(0x141)+_0x57410f[_0x1d50d8(0x162)]('@')[0x0]+_0x1d50d8(0x168)+_0x1c19da+_0x1d50d8(0x14b),'mentions':[_0x57410f]}):(await _0x1b9c7e[_0x1d50d8(0x147)](_0x5e2494,{'text':'@'+_0x57410f[_0x1d50d8(0x162)]('@')[0x0]+_0x1d50d8(0x14c),'mentions':[_0x57410f]}),await _0x1b9c7e['groupParticipantsUpdate'](_0x5e2494,[_0x57410f],_0x1d50d8(0x17d)),delete global[_0x1d50d8(0x166)][_0x57410f]);}}catch(_0x46d03c){console[_0x1d50d8(0x178)](_0x1d50d8(0x17e),_0x46d03c),_0x177082(_0x1d50d8(0x165));}}),cmd({'on':_0x4feb5e(0x169)},async(_0x167346,_0x39f73d,_0x4efa59,{from:_0x4dcbe2,body:_0x555430,sender:_0x85226b,isGroup:_0x1144c0,isAdmins:_0x908ea6,isBotAdmins:_0x33aec2,reply:_0x14d7be})=>{const _0x42c489=_0x4feb5e;try{if(!_0x1144c0||_0x908ea6||!_0x33aec2)return;const _0x37b665=[/https?:\/\/(?:chat\.whatsapp\.com|wa\.me)\/\S+/gi,/^https?:\/\/(www\.)?whatsapp\.com\/channel\/([a-zA-Z0-9_-]+)$/,/wa\.me\/\S+/gi,/https?:\/\/(?:t\.me|telegram\.me)\/\S+/gi,/https?:\/\/(?:www\.)?youtube\.com\/\S+/gi,/https?:\/\/youtu\.be\/\S+/gi,/https?:\/\/(?:www\.)?twitter\.com\/\S+/gi,/https?:\/\/(?:www\.)?linkedin\.com\/\S+/gi,/https?:\/\/(?:www\.)?snapchat\.com\/\S+/gi,/https?:\/\/(?:www\.)?pinterest\.com\/\S+/gi,/https?:\/\/(?:www\.)?reddit\.com\/\S+/gi,/https?:\/\/ngl\/\S+/gi,/https?:\/\/(?:www\.)?discord\.com\/\S+/gi,/https?:\/\/(?:www\.)?twitch\.tv\/\S+/gi,/https?:\/\/(?:www\.)?vimeo\.com\/\S+/gi,/https?:\/\/(?:www\.)?dailymotion\.com\/\S+/gi,/https?:\/\/(?:www\.)?medium\.com\/\S+/gi],_0x52ade1=_0x37b665[_0x42c489(0x15b)](_0x47cc71=>_0x47cc71[_0x42c489(0x179)](_0x555430));if(_0x52ade1&&config[_0x42c489(0x152)]==='true'){console['log']('Link\x20detected\x20from\x20'+_0x85226b+':\x20'+_0x555430);try{await _0x167346['sendMessage'](_0x4dcbe2,{'delete':_0x39f73d[_0x42c489(0x15e)]}),console['log'](_0x42c489(0x155)+_0x39f73d['key']['id']);}catch(_0x595394){console[_0x42c489(0x178)]('Failed\x20to\x20delete\x20message:',_0x595394);}await _0x167346[_0x42c489(0x147)](_0x4dcbe2,{'text':_0x42c489(0x163)+_0x85226b[_0x42c489(0x162)]('@')[0x0]+_0x42c489(0x173),'mentions':[_0x85226b]}),await _0x167346['groupParticipantsUpdate'](_0x4dcbe2,[_0x85226b],'remove');}}catch(_0x8206e3){console[_0x42c489(0x178)](_0x42c489(0x17e),_0x8206e3),_0x14d7be(_0x42c489(0x14a));}}),cmd({'pattern':_0x4feb5e(0x148),'alias':[_0x4feb5e(0x13a),'abw'],'desc':_0x4feb5e(0x176),'category':_0x4feb5e(0x150),'filename':__filename},async(_0x3a85c1,_0x3fe9dd,_0x33fb19,{from:_0x1fb8b7,args:_0x3c82e7,isCreator:_0x54927b,reply:_0x1012e4})=>{const _0x565d17=_0x4feb5e;if(!_0x54927b)return _0x1012e4(_0x565d17(0x174));const _0xc2e3eb=_0x3c82e7[0x0]?.[_0x565d17(0x156)]();if(_0x3c82e7[0x0]==='on')return config['ANTI_BAD_WORD']=_0x565d17(0x182),_0x1012e4(_0x565d17(0x159));else return _0x3c82e7[0x0]===_0x565d17(0x171)?(config[_0x565d17(0x17f)]='false',_0x1012e4('*❌\x20αитι-вα∂\x20ωσя∂ѕ\x20нαѕ\x20вєєи\x20∂ιѕαвℓє∂*')):_0x1012e4(_0x565d17(0x14f));}),cmd({'on':'body'},async(_0x482b2f,_0x5ead2f,_0x1e8f7a,{from:_0x382e6f,body:_0x43daf4,isGroup:_0x4a8c22,isAdmins:_0x357a9f,isBotAdmins:_0x21a0dd,reply:_0xe4534a,sender:_0x2ef792})=>{const _0x575397=_0x4feb5e;try{const _0x5475cc=[_0x575397(0x16e),_0x575397(0x145),'xxx','سکس',_0x575397(0x149),_0x575397(0x161),_0x575397(0x175),'fuck','sex',_0x575397(0x144),_0x575397(0x177),_0x575397(0x143),_0x575397(0x13f)];if(!_0x4a8c22||_0x357a9f||!_0x21a0dd)return;const _0x323873=_0x43daf4['toLowerCase'](),_0x27ddb6=_0x5475cc[_0x575397(0x15b)](_0x5d6184=>_0x323873[_0x575397(0x160)](_0x5d6184));_0x27ddb6&&config[_0x575397(0x17f)]===_0x575397(0x182)&&(await _0x482b2f[_0x575397(0x147)](_0x382e6f,{'delete':_0x5ead2f[_0x575397(0x15e)]},{'quoted':_0x5ead2f}),await _0x482b2f[_0x575397(0x147)](_0x382e6f,{'text':_0x575397(0x16d)},{'quoted':_0x5ead2f}));}catch(_0x28a5bf){console[_0x575397(0x178)](_0x28a5bf),_0xe4534a('An\x20error\x20occurred\x20while\x20processing\x20the\x20message.');}});
+const fs = require("fs");
+const { cmd, commands } = require('../command');
+const config = require('../config');
+const axios = require('axios');
+const prefix = config.PREFIX;
+const AdmZip = require("adm-zip");
+const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, sleep, fetchJson } = require('../lib/functions2');
+const { writeFileSync } = require('fs');
+const path = require('path');
+
+//--------------------------------------------
+//  ANTI-LINK COMMANDS
+//--------------------------------------------
+cmd({
+  pattern: "antilink",
+  desc: "Configure ANTILINK system with menu",
+  category: "owner",
+  react: "🛡️",
+  filename: __filename
+}, async (conn, mek, m, { from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isCreator, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
+  try {
+    // Check for group, bot admin, and user admin permissions
+    if (!isGroup) return reply('This command can only be used in a group.');
+    if (!isBotAdmins) return reply('*📛 ι ɴєє∂ тσ вє αɴ α∂мιɴ тσ ᴜѕє тнιѕ ᴄσммαɴ∂.*');
+    if (!isAdmins) return reply('*📛 σɴℓʏ gʀσᴜᴘ α∂мιɴs σʀ тнє σωɴєʀ ᴄαɴ ᴜsє тнιѕ ᴄσммαɴ∂.*');
+
+    const currentMode =
+      config.ANTI_LINK_KICK === "true"
+        ? "кι¢к"
+        : config.ANTI_LINK_WARN === "true"
+        ? "ωαʀɴ"
+        : config.ANTI_LINK_DELETE === "true"
+        ? "∂єℓєтє"
+        : "∂ιѕαвℓє∂";
+
+    const text = `*⌈ ీ𝐀𝐍𝐓𝐈-𝐋𝐈𝐍𝐊 𝐂𝐌𝐃 𝐆𝐔𝐈𝐃𝐄ీ ⌋*\n‎*╭──────────────────✑*\n‎*┋* ⬡ ☇ *¢ᴜʀʀєɴᴛ мσ∂є:${currentMode}*\n‎*┋* *⬡ 𝟏: αɴтι-ℓιɴк ωαʀɴ*\n‎*┋* *⬡ 𝟐: αɴтι-ℓιɴк ∂єℓєтє*\n*┋* *⬡ 𝟑: αɴтι-ℓιɴк кι¢к*\n‎*┋* *⬡ 𝟒: αɴтι-ℓιɴк αℓℓ ∂ιѕαвℓє∂*\n‎*╰──────────────────✑*\n> *© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽💀🐍*`;
+
+    const sentMsg = await conn.sendMessage(from, {
+      image: { url: "https://files.catbox.moe/33hd05.jpg" },
+      caption: text
+    }, { quoted: mek });
+
+    const messageID = sentMsg.key.id;
+
+    const handler = async (msgData) => {
+      try {
+        const receivedMsg = msgData.messages[0];
+        if (!receivedMsg?.message || !receivedMsg.key?.remoteJid) return;
+
+        const quotedId = receivedMsg.message?.extendedTextMessage?.contextInfo?.stanzaId;
+        const isReply = quotedId === messageID;
+        if (!isReply) return;
+
+        const replyText =
+          receivedMsg.message?.conversation ||
+          receivedMsg.message?.extendedTextMessage?.text ||
+          "";
+
+        const sender = receivedMsg.key.remoteJid;
+
+        // Reset all modes
+        config.ANTI_LINK_DELETE = "false";
+        config.ANTI_LINK_WARN = "false";
+        config.ANTI_LINK_KICK = "false";
+
+        if (replyText === "1") {
+          config.ANTI_LINK_WARN = "true";
+          await conn.sendMessage(sender, { text: "*✅ αɴтι-ℓιɴк ωαʀɴ нαѕ вєєи єɴαвℓє∂*" }, { quoted: receivedMsg });
+        } else if (replyText === "2") {
+          config.ANTI_LINK_DELETE = "true";
+          await conn.sendMessage(sender, { text: "*✅ αɴтι-ℓιɴк ∂єℓєтє нαѕ вєєи єɴαвℓє∂*" }, { quoted: receivedMsg });
+        } else if (replyText === "3") {
+          config.ANTI_LINK_KICK = "true";
+          await conn.sendMessage(sender, { text: "*✅ αɴтι-ℓιɴк кι¢к нαѕ вєєи єɴαвℓє∂*" }, { quoted: receivedMsg });
+        } else if (replyText === "4") {
+          await conn.sendMessage(sender, { text: "*❌ αɴтι-ℓιɴк all нαѕ вєєи ∂ιѕαвℓє∂*" }, { quoted: receivedMsg });
+        } else {
+          await conn.sendMessage(sender, { text: "*⛔ ιɴναℓι∂ σρтισɴ. ρℓєαѕє ʀєρℓу ωιтн 1, 2, 3, σʀ 4.*" }, { quoted: receivedMsg });
+        }
+
+        conn.ev.off("messages.upsert", handler);
+      } catch (err) {
+        console.log("Antilink handler error:", err);
+      }
+    };
+
+    conn.ev.on("messages.upsert", handler);
+
+    setTimeout(() => {
+      conn.ev.off("messages.upsert", handler);
+    }, 600000);
+  } catch (e) {
+    reply(`❗ Error: ${e.message}`);
+  }
+});
+//
+cmd({
+  on: 'body'
+}, async (conn, m, store, {
+  from,
+  body,
+  sender,
+  isGroup,
+  isAdmins,
+  isBotAdmins
+}) => {
+  try {
+    if (!isGroup || isAdmins || !isBotAdmins) {
+      return;
+    }
+    const linkPatterns = [
+  /https?:\/\/(?:chat\.whatsapp\.com|wa\.me)\/\S+/gi,
+  /^https?:\/\/(www\.)?whatsapp\.com\/channel\/([a-zA-Z0-9_-]+)$/,
+  /wa\.me\/\S+/gi,
+  /https?:\/\/(?:t\.me|telegram\.me)\/\S+/gi,
+  /https?:\/\/(?:www\.)?youtube\.com\/\S+/gi,
+  /https?:\/\/youtu\.be\/\S+/gi,
+  /https?:\/\/(?:www\.)?facebook\.com\/\S+/gi,
+  /https?:\/\/fb\.me\/\S+/gi,
+  /https?:\/\/(?:www\.)?instagram\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?twitter\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?tiktok\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?linkedin\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?snapchat\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?pinterest\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?reddit\.com\/\S+/gi,
+  /https?:\/\/ngl\/\S+/gi,
+  /https?:\/\/(?:www\.)?discord\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?twitch\.tv\/\S+/gi,
+  /https?:\/\/(?:www\.)?vimeo\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?dailymotion\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?medium\.com\/\S+/gi
+];
+    const containsLink = linkPatterns.some(pattern => pattern.test(body));
+
+    if (containsLink && config.ANTI_LINK_DELETE === 'true') {
+      await conn.sendMessage(from, { delete: m.key }, { quoted: m });
+      await conn.sendMessage(from, {
+        'text': `*⚠️ ℓιɴкѕ αʀє ɴσт αℓℓσωє∂ ιɴ тнιѕ gʀσυρ* @⁨${sender.split('@')[0]}̄⁩ *ρℓєαѕє ανσι∂ ѕєɴ∂ιиg ℓιɴкѕ.🚫*`,
+        'mentions': [sender]
+      }, { 'quoted': m });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+//
+cmd({
+  'on': "body"
+}, async (conn, m, store, {
+  from,
+  body,
+  sender,
+  isGroup,
+  isAdmins,
+  isBotAdmins,
+  reply
+}) => {
+  try {
+    // Initialize warnings if not exists
+    if (!global.warnings) {
+      global.warnings = {};
+    }
+
+    // Only act in groups where bot is admin and sender isn't admin
+    if (!isGroup || isAdmins || !isBotAdmins) {
+      return;
+    }
+
+    // List of link patterns to detect
+    const linkPatterns = [
+      /https?:\/\/(?:chat\.whatsapp\.com|wa\.me)\/\S+/gi, // WhatsApp links
+      /https?:\/\/(?:api\.whatsapp\.com|wa\.me)\/\S+/gi,  // WhatsApp API links
+      /wa\.me\/\S+/gi,                                    // WhatsApp.me links
+      /https?:\/\/(?:t\.me|telegram\.me)\/\S+/gi,         // Telegram links
+      /https?:\/\/(?:www\.)?\.com\/\S+/gi,                // Generic .com links
+      /https?:\/\/(?:www\.)?twitter\.com\/\S+/gi,         // Twitter links
+      /https?:\/\/(?:www\.)?linkedin\.com\/\S+/gi,        // LinkedIn links
+      /https?:\/\/(?:whatsapp\.com|channel\.me)\/\S+/gi,  // Other WhatsApp/channel links
+      /https?:\/\/(?:www\.)?reddit\.com\/\S+/gi,          // Reddit links
+      /https?:\/\/(?:www\.)?discord\.com\/\S+/gi,         // Discord links
+      /https?:\/\/(?:www\.)?twitch\.tv\/\S+/gi,           // Twitch links
+      /https?:\/\/(?:www\.)?vimeo\.com\/\S+/gi,           // Vimeo links
+      /https?:\/\/(?:www\.)?dailymotion\.com\/\S+/gi,     // Dailymotion links
+      /https?:\/\/(?:www\.)?medium\.com\/\S+/gi           // Medium links
+    ];
+
+    // Check if message contains any forbidden links
+    const containsLink = linkPatterns.some(pattern => pattern.test(body));
+
+    // Only proceed if anti-link is enabled and link is detected
+    if (containsLink && config.ANTI_LINK_WARN === 'true') {
+      console.log(`Link detected from ${sender}: ${body}`);
+
+      // Try to delete the message
+      try {
+        await conn.sendMessage(from, {
+          delete: m.key
+        });
+        console.log(`Message deleted: ${m.key.id}`);
+      } catch (error) {
+        console.error("Failed to delete message:", error);
+      }
+
+      // Update warning count for user
+      global.warnings[sender] = (global.warnings[sender] || 0) + 1;
+      const warningCount = global.warnings[sender];
+
+      // Handle warnings
+      if (warningCount < 4) {
+        // Send warning message
+        await conn.sendMessage(from, {
+          text: `‎*⚠️ ℓιɴкѕ αʀє ɴσт αℓℓσωє∂ ⚠️*\n*╭────⬡ ᴡαʀɴιɴg ⬡────*\n*├▢ ᴜsєʀ :* @${sender.split('@')[0]}!\n*├▢ ᴄσᴜɴᴛ : ${warningCount}*\n*├▢ ʀєαѕσɴ : ℓιɴᴋ ѕєɴ∂ιɴg*\n*├▢ ᴡαʀɴ ℓιмιт : 3*\n*╰────────────────*`,
+          mentions: [sender]
+        });
+      } else {
+        // Remove user if they exceed warning limit
+        await conn.sendMessage(from, {
+          text: `@${sender.split('@')[0]} *нαѕ вєєи ʀємσνє∂ ᴡαʀɴ ℓιмιт єχᴄєє∂є∂!*`,
+          mentions: [sender]
+        });
+        await conn.groupParticipantsUpdate(from, [sender], "remove");
+        delete global.warnings[sender];
+      }
+    }
+  } catch (error) {
+    console.error("Anti-link error:", error);
+    reply("❌ An error occurred while processing the message.");
+  }
+});
+//
+cmd({
+  'on': "body"
+}, async (conn, m, store, {
+  from,
+  body,
+  sender,
+  isGroup,
+  isAdmins,
+  isBotAdmins,
+  reply
+}) => {
+  try {
+    if (!isGroup || isAdmins || !isBotAdmins) {
+      return;
+    }
+    const linkPatterns = [
+  /https?:\/\/(?:chat\.whatsapp\.com|wa\.me)\/\S+/gi,
+  /^https?:\/\/(www\.)?whatsapp\.com\/channel\/([a-zA-Z0-9_-]+)$/,
+  /wa\.me\/\S+/gi,
+  /https?:\/\/(?:t\.me|telegram\.me)\/\S+/gi,
+  /https?:\/\/(?:www\.)?youtube\.com\/\S+/gi,
+  /https?:\/\/youtu\.be\/\S+/gi,
+  /https?:\/\/(?:www\.)?facebook\.com\/\S+/gi,
+  /https?:\/\/fb\.me\/\S+/gi,
+  /https?:\/\/(?:www\.)?instagram\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?twitter\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?tiktok\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?linkedin\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?snapchat\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?pinterest\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?reddit\.com\/\S+/gi,
+  /https?:\/\/ngl\/\S+/gi,
+  /https?:\/\/(?:www\.)?discord\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?twitch\.tv\/\S+/gi,
+  /https?:\/\/(?:www\.)?vimeo\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?dailymotion\.com\/\S+/gi,
+  /https?:\/\/(?:www\.)?medium\.com\/\S+/gi
+];
+    const containsLink = linkPatterns.some(pattern => pattern.test(body));
+
+    if (containsLink && config.ANTI_LINK_KICK === 'true') {
+      await conn.sendMessage(from, { 'delete': m.key }, { 'quoted': m });
+      await conn.sendMessage(from, {
+        'text': `*⌈⚠️ ℓιɴк ∂єтє¢тє∂ ⌋*\n*╭────────────────┄┈┈*\n*│🫩 υѕєʀ:* @${sender.split('@')[0]}\n*│🛩️ кι¢кє∂: ѕυ¢¢єѕѕfυℓℓу!*\n*│📑 ʀєαѕσɴ: ℓιикѕ ɴσт αℓℓσωє∂*\n*╰────────────────┄┈┈*`,
+        'mentions': [sender]
+      }, { 'quoted': m });
+
+      await conn.groupParticipantsUpdate(from, [sender], "remove");
+    }
+  } catch (error) {
+    console.error(error);
+    reply("An error occurred while processing the message.");
+  }
+});
+
+cmd({
+    pattern: "anti-bad",
+    alias: ["antibadword","abw"],
+    desc: "enable or disable antibad.",
+    category: "owner",
+    filename: __filename
+},    
+async (conn, mek, m, { from, args, isCreator, reply }) => {
+    if (!isCreator) return reply("_*❗This Command Can Only Be Used By My Owner !*_");
+
+    const status = args[0]?.toLowerCase();
+    // Check the argument for enabling or disabling the anticall feature
+    if (args[0] === "on") {
+        config.ANTI_BAD_WORD = "true";
+        return reply("*✅ αитι-вα∂ ωσя∂ѕ нαѕ вєєи єɴαвℓє∂*");
+    } else if (args[0] === "off") {
+        config.ANTI_BAD_WORD = "false";
+        return reply("*❌ αитι-вα∂ ωσя∂ѕ нαѕ вєєи ∂ιѕαвℓє∂*");
+    } else {
+        return reply(`*🏷️ єχαмρℓє: αɴтι-вα∂ σɴ/σff*`);
+    }
+});
+// Anti-Bad Words System
+cmd({
+  'on': "body"
+}, async (conn, m, store, {
+  from,
+  body,
+  isGroup,
+  isAdmins,
+  isBotAdmins,
+  reply,
+  sender
+}) => {
+  try {
+    const badWords = ["wtf", "mia", "xxx", "سکس", "کوس", "غین", "کون", "fuck", 'sex', "boobs", "pakaya", 'porn', "hutto"];
+
+    if (!isGroup || isAdmins || !isBotAdmins) {
+      return;
+    }
+
+    const messageText = body.toLowerCase();
+    const containsBadWord = badWords.some(word => messageText.includes(word));
+
+    if (containsBadWord && config.ANTI_BAD_WORD === "true") {
+      await conn.sendMessage(from, { 'delete': m.key }, { 'quoted': m });
+      await conn.sendMessage(from, { 'text': "*⚠️ вα∂ ωσя∂ѕ иσт αℓℓσωє∂ ιи 🚫*" }, { 'quoted': m });
+    }
+  } catch (error) {
+    console.error(error);
+    reply("An error occurred while processing the message.");
+  }
+});
