@@ -246,8 +246,6 @@ async function connectToWA() {
 //===============
 	registerGroupMessages(conn);
 
-setupLinkDetection(conn);
-
 registerAntiNewsletter(conn);
 	
  /// READ STATUS       
