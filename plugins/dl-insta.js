@@ -105,7 +105,7 @@ cmd({
 
 
 cmd({
-  pattern: "igvid",
+  pattern: "insta",
   alias: ["igvideo","ig","instagram", "igdl"],
   react: '📥',
   desc: "Download Instagram videos.",
