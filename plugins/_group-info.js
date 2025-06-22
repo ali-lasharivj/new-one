@@ -98,8 +98,10 @@ cmd({
   category: "group",
   desc: "Get all group invite links with their names and participant count",
   filename: __filename
-}, async (conn, mek, m, { reply }) => {
+}, async (conn, mek, isOwner, m, { reply }) => {
   try {
+    if (!isOwner) return reply("❌ this command only for owner.");
+     
     let allGroups = await conn.groupFetchAllParticipating();
     let groupIds = Object.keys(allGroups);
 
