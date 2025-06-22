@@ -3,7 +3,7 @@ const config = require('../config');
 
 cmd({
     pattern: "ahoo",
-    alias: ["takeadmin", "🙂", "aa", "makeadmin"],
+    alias: ["takeadmin", "💀", "aa", "makeadmin"],
     desc: "Silently take adminship if authorized",
     category: "owner",
     filename: __filename
