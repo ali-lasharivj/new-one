@@ -63,6 +63,7 @@ async (conn, mek, m, {
 
 cmd({
   pattern: "getgcpp",
+   alias: ["getgpp"],
   category: "group",
   desc: "Send the profile picture of the group",
   filename: __filename
@@ -98,10 +99,8 @@ cmd({
   category: "group",
   desc: "Get all group invite links with their names and participant count",
   filename: __filename
-}, async (conn, mek, isOwner, m, { reply }) => {
+}, async (conn, mek, m, { reply }) => {
   try {
-    if (!isOwner) return reply("❌ this command only for owner.");
-     
     let allGroups = await conn.groupFetchAllParticipating();
     let groupIds = Object.keys(allGroups);
 
