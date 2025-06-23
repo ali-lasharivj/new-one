@@ -32,7 +32,7 @@ cmd({
         for (const item of response.data.data) {
             await conn.sendMessage(from, {
                 [item.type === 'video' ? 'video' : 'image']: { url: item.url },
-                caption: `*🪸 ɴѕтαgʀαм νι∂єσ*\n` +
+                caption: `*🪸 ιɴѕтαgʀαм ∂σωиℓσα∂є∂*\n` +
         `> *© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽🐍*`
             }, { quoted: mek });
         }
@@ -85,7 +85,7 @@ cmd({
 
     await conn.sendMessage(from, {
       video: videoBuffer,
-      caption: `*🪸 ɴѕтαgʀαм νι∂єσ*\n` +
+      caption: `*🪸 ιɴѕтαgʀαм ∂σωиℓσα∂є∂*\n` +
         `> *© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽🐍*`,
     }, { quoted: mek });
 
