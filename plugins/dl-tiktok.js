@@ -49,7 +49,7 @@ cmd({
     // Send the video with details
     await conn.sendMessage(from, {
       video: videoBuffer,
-      caption: `*🫟𝐀ɭīī 𝐌Ɗ 𝐃𝐎𝐖𝐍𝐋𝐎𝐀𝐃𝐄𝐃*\n\n` +
+      caption: `*🫟𝐀ɭīī 𝐌Ɗ 𝐃𝐎𝐖𝐍𝐋𝐎𝐀𝐃𝐄𝐃*\n` +
         `🔖 *ᴛɪᴛʟᴇ*: ${title || "No title"}\n` +
         `👤 *ᴀᴜᴛʜᴏʀ*: ${author.nickname}\n` +
         `♥️ *ʟɪᴋᴇs*: ${metrics.digg_count}\n` +
@@ -60,7 +60,7 @@ cmd({
       contextInfo: {
         mentionedJid: [m.sender],
         forwardingScore: 999,
-        isForwarded: true,
+        isForwarded: false,
         forwardedNewsletterMessageInfo: {
           newsletterJid: '120363318387454868@newsletter',
           newsletterName: '『 𝐀ɭīī 𝐌Ɗ 𝐒ʊ̊𝐏𝐏๏፝֟ɼʈ 』',
