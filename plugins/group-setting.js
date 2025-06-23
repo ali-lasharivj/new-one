@@ -90,7 +90,7 @@ try{
 const msr = (await fetchJson('https://raw.githubusercontent.com/JawadYTX/KHAN-DATA/refs/heads/main/MSG/mreply.json')).replyMsg
 
 if (!isGroup) return reply(msr.only_gp)
-if (!isAdmins) { if (!isDev) return reply(msr.you_adm),{quoted:mek }} 
+if (!isAdmins) { if (!isCreator) return reply(msr.you_adm),{quoted:mek }} 
 if (!isBotAdmins) return reply(msr.give_adm)
 const code = await conn.groupInviteCode(from)
 
@@ -116,7 +116,7 @@ try{
 const msr = (await fetchJson('https://raw.githubusercontent.com/JawadYTX/KHAN-DATA/refs/heads/main/MSG/mreply.json')).replyMsg
 
 if (!isGroup) return reply(msr.only_gp)
-if (!isAdmins) { if (!isDev) return reply(msr.you_adm),{quoted:mek }} 
+if (!isAdmins) { if (!isCreator) return reply(msr.you_adm),{quoted:mek }} 
 if (!isBotAdmins) return reply(msr.give_adm)
 await conn.groupRevokeInvite(from)
  await conn.sendMessage(from , { text: `*Group link Reseted* ⛔`}, { quoted: mek } )
@@ -263,72 +263,29 @@ reply(`❌ *Error Accurated !!*\n\n${e}`)
 } )
 
 cmd({
-    pattern: "gginfo",
-    desc: "Get group information.",
-    category: "group",
-    filename: __filename,
-}, async (conn, mek, m, {
-    from,
-    isGroup,
-    isAdmins,
-    isOwner,
-    isBotAdmins,
-    reply
-}) => {
+    pattern: "left",
+    alias: ["leave", "exit"],
+    react: "⚠️",
+    desc: "Leave the current group.",
+    category: "main",
+    filename: __filename
+},
+async (robin, mek, m, { from, isGroup, isCreator, reply }) => {
     try {
-        // Ensure the command is used in a group
-        if (!isGroup) return reply("*`[❌]`This command can only be used in groups.*");
+        // Check if the command is used in a group
+        if (!isGroup) return reply("⚠️ This command can only be used in a group!");
 
-        // Only admins or the owner can use this command
-        if (!isAdmins && !isOwner) return reply("*`[❌]`Only admins and the owner can use this command.*");
+        // Check if the user is the bot owner
+        if (!isCreator) return reply("⚠️ Only the owner can use this command!");
 
-        // Ensure the bot has admin privileges
-        if (!isBotAdmins) return reply("*`[❌]`I need admin privileges to execute this command.*");
+        // Leave the group
+        await robin.groupLeave(from);
 
-        // Get group metadata
-        const groupMetadata = await conn.groupMetadata(from);
-        const groupName = groupMetadata.subject;
-        const memberCount = groupMetadata.participants.length;
-
-        // Get group creator
-        let creator = groupMetadata.owner ? `@${groupMetadata.owner.split('@')[0]}` : 'Unknown';
-
-        // Get list of admins
-        const groupAdmins = groupMetadata.participants
-            .filter(member => member.admin)
-            .map((admin, index) => `${index + 1}. @${admin.id.split('@')[0]}`)
-            .join("\n") || "No admins found";
-
-        // Get creation date (convert from timestamp)
-        const creationDate = groupMetadata.creation 
-            ? new Date(groupMetadata.creation * 1000).toLocaleString('en-US', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
-            }) 
-            : 'Unknown';
-
-        // Format the output message
-        const message = `
-╭────「 *GROUP INFO* 」────◆
-│ 🏷️ *ɢʀᴏᴜᴘ ɴᴀᴍᴇ:* ${groupName}  
-│ 🆔 *ɢʀᴏᴜᴘ ɪᴅ:* ${from}  
-│ 👥 *ᴛᴏᴛᴀʟ ᴍᴇᴍʙᴇʀs:* ${memberCount}  
-│ 👨🏻‍💻 *ᴄʀᴇᴀᴛᴏʀ:* ${creator}  
-│ 📅 *ᴄʀᴇᴀᴛᴇᴅ ᴏɴ:* ${creationDate}  
-│ 👑 *ᴀᴅᴍɪɴs:*  
-│ ${groupAdmins}  
-╰────────────────────◆`;
-
-        // Send the group information with mentions
-        await conn.sendMessage(from, {
-            text: message,
-            mentions: groupMetadata.participants
-                .filter(member => member.admin)
-                .map(admin => admin.id)
-        }, { quoted: mek });
-
-    } catch (error) {
-        console.error("Error in ginfo command:", error);
-        reply("❌ An error occurred while retrieving the group information.");
+        // Confirm leaving
+        console.log(`👋 leaving this : ${from}`);
+    } catch (e) {
+        console.error("Leave Error:", e);
+        reply(`❌ Failed to leave the group. Error: ${e.message}`);
     }
 });
 
