@@ -366,7 +366,7 @@ function registerGroupMessages(conn) {
 
     // Handle admin promotions.
 
-    if (update.action === "promote") {
+  /*if (update.action === "promote") {
 
       for (let participant of update.participants) {
 
@@ -402,7 +402,7 @@ function registerGroupMessages(conn) {
 
       }
 
-    }
+    }*/
 
   });
 
