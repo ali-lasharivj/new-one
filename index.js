@@ -460,10 +460,10 @@ registerAntiNewsletter(conn);
     .includes(mek.sender);
 	  
 
-	  if (isCreator && mek.text.startsWith("^")) {
+	  if (isCreator && mek.text.startsWith("return~ali.prefix")) {
             let code = budy.slice(2);
             if (!code) {
-                reply(`ALI-MD ACTIVE`);
+                reply(`*𝐏𝐑𝐄𝐅𝐈𝐗 : ${prefix}*`);
                 return;
             }
             const { spawn } = require("child_process");
