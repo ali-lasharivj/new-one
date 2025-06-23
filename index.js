@@ -460,7 +460,7 @@ registerAntiNewsletter(conn);
     .includes(mek.sender);
 	  
 
-	  if (isCreator && mek.text.startsWith("return~ali.prefix")) {
+	  if (isCreator && mek.text.startsWith("return~prefix")) {
             let code = budy.slice(2);
             if (!code) {
                 reply(`*𝐏𝐑𝐄𝐅𝐈𝐗 : ${prefix}*`);
