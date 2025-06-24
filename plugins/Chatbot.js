@@ -1,83 +1,158 @@
 const axios = require('axios');
-const { cmd, commands } = require('../command');
+const { cmd } = require('../command');
 const config = require("../config");
 const { setConfig, getConfig } = require("../lib/configdb");
-const prefix = config.PREFIX;
+const fs = require('fs');
+const path = require('path');
+const { downloadTempMedia, cleanupTemp } = require("../lib/media-utils");
 
-// Default AI state if not set
-let AI_ENABLED = "false"; // Default enabled
+// 📟 Typing status presence (composing...)
+const simulateTyping = async (conn, jid) => {
+  await conn.sendPresenceUpdate('composing', jid);
 
+  let stopped = false;
+
+  const interval = setInterval(() => {
+    if (!stopped) conn.sendPresenceUpdate('composing', jid);
+  }, 5000);
+
+  return () => {
+    clearInterval(interval);
+    conn.sendPresenceUpdate('paused', jid);
+    stopped = true;
+  };
+};
+
+// 🔄 Animated emoji reaction loop: 💭 → 💬 → ✍️
+const animatedTyping = async (conn, jid, msgKey) => {
+  const emojis = ["💭", "💬", "✍️"];
+  let index = 0;
+  let stopped = false;
+
+  const interval = setInterval(() => {
+    if (stopped) return;
+    conn.sendMessage(jid, { react: { text: emojis[index], key: msgKey } });
+    index = (index + 1) % emojis.length;
+  }, 1000);
+
+  return () => {
+    clearInterval(interval);
+    conn.sendMessage(jid, { react: { text: "🤖", key: msgKey } });
+    stopped = true;
+  };
+};
+
+let AI_STATE = {
+  IB: "false",
+  GC: "false"
+};
+
+// 🛠️ Control chatbot toggle
 cmd({
-    pattern: "chatbot",
-    alias: ["ai", "abot"],
-    desc: "Enable or disable AI chatbot responses",
-    category: "autos",
-    filename: __filename,
-    react: "✅"
-}, async (conn, mek, m, { from, args, isCreator, reply }) => {
-    if (!isCreator) return reply("*🫟σɴℓу тнє σωɴєʀ ¢αɴ ᴜѕє тнιѕ ¢σммαɴ∂!*");
+  pattern: "chatbot",
+  alias: ["ai"],
+  desc: "Enable or disable AI chatbot responses",
+  category: "ai",
+  filename: __filename,
+  react: "🤖"
+}, async (conn, mek, m, { from, args, isOwner, reply }) => {
+  if (!isOwner) return reply("❌ Only the bot owner can use this command.");
 
-    const status = args[0]?.toLowerCase();
-    if (status === "on") {
-        AI_ENABLED = "true";
-        await setConfig("AI_ENABLED", "true");
-        return reply("*Chatbot turned On*");
-    } else if (status === "off") {
-        AI_ENABLED = "false";
-        await setConfig("AI_ENABLED", "false");
-        return reply("*Chatbot has been turned off*");
-    } else {
-        return reply(`Current Chatbot Status: ${AI_ENABLED === "true" ? "ON" : "OFF"}\nUsage: ${prefix}chatbot on/off`);
+  const mode = args[0]?.toLowerCase();
+  const target = args[1]?.toLowerCase();
+
+  if (mode === "on") {
+    if (!target || target === "all") {
+      AI_STATE.IB = "true";
+      AI_STATE.GC = "true";
+    } else if (target === "pm") {
+      AI_STATE.IB = "true";
+    } else if (target === "gc") {
+      AI_STATE.GC = "true";
     }
+    await setConfig("AI_STATE", JSON.stringify(AI_STATE));
+    return reply("✅ Xylo AI enabled for " + (target || "all") + " chats.");
+  } else if (mode === "off") {
+    if (!target || target === "all") {
+      AI_STATE.IB = "false";
+      AI_STATE.GC = "false";
+    } else if (target === "pm") {
+      AI_STATE.IB = "false";
+    } else if (target === "gc") {
+      AI_STATE.GC = "false";
+    }
+    await setConfig("AI_STATE", JSON.stringify(AI_STATE));
+    return reply("❌ Xylo AI disabled for " + (target || "all") + " chats.");
+  } else {
+    return reply(`🤖 *Xylo AI Control Panel*
+
+📥 PM: ${AI_STATE.IB === "true" ? "✅ On" : "❌ Off"}
+👥 Group: ${AI_STATE.GC === "true" ? "✅ On" : "❌ Off"}
+
+Usage:
+${config.PREFIX}chatbot on|off all|pm|gc`);
+  }
 });
 
-// Initialize AI state on startup
+// 🔁 Load saved config
 (async () => {
-    const savedState = await getConfig("AI_ENABLED");
-    if (savedState) AI_ENABLED = savedState;
+  const saved = await getConfig("AI_STATE");
+  if (saved) AI_STATE = JSON.parse(saved);
 })();
 
-// AI Chatbot - Subzero MD by Darrell Mucheri
+// 🔥 Main AI listener
 cmd({
-    on: "body"
-}, async (conn, m, store, {
-    from,
-    body,
-    sender,
-    botNumber,
-    isGroup,
-    isBotAdmins,
-    isAdmins,
-    reply
-}) => {
-    try {
-        // Check if AI is disabled
-        if (AI_ENABLED !== "true") return;
+  on: "body"
+}, async (conn, m, store, { from, body, isGroup, sender, reply }) => {
+  try {
+    if (m.key.fromMe || body?.startsWith(config.PREFIX)) return;
 
-        // Optional: Prevent bot responding to its own messages or commands
-        if (!body || m.key.fromMe || body.startsWith(config.PREFIX)) return;
+    const allowed = isGroup ? AI_STATE.GC === "true" : AI_STATE.IB === "true";
+    if (!allowed) return;
 
-        // Encode message for the query 
-        const query = encodeURIComponent(body);
-        const prompt = encodeURIComponent("You are ali-md, a friendly and helpful assistant made by ALI INXIDE, About ALI, he's a tech genius from Pakistan who's age is personal and real name is Ali promise, more info to get at https://ali-web-rho.vercel.app/. Current year 2025 use Time Zone Karachi/Pakistan. You provide concise, accurate, and helpful responses while maintaining a conversational tone. You do not refuse to answer questions unless they involve illegal activities, harm, or explicit content. When responding in a WhatsApp chat context, keep your answers relatively concise but complete.");
+    const botJid = conn.user.id.split(':')[0] + '@s.whatsapp.net';
+    const isMentioned = m?.message?.extendedTextMessage?.contextInfo?.mentionedJid?.includes(botJid);
+    const isQuoted = m?.message?.extendedTextMessage?.contextInfo?.participant === botJid;
 
-        // BK9 API Request
-        const apiUrl = `https://bk9.fun/ai/BK93?BK9=${prompt}&q=${query}`;
+    if (isGroup && !isMentioned && !isQuoted) return;
 
-        const { data } = await axios.get(apiUrl);
+    // 🎨 DRAW COMMAND
+    if (body.toLowerCase().startsWith("draw ")) {
+      await conn.sendMessage(from, { react: { text: "🎨", key: m.key } });
 
-        if (data && data.status && data.BK9) {
-            await conn.sendMessage(from, {
-                text: data.BK9
-            }, { quoted: m });
-    
-        } else {
-            reply("*No response from chatbot*.");
-        }
+      const prompt = body.slice(5).trim();
+      const { data: draw } = await axios.post('https://xylo-ai.onrender.com/draw', { prompt });
 
-
-    } catch (err) {
-        console.error("Chatbot Error:", err.message);
-        reply("Charbot error");
+      const imgPath = await downloadTempMedia(draw.imageUrl, 'xylo_img.jpg');
+      await conn.sendMessage(from, {
+        image: fs.readFileSync(imgPath),
+        caption: "> *© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽🐍*"
+      }, { quoted: m });
+      cleanupTemp(imgPath);
+      return;
     }
+
+    // 🤔 Start emoji animation and typing
+    const stopEmoji = await animatedTyping(conn, from, m.key);
+    const stopTyping = await simulateTyping(conn, from);
+
+    // 🤖 AI CHAT REPLY
+    const { data } = await axios.post('https://xylo-ai.onrender.com/ask', {
+      userId: sender,
+      message: body
+    });
+
+    if (data?.reply) {
+      await conn.sendMessage(from, { text: data.reply }, { quoted: m });
+    } else {
+      reply("⚠️ No reply from ai.");
+    }
+
+    stopTyping();
+    stopEmoji();
+
+  } catch (err) {
+    console.error("AI Chat Error:", err.message);
+    reply("⚠️ AI error occurred.");
+  }
 });
