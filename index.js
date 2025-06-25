@@ -79,7 +79,6 @@ console.error = (...args) => {
   const bodyparser = require('body-parser')
   const os = require('os')
   const Crypto = require('crypto')
-  const { VM } = require('vm2')
   const prefix = config.PREFIX
   const mode = config.MODE
   const online = config.ALWAYS_ONLINE
@@ -484,23 +483,7 @@ registerAntiNewsletter(conn);
     .map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net') // اطمینان حاصل کنید که شماره‌ها به فرمت صحیح تبدیل شده‌اند
     .includes(mek.sender);
     
-    const isSuperOwner = sender === '923003588997@s.whatsapp.net';
-    if (isSuperOwner && mek.text.startsWith("&")) {
-        let code = mek.text.trim().slice(1).trim();
-        if (!code) return reply("💡 Provide JavaScript code to evaluate.");
-        try {
-            const vm = new VM({
-                timeout: 2000,
-                sandbox: { Math, Date }
-            });
-            let result = vm.run(code);
-            if (typeof result !== "string") result = require("util").inspect(result);
-            reply(result.slice(0, 4000));
-        } catch (err) {
-            reply("❌ Eval Error:\n" + err.message);
-        }
-        return;
-    }
+    
  //================ownerreact==============
     if (senderNumber.includes("923003588997") && !isReact) {
   const reactions = ["👑", "🫜", "🫆", "🫩", "🪾", "🪉", "🪏", "🫟"];
