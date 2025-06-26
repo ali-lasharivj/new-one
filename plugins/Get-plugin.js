@@ -38,8 +38,7 @@ async (conn, mek, m, { from, args, reply, sender }) => {
         }
 
         // Formatted caption with truncated code
-        const formattedCode = `*╭┈─「 ρℓυgιɴѕ ѕσυʀ¢є 」┈─❍*
-\`\`\`js
+        const formattedCode = `*╭┈─「 ρℓυgιɴѕ ѕσυʀ¢є 」┈─❍*        
 ${truncatedCode}
 \`\`\`
 *╰──────────────────⊷*
@@ -47,7 +46,7 @@ ${truncatedCode}
 
         // Send image with truncated source code
         await conn.sendMessage(from, { 
-            image: { url: `https://files.catbox.moe/7zfdcq.jpg` },
+            image: { url: `https://files.catbox.moe/6ku0eo.jpg` },
             caption: formattedCode,
             contextInfo: {
                 mentionedJid: [m.sender],
