@@ -37,7 +37,7 @@ MENTION_REPLY: process.env.MENTION_REPLY || "false",
 // make true if want auto voice reply if someone menetion you 
 ALIVE_IMG: getConfig("ALIVE_IMG") || "https://qu.ax/zrqFX.jpg",
 // add custom menu image url
-PREFIX: getConfig("PREFIX") || ".", 
+PREFIX: getConfig("PREFIX") || ",", 
 // add your prifix for bot   
 BOT_NAME: getConfig("BOT_NAME") || "ALI-MD",
 // add bot namw here for menu
