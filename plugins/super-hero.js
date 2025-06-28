@@ -17,10 +17,8 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
         const hero = args.length > 0 ? args.join(" ") : "ALI-MAN"; // User can specify a hero
         const steps = [
             '🦸 *ALI-MD HERO SUMMONING PROTOCOL...* 🦸',
-            '',
             '*Charging superpower matrix...* ⚡',
             '*Locating hero signal...* 📍',
-            '',
             '```[★☆☆☆☆☆☆☆☆☆] 10%``` 💥',
             '```[★★☆☆☆☆☆☆☆☆] 20%``` 💥',
             '```[★★★☆☆☆☆☆☆☆] 30%``` 💥',
@@ -31,18 +29,14 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
             '```[★★★★★★★★☆☆] 80%``` 💥',
             '```[★★★★★★★★★☆] 90%``` 💥',
             '```[★★★★★★★★★★] 100%``` ✅',
-            '',
             '*BOOM!* Hero signal locked! *KAPOW!* 🦸‍♂️',
             `🌟 *Summoning: ${hero}* 💪`,
             '*Activating hero powers...* 🔥',
-            '',
             '*WHOOSH!* Hero soaring to the rescue! *ZOOM!* ✈️',
             '*Defeating villains...* 👊',
             '*Restoring peace...* 🕊️',
-            '',
             '⚠️ *Warning:* Do not interrupt the hero!',
             '⚠️ *Note:* This is a fun superhero simulation.',
-            '',
             ` *🦸 ${hero.toUpperCase()} SAVES THE DAY! 🌍*`,
             '',
             '> *© ᴘσωєʀє∂ ву αℓι м∂⎯꯭̽🐍*'
@@ -54,7 +48,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 ‎*╭──────────────────✑*
 *┋👤 Caller: ${pushname || 'Unknown'}*
 *┋🦸 Hero: ${hero}*
-*┋⚡ Power Level: ${Math.floor(Math.random() * 100 + 1)}%
+*┋⚡ Power Level: ${Math.floor(Math.random() * 100 + 1)}%*
 *┋📡 Signal: Locked*
 *┋🛡️ Mission: Save the Day*
 ‎*╰──────────────────✑*
