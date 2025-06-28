@@ -73,7 +73,6 @@ console.error = (...args) => {
   const { registerAntiNewsletter } = require('./plugins/antinewsletter')
   const { updateActivity } = require('./lib/activity')
   const { registerGroupMessages } = require('./plugins/groupMessages')
-  const { registerAntitag } = require('./plugins/antitag');
   const FileType = require('file-type');
   const { File } = require('megajs')
   const { fromBuffer } = require('file-type')
@@ -387,7 +386,6 @@ registerGroupMessages(conn);
 
 registerAntiNewsletter(conn);
            
-registerAntitag(conn);
 	
 	
  /// READ STATUS       
