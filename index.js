@@ -385,6 +385,9 @@ conn.ev.on('messages.upsert', async (msg) => {
 registerGroupMessages(conn);
 
 registerAntiNewsletter(conn);
+           
+registerAntitag(conn);
+	
 	
  /// READ STATUS       
   conn.ev.on('messages.upsert', async(mek) => {
