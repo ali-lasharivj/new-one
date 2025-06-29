@@ -1,201 +1,226 @@
+const fs = require("fs");
+const axios = require("axios");
 const { cmd } = require('../command');
 const config = require('../config');
+const prefix = config.PREFIX;
 
-// Fake hacking commands
+const dbPath = "./lib/wcg-database.json";
+const timers = {};
+const startTimers = {};
+
+function loadDB() {
+  if (!fs.existsSync(dbPath)) return {};
+  const data = fs.readFileSync(dbPath, "utf-8");
+  return JSON.parse(data || "{}");
+}
+
+function saveDB(db) {
+  fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
+}
+
+async function isValidWord(word) {
+  try {
+    const res = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.toLowerCase()}`);
+    return Array.isArray(res.data);
+  } catch {
+    return false;
+  }
+}
+
+function clearStartTimer(from) {
+  if (startTimers[from]) {
+    clearTimeout(startTimers[from]);
+    delete startTimers[from];
+  }
+}
+
+function clearTurnTimer(from) {
+  if (timers[from]) {
+    clearTimeout(timers[from]);
+    delete timers[from];
+  }
+}
+
 cmd({
-    pattern: "hack",
-    alias: ["hacker"],
-    desc: "Simulate a hacking process",
-    category: "fun",
-    react: "💻",
-    filename: __filename
-}, async (conn, mek, m, { from, reply }) => {
-    const steps = [
-        "Initializing hack protocol...",
-        "Bypassing firewall... [23%]",
-        "Injecting payload... [47%]",
-        "Decrypting security layers... [68%]",
-        "Accessing mainframe... [89%]",
-        "Hack successful! Data extracted ✅"
-    ];
-    
-    let msg = await reply(steps[0]);
-    
-    for (let i = 1; i < steps.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        await conn.sendMessage(from, {
-            text: steps[i],
-            edit: msg.key
-        });
+  pattern: "wcg",
+  desc: "Start a Word Chain Game",
+  category: "game",
+  filename: __filename
+}, async (conn, mek, m, { from, reply, sender }) => {
+  const db = loadDB();
+
+  if (db[from] && !db[from].finished) {
+    return reply("⚠️ A Word Chain game is already active.");
+  }
+
+  db[from] = {
+    type: "wcg",
+    players: [sender],
+    words: [],
+    turn: 0,
+    waiting: true,
+    finished: false,
+    wordLimit: 3
+  };
+
+  saveDB(db);
+
+  reply(
+    `🎮 *Word Chain Game Started!*\n👤 Player 1: @${sender.split("@")[0]}\n⏳ Waiting for more players (up to 20)...\nSend *join-wcg* to join.`,
+    null,
+    { mentions: [sender] }
+  );
+
+  clearStartTimer(from);
+  startTimers[from] = setTimeout(() => {
+    const db = loadDB();
+    if (!db[from] || db[from].finished) return;
+    const game = db[from];
+    if (game.waiting) {
+      game.waiting = false;
+      game.turn = 0;
+      const randomLetter = String.fromCharCode(97 + Math.floor(Math.random() * 26));
+      game.requiredFirstLetter = randomLetter;
+
+      saveDB(db);
+
+      conn.sendMessage(from, {
+        text: `⏳ Time's up! Game is starting with ${game.players.length} player(s).\n🧠 *Word Chain Begins!*\n🎯 @${game.players[0].split("@")[0]} starts.\n🔤 First letter: *${randomLetter.toUpperCase()}*\n📌 Send an English word starting with *${randomLetter.toUpperCase()}* and at least *3 letters*`,
+        mentions: game.players
+      });
+
+      clearStartTimer(from);
+
+      clearTurnTimer(from);
+      timers[from] = setTimeout(() => handleTimeout(conn, from), 40 * 1000);
     }
+  }, 40 * 1000);
 });
 
 cmd({
-    pattern: "ip",
-    desc: "Get fake IP information",
-    category: "fun",
-    react: "🌐",
-    filename: __filename
+  pattern: "join-wcg",
+  desc: "Join a Word Chain Game",
+  category: "game",
+  filename: __filename
 }, async (conn, mek, m, { from, sender, reply }) => {
-    const fakeIP = `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
-    const isp = ["Comcast", "Verizon", "AT&T", "Spectrum", "T-Mobile"][Math.floor(Math.random() * 5)];
-    const location = ["New York", "London", "Tokyo", "Dubai", "Sydney"][Math.floor(Math.random() * 5)];
-    
-    const result = `🔍 IP Information:
-📡 IP Address: ${fakeIP}
-🏢 ISP: ${isp}
-📍 Location: ${location}
-🛡️ Proxy: ${Math.random() > 0.5 ? "Detected" : "Not detected"}
-🌐 VPN: ${Math.random() > 0.7 ? "Active" : "Inactive"}`;
-    
-    await reply(result);
+  const db = loadDB();
+  const game = db[from];
+
+  if (!game || game.type !== "wcg") return reply("❌ No Word Chain game to join.");
+  if (!game.waiting) return reply("⚠️ Game already started.");
+  if (game.players.includes(sender)) return reply("⚠️ You already joined the game.");
+  if (game.players.length >= 20) return reply("⚠️ Player limit reached (20).");
+
+  game.players.push(sender);
+  saveDB(db);
+
+  reply(
+    `🙌 @${sender.split("@")[0]} joined the game! (${game.players.length} player(s) now)\n⏳ 40 seconds after first joiner the game will start.`,
+    null,
+    { mentions: game.players }
+  );
 });
 
 cmd({
-    pattern: "ddos",
-    desc: "Simulate a DDoS attack",
-    category: "fun",
-    react: "⚡",
-    filename: __filename
-}, async (conn, mek, m, { from, reply }) => {
-    const target = m.quoted ? m.quoted.sender.split('@')[0] : m.args[0] || "example.com";
-    
-    let msg = await reply(`🚀 Launching DDoS attack on ${target}...`);
-    
-    for (let i = 1; i <= 5; i++) {
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        await conn.sendMessage(from, {
-            text: `🔄 Sending ${Math.floor(Math.random() * 5000) + 1000} packets to ${target} (Wave ${i}/5)`,
-            edit: msg.key
-        });
+  on: "body"
+}, async (conn, mek, m, { from, body, sender, reply }) => {
+  const text = body.trim().toLowerCase();
+  const db = loadDB();
+  const game = db[from];
+  if (!game || game.type !== "wcg" || game.finished) return;
+
+  if (text === "join-wcg") {
+    if (!game.waiting) return reply("⚠️ Game already started.");
+    if (game.players.includes(sender)) return reply("⚠️ You already joined the game.");
+    if (game.players.length >= 20) return reply("⚠️ Player limit reached (20).");
+
+    game.players.push(sender);
+    saveDB(db);
+
+    return reply(
+      `🙌 @${sender.split("@")[0]} joined the game! (${game.players.length} player(s) now)\n⏳ 40 seconds after first joiner the game will start.`,
+      null,
+      { mentions: game.players }
+    );
+  }
+
+  if (game.waiting) return;
+
+  const currentPlayer = game.players[game.turn];
+  if (currentPlayer !== sender) return;
+
+  if (!/^[a-z]{2,}$/.test(text)) return reply("⚠️ Only alphabetic English words are allowed.");
+  if (text.length < game.wordLimit) return reply(`📏 Word must be at least *${game.wordLimit}* letters.`);
+  if (game.words.includes(text)) return reply("♻️ Word already used!");
+  if (!(await isValidWord(text))) return reply("❌ Not a valid English word!");
+
+  if (game.words.length > 0) {
+    const lastWord = game.words[game.words.length - 1];
+    if (lastWord[lastWord.length - 1] !== text[0]) {
+      return reply(`🔁 Word must start with *${lastWord[lastWord.length - 1].toUpperCase()}*`);
     }
-    
+  } else {
+    if (text[0] !== game.requiredFirstLetter) {
+      return reply(`🔤 First word must start with *${game.requiredFirstLetter.toUpperCase()}*`);
+    }
+  }
+
+  game.words.push(text);
+  game.turn = (game.turn + 1) % game.players.length;
+  game.wordLimit = Math.min(game.wordLimit + 1, 7);
+  game.lastMoveTime = Date.now();
+
+  clearTurnTimer(from);
+  timers[from] = setTimeout(() => handleTimeout(conn, from), 40 * 1000);
+
+  saveDB(db);
+
+  reply(
+    `✅ *${text}* accepted!\n🧮 Total words so far: *${game.words.length}*\n🔠 Next word must start with *${text[text.length - 1].toUpperCase()}*\n➡️ @${game.players[game.turn].split("@")[0]}, your turn!\n📏 Min word length: *${game.wordLimit}*\n⏳ You have *40 seconds* to respond.`,
+    null,
+    { mentions: game.players }
+  );
+});
+
+async function handleTimeout(conn, from) {
+  const db = loadDB();
+  if (!db[from]) return;
+  const game = db[from];
+  if (game.finished) return;
+
+  const loser = game.players[game.turn];
+  game.players.splice(game.turn, 1);
+
+  await conn.sendMessage(from, {
+    text: `⌛ *Timeout!*\n@${loser.split("@")[0]} did not respond and was eliminated.`,
+    mentions: [loser]
+  });
+
+  if (game.players.length === 1) {
+    game.finished = true;
     await conn.sendMessage(from, {
-        text: `✅ DDoS attack completed!\n${target} is now offline (simulated)`,
-        edit: msg.key
+      text: `🏆 *Game Over!*\n🎉 Winner: @${game.players[0].split("@")[0]}`,
+      mentions: game.players
     });
-});
+    clearTurnTimer(from);
+    clearStartTimer(from);
+    delete db[from];
+    saveDB(db);
+    return;
+  }
 
-cmd({
-    pattern: "crack",
-    desc: "Simulate password cracking",
-    category: "fun",
-    react: "🔑",
-    filename: __filename
-}, async (conn, mek, m, { from, reply }) => {
-    const passwords = ["password123", "admin", "123456", "qwerty", "letmein", "welcome"];
-    const target = m.args[0] || "admin@system";
-    
-    let msg = await reply(`🔓 Attempting to crack ${target}...`);
-    
-    for (let i = 0; i < passwords.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        await conn.sendMessage(from, {
-            text: `🔑 Trying password: ${'•'.repeat(passwords[i].length)}`,
-            edit: msg.key
-        });
-    }
-    
-    const success = Math.random() > 0.3;
-    if (success) {
-        const foundPass = passwords[Math.floor(Math.random() * passwords.length)];
-        await conn.sendMessage(from, {
-            text: `✅ Password cracked!\nAccount: ${target}\nPassword: ${foundPass}`,
-            edit: msg.key
-        });
-    } else {
-        await conn.sendMessage(from, {
-            text: `❌ Failed to crack password\nTarget has been locked!`,
-            edit: msg.key
-        });
-    }
-});
+  if (game.turn >= game.players.length) game.turn = 0;
 
-cmd({
-    pattern: "virusscan",
-    alias: ["scan"],
-    desc: "Simulate virus scanning",
-    category: "fun",
-    react: "🛡️",
-    filename: __filename
-}, async (conn, mek, m, { from, reply }) => {
-    const files = ["system32.dll", "kernel.exe", "config.sys", "winload.efi", "explorer.exe"];
-    const threats = ["Trojan:Win32/Zpevdo.B", "Worm:MSIL/Autorun", "Backdoor:PHP/WebShell", "Adware:Elex"];
-    
-    let msg = await reply("🛡️ Starting virus scan...");
-    
-    for (let i = 0; i < files.length; i++) {
-        await new Promise(resolve => setTimeout(resolve, 1200));
-        const hasVirus = Math.random() > 0.7;
-        const status = hasVirus ? `⚠️ THREAT DETECTED: ${threats[Math.floor(Math.random() * threats.length)]}` : "✅ Clean";
-        await conn.sendMessage(from, {
-            text: `🔍 Scanning ${files[i]}...\n${status}`,
-            edit: msg.key
-        });
-    }
-    
-    await conn.sendMessage(from, {
-        text: "🛡️ Scan complete!\nSystem is now secure (simulated)",
-        edit: msg.key
-    });
-});
+  const lastWord = game.words[game.words.length - 1];
+  const nextLetter = lastWord[lastWord.length - 1];
 
-cmd({
-    pattern: "encrypt",
-    desc: "Simulate file encryption",
-    category: "fun",
-    react: "🔒",
-    filename: __filename
-}, async (conn, mek, m, { from, reply }) => {
-    const files = ["important.docx", "family.jpg", "passwords.txt", "project.zip"];
-    const target = m.args[0] || files[Math.floor(Math.random() * files.length)];
-    
-    let msg = await reply(`🔐 Encrypting ${target}...`);
-    
-    for (let i = 1; i <= 5; i++) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await conn.sendMessage(from, {
-            text: `⏳ Encryption progress: ${i * 20}%`,
-            edit: msg.key
-        });
-    }
-    
-    const key = Math.random().toString(36).substring(2, 10).toUpperCase();
-    await conn.sendMessage(from, {
-        text: `🔒 File encrypted!\n\nFile: ${target}\nKey: ${key}\n\n⚠️ Without this key, the file cannot be decrypted!`,
-        edit: msg.key
-    });
-});
+  clearTurnTimer(from);
+  timers[from] = setTimeout(() => handleTimeout(conn, from), 40 * 1000);
 
-cmd({
-    pattern: "decrypt",
-    desc: "Simulate file decryption",
-    category: "fun",
-    react: "🔓",
-    filename: __filename
-}, async (conn, mek, m, { from, reply }) => {
-    const key = m.args[0] || "INVALID";
-    const isValid = key.length >= 6 && /[A-Z0-9]/.test(key);
-    
-    let msg = await reply(`🔓 Attempting decryption with key: ${key}`);
-    
-    for (let i = 1; i <= 5; i++) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await conn.sendMessage(from, {
-            text: `⏳ Decryption progress: ${i * 20}%`,
-            edit: msg.key
-        });
-    }
-    
-    if (isValid) {
-        await conn.sendMessage(from, {
-            text: `✅ Decryption successful!\nFile has been restored.`,
-            edit: msg.key
-        });
-    } else {
-        await conn.sendMessage(from, {
-            text: `❌ Decryption failed!\nInvalid key provided.`,
-            edit: msg.key
-        });
-    }
-});
+  saveDB(db);
+
+  await conn.sendMessage(from, {
+    text: `➡️ It's @${game.players[game.turn].split("@")[0]}'s turn\n🔠 Word must start with *${nextLetter.toUpperCase()}*\n📏 Minimum length: *${game.wordLimit}*\n⏳ You have 40 seconds.`,
+    mentions: [game.players[game.turn]]
+  });
+}
