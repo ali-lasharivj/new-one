@@ -16,6 +16,7 @@ let madeMenu = `*╭┈──「${config.BOT_NAME}」┈───⊷*
 *┃ 🪾* *xᴅ ᴜsᴇʀ* : *${pushname}* 
 *┃ 🫟* *ᴍᴏᴅᴇ :* *${config.MODE}*
 *┃ 🪄* *ᴘʀᴇғɪx :* *${config.PREFIX}*
+Plugins: ${commands.length}
 *┃ 🛰️* *ʀᴀᴍ :* *𝟹𝟺.𝟻𝟼 ɢʙ/𝟼𝟶.𝟽𝟿*
 *┃ 👑* *ᴄʀᴇᴀᴛᴏʀ :* *ᴀʟɪ ɪɴxɪᴅᴇ*
 *┃ 🎐* *ᴠᴇʀsɪᴏɴ :* *𝟺.𝟻.𝟶 ʙᴇᴛᴀ☯︎*
