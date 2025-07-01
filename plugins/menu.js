@@ -1,22 +1,24 @@
 const config = require('../config')
-const {cmd , commands} = require('../command')
+const { cmd, commands } = require('../command');
 const os = require("os")
 const {runtime} = require('../lib/functions')
-cmd({
-    pattern: "menu",
-    alias: ["bot" ,"allmenu"],
-    desc: "menu the bot",
-    react: "📜",
-    category: "menu"
-},
-async(conn, mek, m,{from, l, quoted, body, isCmd, umarmd, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply}) => {
+const axios = require('axios')
 
-try{
-let madeMenu = `*╭┈──「${config.BOT_NAME}」┈───⊷*
+cmd({
+    pattern: "allmenu",
+    alias: "menu",
+    desc: "menu the bot",
+    category: "menu2",
+    react: "🛠️",
+    filename: __filename
+}, 
+async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply }) => {
+    try {
+        let dec = `*╭┈──「${config.BOT_NAME}」┈───⊷*
 *┃ 🪾* *xᴅ ᴜsᴇʀ* : *${pushname}* 
 *┃ 🫟* *ᴍᴏᴅᴇ :* *${config.MODE}*
 *┃ 🪄* *ᴘʀᴇғɪx :* *${config.PREFIX}*
-*┃ 📍* *ᴘʟᴜɢɪɴs:* *${commands.length}*
+*┃ 📍* ᴘʟᴜɢɪɴs:* *${commands.length}*
 *┃ 🛰️* *ʀᴀᴍ :* *𝟹𝟺.𝟻𝟼 ɢʙ/𝟼𝟶.𝟽𝟿*
 *┃ 👑* *ᴄʀᴇᴀᴛᴏʀ :* *ᴀʟɪ ɪɴxɪᴅᴇ*
 *┃ 🎐* *ᴠᴇʀsɪᴏɴ :* *𝟺.𝟻.𝟶 ʙᴇᴛᴀ☯︎*
@@ -93,9 +95,6 @@ let madeMenu = `*╭┈──「${config.BOT_NAME}」┈───⊷*
 ‎*┋* *⬡ ʙᴀᴄʜᴀ*
 ‎*┋* *⬡ sᴜᴘᴇʀʜᴇʀᴏ*
 ‎*┋* *⬡ ᴛɪᴍᴇᴛʀᴀᴠᴇʟ*
-‎*┋* *⬡ ᴛᴛᴛ*
-‎*┋* *⬡ ʟᴇᴀᴠᴇ-ᴛᴛᴛ*
-‎*┋* *⬡ ᴄᴀɴᴄᴇʟ-ᴛᴛᴛ*
 ‎*┋* *⬡ 𝟾ʙᴀʟʟ*
 ‎*┋* *⬡ ɴᴜᴍʙᴇʀɢᴀᴍᴇ*
 ‎*┋* *⬡ ʀᴏʟʟ*
@@ -380,18 +379,18 @@ let madeMenu = `*╭┈──「${config.BOT_NAME}」┈───⊷*
 ‎*┋* *⬡ ᴅᴀɪʟʏꜰᴀᴄᴛ*
 ‎*┋* *⬡ ᴍɪɴᴜᴛᴏʀ*
 ‎*╰──────────────────✑*
-> *ғꪮʀ ʏꪮꪊ ғꪮʀ ᴀʟʟ ꪮғ ᴀꜱ 🍉*`
+> *ғꪮʀ ʏꪮꪊ ғꪮʀ ᴀʟʟ ꪮғ ᴀꜱ 🍉*`;
 
-await conn.sendMessage(from, { 
+        await conn.sendMessage(from, { 
     image: { url: config.ALIVE_IMG || 'https://files.catbox.moe/6ku0eo.jpg' }, 
-    caption: madeMenu, 
+    caption: dec, 
     contextInfo: { 
         mentionedJid: [m.sender], 
         forwardingScore: 999, 
         isForwarded: true, 
         forwardedNewsletterMessageInfo: { 
             newsletterJid: '120363318387454868@newsletter', 
-            newsletterName: config.BOT_NAME, 
+            newsletterName: config.BOT_NAME,
             serverMessageId: 143 
         } 
     } 
@@ -402,3 +401,4 @@ await conn.sendMessage(from, {
     reply(`Error: ${e}`); 
 } 
 });
+        
