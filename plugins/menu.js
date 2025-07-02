@@ -18,7 +18,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
 *┃ 🪾* *xᴅ ᴜsᴇʀ* : *${pushname}* 
 *┃ 🫟* *ᴍᴏᴅᴇ :* *${config.MODE}*
 *┃ 🪄* *ᴘʀᴇғɪx :* *${config.PREFIX}*
-*┃ 📍* ᴘʟᴜɢɪɴs:* *${commands.length}*
+*┃ 📍* *ᴘʟᴜɢɪɴs:* *${commands.length}*
 *┃ 🛰️* *ʀᴀᴍ :* *𝟹𝟺.𝟻𝟼 ɢʙ/𝟼𝟶.𝟽𝟿*
 *┃ 👑* *ᴄʀᴇᴀᴛᴏʀ :* *ᴀʟɪ ɪɴxɪᴅᴇ*
 *┃ 🎐* *ᴠᴇʀsɪᴏɴ :* *𝟺.𝟻.𝟶 ʙᴇᴛᴀ☯︎*
