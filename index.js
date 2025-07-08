@@ -270,8 +270,12 @@ conn.ev.on('call', async (calls) => {
       await conn.sendMessage(from, {
         text: config.REJECT_MSG || '*📞 ᴄαℓℓ ɴσт αℓℓσωє∂ ιɴ тнιѕ ɴᴜмвєʀ уσυ ∂σɴт нανє ᴘєʀмιѕѕισɴ 📵*'
       });
-      console.log(`Call rejected and message sent to ${from}`);
-
+   console.log(`Call rejected and message sent to ${from}`);
+    }
+  } catch (err) {
+    console.error("Anti-call error:", err);
+  }
+});
 // =====================================
 	 
   conn.ev.on('messages.update', async updates => {
