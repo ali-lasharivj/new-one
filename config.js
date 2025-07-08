@@ -67,6 +67,7 @@ ANTI_BOT: process.env.ANTI_BOT || "true",
 MODE: getConfig("MODE") || "public",
 // make bot public-private-inbox-group 
 ANTIVIEW_ONCE: process.env.ANTIVIEW_ONCE || "off",
+AUTO_BIO: process.env.AUTO_BIO || "false",
 AUTO_VOICE: process.env.AUTO_VOICE || "false",
 // make true for send automatic voices
 AUTO_STICKER: process.env.AUTO_STICKER || "false",
