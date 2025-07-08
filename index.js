@@ -82,6 +82,7 @@ console.error = (...args) => {
   const mode = config.MODE
   const online = config.ALWAYS_ONLINE
   const status = config.AUTO_STATUS_SEEN
+ const reaction = config.AUTO_STATUS_REACT
   const ownerNumber = ['923003588997']
 
   //=============================================
@@ -246,15 +247,17 @@ message:{
 	     const username = `itx-alii-raza`;
              const mrfrank = `https://github.com/${username}`;
 	
-                    const upMessage = `\`SubZero Bot Connected!\` ✅
-\n\n> _Light, Cold, Icy, Fast & Rich Loaded With Features, SubZero W.A Bot._\n\n────────────────
-> 🌟 \`Star Repo\` : 
-${config.REPO}\n
-> 🎀 \`Follow Us\` :
-${mrfrank}\n
-> ⛔  \`Bot Prefix\` ${prefix}
-────────────────
-\n> © ᴘϙᴡᴇʀᴇᴅ ʙʏ ᴍʀ ꜰʀᴀɴᴋ ᴏꜰᴄ  🎐`;
+                    const upMessage = `*𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 𝐒𝐔𝐂𝐂𝐄𝐒𝐒𝐅𝐔𝐋𝐋𝐘!*
+*╭───────────────────✑*
+*│• 𝐓𝐘𝐏𝐄 .𝐌𝐄𝐍𝐔 𝐓𝐎 𝐒𝐄𝐄 𝐋𝐈𝐒𝐓 •*
+*│• 𝐁𝐎𝐓 𝐀𝐌𝐀𝐙𝐈𝐍𝐆 𝐅𝐄𝐀𝐓𝐔𝐑𝐄𝐒 •*
+*│• 🌸𝐃𝐄𝐕𝐄𝐋𝐎𝐏𝐄𝐑: 𝐀ɭīī 𝐗𝐃 𝟔𝐓𝟗*
+*│• ⏰𝐀𝐋𝐖𝐀𝐘𝐒 𝐎𝐍𝐋𝐈𝐍𝐄: ${online}*
+*│• 📜𝐏𝐑𝐄𝐅𝐈𝐗: ${prefix}*
+*│• 🪾𝐌𝐎𝐃𝐄: ${mode}*
+*│• 🪄𝐒𝐓𝐀𝐓𝐔𝐒 𝐕𝐈𝐄𝐖𝐒: ${status}*
+*│• 🫟𝐒𝐓𝐀𝐓𝐔𝐒 𝐑𝐄𝐀𝐂𝐓: ${reaction}*
+‎*╰───────────────────✑*`;
                     
                     await conn.sendMessage(conn.user.id, { 
                         image: { url: config.ALIVE_IMG || 'https://files.catbox.moe/6ku0eo.jpg' }, 
@@ -448,14 +451,6 @@ if (!isReact && senderNumber !== botNumber) {
     }
 }
 
-if (!isReact && senderNumber === botNumber) {
-    if (config.HEART_REACT === 'true') {
-        // Use custom emojis from the configuration
-        const reactions = (config.CUSTOM_REACT_EMOJIS || '❤️,🧡,💛,💚,💚').split(',');
-        const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
-        m.react(randomReaction);
-    }
-} 
 
 
 const bannedUsers = JSON.parse(fs.readFileSync('./lib/ban.json', 'utf-8'));
