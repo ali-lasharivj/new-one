@@ -225,8 +225,8 @@ conn.ev.on('connection.update', async (update) => {
 
     try {
 		// const username = config.REPO.split('/').slice(3, 4)[0];
- const botname = "𝐒𝐔𝐁𝐙𝐄𝐑𝐎 𝐌𝐃"; //add your name
- const ownername = "𝐌𝐑 𝐅𝐑𝐀𝐍𝐊"; // add your name
+ const botname = "—˹𝐀ɭīī "; //add your name
+ const ownername = "𝐒ʊ̊𝐏𝐏๏፝֟ɼʈ⎯꯭̽💀🇦🇱"; // add your name
  const ali = { 
  key: { 
   remoteJid: 'status@broadcast', 
@@ -236,7 +236,7 @@ message:{
   newsletterAdminInviteMessage: { 
     newsletterJid: '120363270086174844@newsletter', //add your channel jid
     newsletterName: "𝐈𝐂𝐘 𝐁𝐎𝐓", //add your bot name
-    caption: botname + ` 𝐁𝐘 ` + ownername, 
+    caption: botname + ` 𝐌Ɗ ` + ownername, 
     inviteExpiration: 0
   }
  }
