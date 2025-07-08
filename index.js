@@ -257,7 +257,7 @@ ${mrfrank}\n
 \n> © ᴘϙᴡᴇʀᴇᴅ ʙʏ ᴍʀ ꜰʀᴀɴᴋ ᴏꜰᴄ  🎐`;
                     
                     await conn.sendMessage(conn.user.id, { 
-                        image: { url: `https://i.postimg.cc/Kv6gLVvq/In-Shot-20250528-234036372.jpg` },
+                        image: { url: config.ALIVE_IMG || 'https://files.catbox.moe/6ku0eo.jpg' }, 
 			ai: true,
                         caption: upMessage},{
 			quoted: ali
