@@ -73,7 +73,7 @@ async (conn, mek, m, { from, pushname: _0x1279c5, reply }) => {
             const cmdsInCat = filteredCommands.filter(cmd => cmd.category === category);
             if (cmdsInCat.length === 0) continue;
 
-            menuText += `\`「${category.toUpperCase()}」\`\n‎*╭──────────────────✑*\n`;
+            menuText += `\`${category.toUpperCase()}\`\n‎*╭──────────────────✑*\n`;
             cmdsInCat.forEach(cmd => {
                 menuText += `‎*┋* *⬡  ${fancy(cmd.pattern)}*\n`;
             });
