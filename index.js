@@ -223,24 +223,46 @@ conn.ev.on('connection.update', async (update) => {
             console.log('Plugins installed successfully ✅');
 
     try {
-      const upMessage = `*𝐇𝐄𝐋𝐋𝐎 𝐓𝐇𝐄𝐑𝐄 𝐀𝐋𝐈-𝐌𝐃 𝐁𝐎𝐓👑*
+      const botname = "⎯꯭̽𓆩〬𝐀𝐋𝐈"; //add your name
+ const ownername = "𝐈𝐍𝐂-💀𓍢ִ𓆪"; // add your name
+ const ali = { 
+ key: { 
+  remoteJid: 'status@broadcast', 
+  participant: '0@s.whatsapp.net' 
+   }, 
+message:{ 
+  newsletterAdminInviteMessage: { 
+    newsletterJid: '120363318387454868@newsletter', //add your channel jid
+    newsletterName: "—˹𝐀ɭīī 𝐌Ɗ 𝐒ʊ̊𝐏𝐏๏፝֟ɼʈ⎯꯭̽💀🚩", //add your bot name
+    caption: botname + ` 𝐓𝐄𝐂𝐇 ` + ownername, 
+    inviteExpiration: 0
+  }
+ }
+}
+			
+				
+	     const username = `itx-alii-raza`;
+             const mrfrank = `https://github.com/${username}`;
+	
+                    const upMessage = `*𝐇𝐄𝐋𝐋𝐎 𝐓𝐇𝐄𝐑𝐄 𝐀𝐋𝐈-𝐌𝐃 𝐁𝐎𝐓👑*
 *𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 𝐒𝐔𝐂𝐂𝐄𝐒𝐒𝐅𝐔𝐋𝐋𝐘!*
-  
-*╭───━━━━───━━━━──┉┈⚆*
+*╭───────────────────✑*
 *│• 𝐓𝐘𝐏𝐄 .𝐌𝐄𝐍𝐔 𝐓𝐎 𝐒𝐄𝐄 𝐋𝐈𝐒𝐓 •*
 *│• 𝐁𝐎𝐓 𝐀𝐌𝐀𝐙𝐈𝐍𝐆 𝐅𝐄𝐀𝐓𝐔𝐑𝐄𝐒 •*
-*│• 🌸𝐃𝐄𝐕𝐄𝐋𝐎𝐏𝐄𝐑 : 𝐀ɭīī 𝐈ƞ̄x̷īīɖ𝛆̽*
-*│• ⏰𝐀𝐋𝐖𝐀𝐘𝐒 𝐎𝐍𝐋𝐈𝐍𝐄 : ${online}*
-*│• 📜𝐏𝐑𝐄𝐅𝐈𝐗 : ${prefix}*
-*│• 🪾𝐌𝐎𝐃𝐄 : ${mode}*
-*│• 🪄𝐒𝐓𝐀𝐓𝐔𝐒 𝐕𝐈𝐄𝐖𝐒 : ${status}*
-*│• 🫟𝐕𝐄𝐑𝐒𝐈𝐎𝐍 : 𝟒.𝟎.𝟎*
-*┗───━━━━───━━━━──┉┈⚆*`;
-
-      await conn.sendMessage(conn.user.id, {
-        image: { url: `https://i.ibb.co/LDLMs949/lordali.jpg` },
-        caption: upMessage
-      });
+*│• 🌸𝐃𝐄𝐕𝐄𝐋𝐎𝐏𝐄𝐑: 𝐀ɭīī 𝐈𝐍𝅦𝐗īī𝐃𝐄*
+*│• ⏰𝐀𝐋𝐖𝐀𝐘𝐒 𝐎𝐍𝐋𝐈𝐍𝐄: ${online}*
+*│• 📜𝐏𝐑𝐄𝐅𝐈𝐗: ${prefix}*
+*│• 🪾𝐌𝐎𝐃𝐄: ${mode}*
+*│• 🪄𝐒𝐓𝐀𝐓𝐔𝐒 𝐕𝐈𝐄𝐖𝐒: ${status}*
+*│• 🫟𝐒𝐓𝐀𝐓𝐔𝐒 𝐑𝐄𝐀𝐂𝐓: ${reaction}*
+‎*╰───────────────────✑*`;
+                    
+                    await conn.sendMessage(conn.user.id, { 
+                        image: { url: `https://i.ibb.co/LDLMs949/lordali.jpg` },
+			ai: true,
+                        caption: upMessage},{
+			quoted: ali
+                    });
 
     } catch (sendError) {
       console.error('❌ Error sending startup message:', sendError);
