@@ -223,8 +223,9 @@ conn.ev.on('connection.update', async (update) => {
             console.log('Plugins installed successfully ✅');
 
     try {
-      const botname = "⎯꯭̽𓆩〬𝐀𝐋𝐈"; //add your name
- const ownername = "𝐈𝐍𝐂-💀𓍢ִ𓆪"; // add your name
+		// const username = config.REPO.split('/').slice(3, 4)[0];
+ const botname = "𝐒𝐔𝐁𝐙𝐄𝐑𝐎 𝐌𝐃"; //add your name
+ const ownername = "𝐌𝐑 𝐅𝐑𝐀𝐍𝐊"; // add your name
  const ali = { 
  key: { 
   remoteJid: 'status@broadcast', 
@@ -232,51 +233,52 @@ conn.ev.on('connection.update', async (update) => {
    }, 
 message:{ 
   newsletterAdminInviteMessage: { 
-    newsletterJid: '120363318387454868@newsletter', //add your channel jid
-    newsletterName: "—˹𝐀ɭīī 𝐌Ɗ 𝐒ʊ̊𝐏𝐏๏፝֟ɼʈ⎯꯭̽💀🚩", //add your bot name
-    caption: botname + ` 𝐓𝐄𝐂𝐇 ` + ownername, 
+    newsletterJid: '120363270086174844@newsletter', //add your channel jid
+    newsletterName: "𝐈𝐂𝐘 𝐁𝐎𝐓", //add your bot name
+    caption: botname + ` 𝐁𝐘 ` + ownername, 
     inviteExpiration: 0
   }
  }
 }
 			
-				
+			
+			
 	     const username = `itx-alii-raza`;
              const mrfrank = `https://github.com/${username}`;
 	
-                    const upMessage = `*𝐇𝐄𝐋𝐋𝐎 𝐓𝐇𝐄𝐑𝐄 𝐀𝐋𝐈-𝐌𝐃 𝐁𝐎𝐓👑*
-*𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 𝐒𝐔𝐂𝐂𝐄𝐒𝐒𝐅𝐔𝐋𝐋𝐘!*
-*╭───────────────────✑*
-*│• 𝐓𝐘𝐏𝐄 .𝐌𝐄𝐍𝐔 𝐓𝐎 𝐒𝐄𝐄 𝐋𝐈𝐒𝐓 •*
-*│• 𝐁𝐎𝐓 𝐀𝐌𝐀𝐙𝐈𝐍𝐆 𝐅𝐄𝐀𝐓𝐔𝐑𝐄𝐒 •*
-*│• 🌸𝐃𝐄𝐕𝐄𝐋𝐎𝐏𝐄𝐑: 𝐀ɭīī 𝐈𝐍𝅦𝐗īī𝐃𝐄*
-*│• ⏰𝐀𝐋𝐖𝐀𝐘𝐒 𝐎𝐍𝐋𝐈𝐍𝐄: ${online}*
-*│• 📜𝐏𝐑𝐄𝐅𝐈𝐗: ${prefix}*
-*│• 🪾𝐌𝐎𝐃𝐄: ${mode}*
-*│• 🪄𝐒𝐓𝐀𝐓𝐔𝐒 𝐕𝐈𝐄𝐖𝐒: ${status}*
-*│• 🫟𝐒𝐓𝐀𝐓𝐔𝐒 𝐑𝐄𝐀𝐂𝐓: ${reaction}*
-‎*╰───────────────────✑*`;
+                    const upMessage = `\`SubZero Bot Connected!\` ✅
+\n\n> _Light, Cold, Icy, Fast & Rich Loaded With Features, SubZero W.A Bot._\n\n────────────────
+> 🌟 \`Star Repo\` : 
+${config.REPO}\n
+> 🎀 \`Follow Us\` :
+${mrfrank}\n
+> ⛔  \`Bot Prefix\` ${prefix}
+────────────────
+\n> © ᴘϙᴡᴇʀᴇᴅ ʙʏ ᴍʀ ꜰʀᴀɴᴋ ᴏꜰᴄ  🎐`;
                     
                     await conn.sendMessage(conn.user.id, { 
-                        image: { url: `https://i.ibb.co/LDLMs949/lordali.jpg` },
+                        image: { url: `https://i.postimg.cc/Kv6gLVvq/In-Shot-20250528-234036372.jpg` },
 			ai: true,
                         caption: upMessage},{
 			quoted: ali
                     });
+		
 
-    } catch (sendError) {
-      console.error('❌ Error sending startup message:', sendError);
-    }
-  }
+                    
+                } catch (sendError) {
+                    console.error('[❄️] Error sending messages:', sendError);
+                }
+            }
 
-  if (qr) {
-    console.log('Scan the QR code to connect or use session ID');
-    qrcode.generate(qr, { small: true });
-  }
-});
+        if (qr) {
+            console.log('[❄️] Scan the QR code to connect or use session ID');
+        }
+    });
 
     conn.ev.on('creds.update', saveCreds);
+
     
+
 // =====================================
 conn.ev.on('call', async (calls) => {
   try {
