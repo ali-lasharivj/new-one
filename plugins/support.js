@@ -26,7 +26,7 @@ cmd({
     pattern: "support",
     desc: "Get the link to the support group or page.",
     react: "🛠️",
-    category: "utility",
+    category: "info",
     use: ".support",
     filename: __filename,
 }, async (conn, mek, m, { reply }) => {
