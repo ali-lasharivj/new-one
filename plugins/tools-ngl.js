@@ -5,7 +5,7 @@ cmd({
     pattern: "ngl",
     alias: ["nglimage", "nglimg", "getngl"],
     desc: "Generate an NGL-style image using custom text",
-    category: "fan-games",
+    category: "fun-games",
     react: "🎨",
     filename: __filename
 }, async (conn, mek, m, { from, reply, text }) => {
