@@ -31,6 +31,8 @@ const {
   const P = require('pino')
   const config = require('./config')
   const GroupEvents = require('./lib/groupevents');
+  const { registerAntiNewsletter } = require('./plugins/antinewsletter')
+  const { registerGroupMessages } = require('./plugins/groupMessages')
   const qrcode = require('qrcode-terminal')
   const StickersTypes = require('wa-sticker-formatter')
   const util = require('util')
@@ -153,7 +155,11 @@ conn.ev.on('creds.update', saveCreds)
 conn.ev.on('group-participants.update', async (update) => {
     await GroupEvents(conn, update);
 });
-  
+  //===============
+	registerGroupMessages(conn);
+
+registerAntiNewsletter(conn);
+	
   // === Debug Call Event ===
 conn.ev.on('call', async (calls) => {
   try {
