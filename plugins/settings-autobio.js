@@ -72,7 +72,7 @@ function startAutoBio(conn, bioText) {
         try {
             const now = new Date();
             const timeString = now.toLocaleTimeString('en-US', { timeZone });
-            const formattedBio = bioText.replace('αℓι-м∂ | σиℓιиє 💀🚩', timeString);
+            const formattedBio = bioText.replace('αℓι-м∂ | σиℓιиє 💀🚩');
             await conn.updateProfileStatus(formattedBio);
         } catch (error) {
             console.error('Bio update error:', error);
