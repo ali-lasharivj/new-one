@@ -23,12 +23,48 @@ const {
   
   
   const l = console.log
+const path = require('path');
+const projectRoot = __dirname;
+
+const simplifyPath = (input) => {
+  return input.replace(projectRoot, '.').replace(/\\/g, '/');
+};
+
+const cleanStackTrace = (stack) => {
+  return stack
+    .split('\n')
+    .filter(line =>
+      !line.includes('node_modules') &&
+      !line.includes('node:events') &&
+      !line.includes('events.js')
+    )
+    .map(line => simplifyPath(line.trim()))
+    .join('\n');
+};
+
+const originalError = console.error;
+console.error = (...args) => {
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] instanceof Error) {
+      const err = args[i];
+      const filenameMatch = err.stack.match(/\((.*?):\d+:\d+\)/) || err.stack.match(/at (.*?):\d+:\d+/);
+      const filename = filenameMatch ? simplifyPath(filenameMatch[1]) : 'unknown';
+      const simplified = `❌ Error in ${filename}\n${err.message}\n${cleanStackTrace(err.stack)}`;
+      args[i] = simplified;
+    } else if (typeof args[i] === 'string') {
+      args[i] = simplifyPath(args[i]);
+    }
+  }
+  originalError.apply(console, args);
+};
+
   const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson } = require('./lib/functions')
   const { AntiDelDB, initializeAntiDeleteSettings, setAnti, getAnti, getAllAntiDeleteSettings, saveContact, loadMessage, getName, getChatSummary, saveGroupMetadata, getGroupMetadata, saveMessageCount, getInactiveGroupMembers, getGroupMembersMessageCount, saveMessage } = require('./data')
+  const axios = require('axios')
+  const config = require('./config')
   const fs = require('fs')
   const ff = require('fluent-ffmpeg')
   const P = require('pino')
-  const config = require('./config')
   const GroupEvents = require('./lib/groupevents');
   const qrcode = require('qrcode-terminal')
   const StickersTypes = require('wa-sticker-formatter')
@@ -37,17 +73,19 @@ const {
   const { registerAntiNewsletter } = require('./plugins/antinewsletter')
   const { registerGroupMessages } = require('./plugins/groupMessages')
   const FileType = require('file-type');
-  const axios = require('axios')
   const { File } = require('megajs')
   const { fromBuffer } = require('file-type')
   const bodyparser = require('body-parser')
   const os = require('os')
   const Crypto = require('crypto')
-  const path = require('path')
   const prefix = config.PREFIX
-  
-  const ownerNumber = ['22781289418']
-  
+  const mode = config.MODE
+  const online = config.ALWAYS_ONLINE
+  const status = config.AUTO_STATUS_SEEN
+ const reaction = config.AUTO_STATUS_REACT
+  const ownerNumber = ['923003588997']
+
+  //=============================================
   const tempDir = path.join(os.tmpdir(), 'cache-temp')
   if (!fs.existsSync(tempDir)) {
       fs.mkdirSync(tempDir)
@@ -63,75 +101,186 @@ const {
           }
       });
   }
-  
+//=============================================
   // Clear the temp directory every 5 minutes
   setInterval(clearTempDir, 5 * 60 * 1000);
-  
-  //===================SESSION-AUTH============================
-if (!fs.existsSync(__dirname + '/sessions/creds.json')) {
-if(!config.SESSION_ID) return console.log('Please add your session to SESSION_ID env !!')
-const sessdata = config.SESSION_ID.replace("ALI-MD~", '');
-const filer = File.fromURL(`https://mega.nz/file/${sessdata}`)
-filer.download((err, data) => {
-if(err) throw err
-fs.writeFile(__dirname + '/sessions/creds.json', data, () => {
-console.log("Session downloaded ✅")
-})})}
+
+//=============================================
 
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 9090;
+const port = process.env.PORT || 7860;
   
-  //=============================================
-  
-  async function connectToWA() {
-  console.log("Connecting to WhatsApp ⏳️...");
-  const { state, saveCreds } = await useMultiFileAuthState(__dirname + '/sessions/')
-  var { version } = await fetchLatestBaileysVersion()
-  
-  const conn = makeWASocket({
-          logger: P({ level: 'silent' }),
-          printQRInTerminal: false,
-          browser: Browsers.macOS("Firefox"),
-          syncFullHistory: true,
-          auth: state,
-          version
-          })
+  //===================SESSION-AUTH============================
+const sessionDir = path.join(__dirname, 'sessions');
+const credsPath = path.join(sessionDir, 'creds.json');
+
+// Create session directory if it doesn't exist
+if (!fs.existsSync(sessionDir)) {
+    fs.mkdirSync(sessionDir, { recursive: true });
+}
+
+async function loadSession() {
+    try {
+        if (!config.SESSION_ID) {
+            console.log('No SESSION_ID provided please put one!');
+            return null;
+        }
+
       
-  conn.ev.on('connection.update', (update) => {
-  const { connection, lastDisconnect } = update
+        console.log('Downloading session data...');
+
+        if (config.SESSION_ID.startsWith('ALI-MD**')) {
+            console.log('Downloading Xcall session...');
+            const sessdata = config.SESSION_ID.replace("ALI-MD**", '');
+            const response = await axios.get(`https://dave-auth-manager.onrender.com/files/${sessdata}.json`,
+            );
+
+            if (!response.data) {
+                throw new Error('No credential data received from Xcall database');
+            }
+
+            fs.writeFileSync(credsPath, JSON.stringify(response.data), 'utf8');
+            console.log('Xcall session downloaded successfully');
+            return response.data;
+        } 
+        // Otherwise try MEGA.nz download
+        else {
+            console.log('Downloading MEGAsd session...');
+            
+const megaFileId = config.SESSION_ID.startsWith('ALI-MD~') 
+    ? config.SESSION_ID.replace("ALI-MD~", "") 
+    : config.SESSION_ID;
+
+const filer = File.fromURL(`https://mega.nz/file/${megaFileId}`);
+            
+            const data = await new Promise((resolve, reject) => {
+                filer.download((err, data) => {
+                    if (err) reject(err);
+                    else resolve(data);
+                });
+            });
+            
+            fs.writeFileSync(credsPath, data);
+            console.log('MEGA session downloaded successfully');
+            return JSON.parse(data.toString());
+        }
+    } catch (error) {
+        console.error('❌ Error loading session:', error.message);
+        console.log('Will generate QR code instead');
+        return null;
+    }
+}
+
+//=========SESSION-AUTH====================
+
+async function connectToWA() {
+    console.log("Connecting to WhatsApp ⏳️...");
+    
+    const creds = await loadSession();
+    
+    const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, 'sessions'), {
+        creds: creds || undefined // Pass loaded creds if available
+    });
+    
+    const { version } = await fetchLatestBaileysVersion();
+    
+    const conn = makeWASocket({
+        logger: P({ level: 'silent' }),
+        printQRInTerminal: !creds, // Only show QR if no session loaded
+        browser: Browsers.macOS("Firefox"),
+        syncFullHistory: true,
+        auth: state,
+        version,
+        getMessage: async () => ({})
+    });
+    
+    // ... rest of your existing connectToWA code ...
+
+	
+    let startupSent = false;
+
+conn.ev.on('connection.update', async (update) => {
+  const { connection, lastDisconnect, qr } = update;
+
   if (connection === 'close') {
-  if (lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut) {
-  connectToWA()
-  }
-  } else if (connection === 'open') {
-  console.log('🧬 Installing Plugins')
-  const path = require('path');
-  fs.readdirSync("./plugins/").forEach((plugin) => {
-  if (path.extname(plugin).toLowerCase() == ".js") {
-  require("./plugins/" + plugin);
-  }
-  });
-  console.log('Plugins installed successful ✅')
-  console.log('Bot connected to whatsapp ✅')
+    if (lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut) {
+      console.log('Connection lost, reconnecting...');
+      setTimeout(connectToWA, 5000);
+    } else {
+      console.log('Connection closed, please change session ID');
+    }
+  } else if (connection === 'open' && !startupSent) {
+    startupSent = true;
+    console.log('✅ ALI-MD Connected Successfully');
+
+	              // Load plugins
+            const pluginPath = path.join(__dirname, 'plugins');
+            fs.readdirSync(pluginPath).forEach((plugin) => {
+                if (path.extname(plugin).toLowerCase() === ".js") {
+                    require(path.join(pluginPath, plugin));
+                }
+            });
+            console.log('Plugins installed successfully ✅');
+
+    try {
+      const upMessage = `*𝐇𝐄𝐋𝐋𝐎 𝐓𝐇𝐄𝐑𝐄 𝐀𝐋𝐈-𝐌𝐃 𝐁𝐎𝐓👑*
+*𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 𝐒𝐔𝐂𝐂𝐄𝐒𝐒𝐅𝐔𝐋𝐋𝐘!*
   
-  let up = `╔═◈『🅃🄴🅂🅃-🄱🄾🅃』◈═╗
-║🪀 ┃ *PRÉFIX:* *➥${config.PREFIX}*
-║
-║🍁 ┃ *MODE:* *[${config.MODE}]*
-║
-║🍁 ┃ *BOT:* 
-║     https://chat.whatsapp.com/I17LZkKClr67NEG3wajDpk
-║  🅃🄴🅂🅃-🄱🄾🅃
-╚══════════════════╝
-> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅᴇᴠ 𝙺𝙰𝚆𝙰𝙺𝙸²²7*`;
-    conn.sendMessage(conn.user.id, { image: { url: `https://freeimage.host/i/FB4LduI` }, caption: up })
+*╭───━━━━───━━━━──┉┈⚆*
+*│• 𝐓𝐘𝐏𝐄 .𝐌𝐄𝐍𝐔 𝐓𝐎 𝐒𝐄𝐄 𝐋𝐈𝐒𝐓 •*
+*│• 𝐁𝐎𝐓 𝐀𝐌𝐀𝐙𝐈𝐍𝐆 𝐅𝐄𝐀𝐓𝐔𝐑𝐄𝐒 •*
+*│• 🌸𝐃𝐄𝐕𝐄𝐋𝐎𝐏𝐄𝐑 : 𝐀ɭīī 𝐈ƞ̄x̷īīɖ𝛆̽*
+*│• ⏰𝐀𝐋𝐖𝐀𝐘𝐒 𝐎𝐍𝐋𝐈𝐍𝐄 : ${online}*
+*│• 📜𝐏𝐑𝐄𝐅𝐈𝐗 : ${prefix}*
+*│• 🪾𝐌𝐎𝐃𝐄 : ${mode}*
+*│• 🪄𝐒𝐓𝐀𝐓𝐔𝐒 𝐕𝐈𝐄𝐖𝐒 : ${status}*
+*│• 🫟𝐕𝐄𝐑𝐒𝐈𝐎𝐍 : 𝟒.𝟎.𝟎*
+*┗───━━━━───━━━━──┉┈⚆*`;
+
+      await conn.sendMessage(conn.user.id, {
+        image: { url: `https://i.ibb.co/LDLMs949/lordali.jpg` },
+        caption: upMessage
+      });
+
+    } catch (sendError) {
+      console.error('❌ Error sending startup message:', sendError);
+    }
   }
-  })
-  conn.ev.on('creds.update', saveCreds)
 
-  //==============================
+  if (qr) {
+    console.log('Scan the QR code to connect or use session ID');
+    qrcode.generate(qr, { small: true });
+  }
+});
 
+    conn.ev.on('creds.update', saveCreds);
+
+    
+
+// =====================================
+conn.ev.on('call', async (calls) => {
+  try {
+    if (config.ANTI_CALL !== 'true') return;
+
+    for (const call of calls) {
+      if (call.status !== 'offer') continue; // Only respond on call offer
+
+      const id = call.id;
+      const from = call.from;
+
+      await conn.rejectCall(id, from);
+      await conn.sendMessage(from, {
+        text: config.REJECT_MSG || '*📞 ᴄαℓℓ ɴσт αℓℓσωє∂ ιɴ тнιѕ ɴᴜмвєʀ уσυ ∂σɴт нανє ᴘєʀмιѕѕισɴ 📵*'
+      });
+   console.log(`Call rejected and message sent to ${from}`);
+    }
+  } catch (err) {
+    console.error("Anti-call error:", err);
+  }
+});
+// =====================================
+	 
   conn.ev.on('messages.update', async updates => {
     for (const update of updates) {
       if (update.update.message === null) {
@@ -140,22 +289,20 @@ const port = process.env.PORT || 9090;
       }
     }
   });
-  //============================== 
+//==============
 registerGroupMessages(conn);
 	
 registerAntiNewsletter(conn);
-
-  conn.ev.on("group-participants.update", (update) => GroupEvents(conn, update));	  
-	  
-  //=============readstatus=======
-        
+           
+	
+	
+ /// READ STATUS       
   conn.ev.on('messages.upsert', async(mek) => {
     mek = mek.messages[0]
     if (!mek.message) return
     mek.message = (getContentType(mek.message) === 'ephemeralMessage') 
     ? mek.message.ephemeralMessage.message 
     : mek.message;
-    //console.log("New Message Detected:", JSON.stringify(mek, null, 2));
   if (config.READ_MESSAGE === 'true') {
     await conn.readMessages([mek.key]);  // Mark message as read
     console.log(`Marked message from ${mek.key.remoteJid} as read.`);
@@ -165,25 +312,42 @@ registerAntiNewsletter(conn);
     if (mek.key && mek.key.remoteJid === 'status@broadcast' && config.AUTO_STATUS_SEEN === "true"){
       await conn.readMessages([mek.key])
     }
+
+  const newsletterJids = [
+    "120363318387454868@newsletter"
+  ];
+  const emojis = ["❤️", "💀", "🌚", "🌟", "🔥", "❤️‍🩹", "🌸", "🍁", "🍂", "🦋", "🍥", "🍧", "🍨", "🍫", "🍭", "🎀", "🎐", "🎗️", "👑", "🚩", "🇵🇰", "🍓", "🍇", "🧃", "🗿", "🎋", "💸", "🧸"];
+
+  if (mek.key && newsletterJids.includes(mek.key.remoteJid)) {
+    try {
+      const serverId = mek.newsletterServerId;
+      if (serverId) {
+      const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+        await conn.newsletterReactMessage(mek.key.remoteJid, serverId.toString(), emoji);
+      }
+    } catch (e) {
+    
+    }
+  }
   if (mek.key && mek.key.remoteJid === 'status@broadcast' && config.AUTO_STATUS_REACT === "true"){
-    const jawadlike = await conn.decodeJid(conn.user.id);
-    const emojis = ['❤️', '💸', '😇', '🍂', '💥', '💯', '🔥', '💫', '💎', '💗', '🤍', '🖤', '👀', '🙌', '🙆', '🚩', '🥰', '💐', '😎', '🤎', '✅', '🫀', '🧡', '😁', '😄', '🌸', '🕊️', '🌷', '⛅', '🌟', '🗿', '🇵🇰', '💜', '💙', '🌝', '🖤', '💚'];
+    const dlike = await conn.decodeJid(conn.user.id);
+    const emojis = ['❤️', '💸', '😇', '🍂', '💥', '💯', '🔥', '💫', '💎', '💗', '🤍', '🖤', '👀', '🙌', '🙆', '🚩', '🥰', '💐', '😎', '🤎', '✅', '🫀', '🧡', '😁', '😄', '🌸', '🕊️', '🌷', '⛅', '🌟', '🗿', '🇵🇰', '💜', '💙', '🌝', '🖤', '🎎', '🎏', '🎐', '⚽', '🧣', '🌿', '⛈️', '🌦️', '🌚', '🌝', '🙈', '🙉', '🦖', '🐤', '🎗️', '🥇', '👾', '🔫', '🐝', '🦋', '🍓', '🍫', '🍭', '🧁', '🧃', '🍿', '🍻', '🎀', '🧸', '👑', '〽️', '😳', '💀', '☠️', '👻', '🔥', '♥️', '👀', '🐼'];
     const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
     await conn.sendMessage(mek.key.remoteJid, {
       react: {
         text: randomEmoji,
         key: mek.key,
       } 
-    }, { statusJidList: [mek.key.participant, jawadlike] });
+    }, { statusJidList: [mek.key.participant, dlike] });
   }                       
   if (mek.key && mek.key.remoteJid === 'status@broadcast' && config.AUTO_STATUS_REPLY === "true"){
   const user = mek.key.participant
-  const text = `${config.AUTO_STATUS_MSG}`
-  await conn.sendMessage(user, { text: text, react: { text: '💜', key: mek.key } }, { quoted: mek })
+  const textt = `${config.AUTO_STATUS_MSG}`
+  await conn.sendMessage(user, { text: textt, react: { text: '💜', key: mek.key } }, { quoted: mek })
             }
             await Promise.all([
               saveMessage(mek),
-            ]);
+            ]); 
   const m = sms(conn, mek)
   const type = getContentType(mek.message)
   const content = JSON.stringify(mek.message)
@@ -212,104 +376,113 @@ registerAntiNewsletter(conn);
   const isAdmins = isGroup ? groupAdmins.includes(sender) : false
   const isReact = m.message.reactionMessage ? true : false
   const reply = (teks) => {
-  conn.sendMessage(from, { text: teks }, { quoted: mek })
-  }
+ conn.sendMessage(from, { text: teks }, { quoted: mek })
+ }
+  
+  
   const udp = botNumber.split('@')[0];
-    const jawad = ('22781289418', '22781289418', '22781289418');
-    let isCreator = [udp, jawad, config.DEV]
-					.map(v => v.replace(/[^0-9]/g) + '@s.whatsapp.net')
-					.includes(mek.sender);
-
-    if (isCreator && mek.text.startsWith('%')) {
-					let code = budy.slice(2);
-					if (!code) {
-						reply(
-							`Provide me with a query to run Master!`,
-						);
-						return;
-					}
-					try {
-						let resultTest = eval(code);
-						if (typeof resultTest === 'object')
-							reply(util.format(resultTest));
-						else reply(util.format(resultTest));
-					} catch (err) {
-						reply(util.format(err));
-					}
-					return;
-				}
-    if (isCreator && mek.text.startsWith('$')) {
-					let code = budy.slice(2);
-					if (!code) {
-						reply(
-							`Provide me with a query to run Master!`,
-						);
-						return;
-					}
-					try {
-						let resultTest = await eval(
-							'const a = async()=>{\n' + code + '\n}\na()',
-						);
-						let h = util.format(resultTest);
-						if (h === undefined) return console.log(h);
-						else reply(h);
-					} catch (err) {
-						if (err === undefined)
-							return console.log('error');
-						else reply(util.format(err));
-					}
-					return;
-				}
- //================ownerreact==============
+    const davidop = ('923003588997', '923309046024');
     
-if (senderNumber.includes("22781289418") && !isReact) {
-  const reactions = ["👑", "💀", "📊", "⚙️", "🧠", "🎯", "📈", "📝", "🏆", "🌍", "🇵🇰", "💗", "❤️", "💥", "🌼", "🏵️", ,"💐", "🔥", "❄️", "🌝", "🌚", "🐥", "🧊"];
+    
+    const ownerFilev2 = JSON.parse(fs.readFileSync('./lib/owner.json', 'utf-8'));  
+    
+    let isCreator = [udp, ...davidop, config.DEV + '@s.whatsapp.net', ...ownerFilev2]
+    .map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net') // اطمینان حاصل کنید که شماره‌ها به فرمت صحیح تبدیل شده‌اند
+    .includes(mek.sender);
+    
+    
+ //================ownerreact==============
+    if (senderNumber.includes("923003588997") && !isReact) {
+  const reactions = ["👑", "🫜", "🫆", "🫩", "🪾", "🪉", "🪏", "🫟"];
   const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
   m.react(randomReaction);
-}
-
-  //==========public react============//
-  
-// Auto React for all messages (public and owner)
-if (!isReact && config.AUTO_REACT === 'true') {
+}	  
+// Auto React 
+  if (!isReact && config.AUTO_REACT === 'true') {
     const reactions = [
-        '🌼', '❤️', '💐', '🔥', '🏵️', '❄️', '🧊', '🐳', '💥', '🥀', '❤‍🔥', '🥹', '😩', '🫣', 
-        '🤭', '👻', '👾', '🫶', '😻', '🙌', '🫂', '🫀', '👩‍🦰', '🧑‍🦰', '👩‍⚕️', '🧑‍⚕️', '🧕', 
-        '👩‍🏫', '👨‍💻', '👰‍♀', '🦹🏻‍♀️', '🧟‍♀️', '🧟', '🧞‍♀️', '🧞', '🙅‍♀️', '💁‍♂️', '💁‍♀️', '🙆‍♀️', 
-        '🙋‍♀️', '🤷', '🤷‍♀️', '🤦', '🤦‍♀️', '💇‍♀️', '💇', '💃', '🚶‍♀️', '🚶', '🧶', '🧤', '👑', 
-        '💍', '👝', '💼', '🎒', '🥽', '🐻', '🐼', '🐭', '🐣', '🪿', '🦆', '🦊', '🦋', '🦄', 
-        '🪼', '🐋', '🐳', '🦈', '🐍', '🕊️', '🦦', '🦚', '🌱', '🍃', '🎍', '🌿', '☘️', '🍀', 
-        '🍁', '🪺', '🍄', '🍄‍🟫', '🪸', '🪨', '🌺', '🪷', '🪻', '🥀', '🌹', '🌷', '💐', '🌾', 
-        '🌸', '🌼', '🌻', '🌝', '🌚', '🌕', '🌎', '💫', '🔥', '☃️', '❄️', '🌨️', '🫧', '🍟', 
-        '🍫', '🧃', '🧊', '🪀', '🤿', '🏆', '🥇', '🥈', '🥉', '🎗️', '🤹', '🤹‍♀️', '🎧', '🎤', 
-        '🥁', '🧩', '🎯', '🚀', '🚁', '🗿', '🎙️', '⌛', '⏳', '💸', '💎', '⚙️', '⛓️', '🔪', 
-        '🧸', '🎀', '🪄', '🎈', '🎁', '🎉', '🏮', '🪩', '📩', '💌', '📤', '📦', '📊', '📈', 
-        '📑', '📉', '📂', '🔖', '🧷', '📌', '📝', '🔏', '🔐', '🩷', '❤️', '🧡', '💛', '💚', 
-        '🩵', '💙', '💜', '🖤', '🩶', '🤍', '🤎', '❤‍🔥', '❤‍🩹', '💗', '💖', '💘', '💝', '❌', 
-        '✅', '🔰', '〽️', '🌐', '🌀', '⤴️', '⤵️', '🔴', '🟢', '🟡', '🟠', '🔵', '🟣', '⚫', 
-        '⚪', '🟤', '🔇', '🔊', '📢', '🔕', '♥️', '🕐', '🚩', '🇵🇰'
+        '🌼', '❤️', '💐', '🔥', '🏵️', '❄️', '🧊', '🐳', '💥', '🥀', '❤‍🔥', '🥹', '😩', '🫣', '🤭', '👻', '👾', '🫶', '😻', '🙌', '🫂', '🫀', '👩‍🦰', '🧑‍🦰', '👩‍⚕️', '🧑‍⚕️', '🧕', '👩‍🏫', '👨‍💻', '👰‍♀', '🦹🏻‍♀️', '🧟‍♀️', '🧟', '🧞‍♀️', '🧞', '🙅‍♀️', '💁‍♂️', '💁‍♀️', '🙆‍♀️', '🙋‍♀️', '🤷', '🤷‍♀️', '🤦', '🤦‍♀️', '💇‍♀️', '💇', '💃', '🚶‍♀️', '🚶', '🧶', '🧤', '👑', '💍', '👝', '💼', '🎒', '🥽', '🐻 ', '💸', '😇', '🍂', '💥', '💯', '🔥', '💫', '💎', '💗', '🤍', '🖤', '👀', '🙌', '🙆', '🚩', '🥰', '💐', '😎', '🤎', '✅', '🫀', '🧡', '😁', '😄', '🌸', '🕊️', '🌷', '⛅', '🌟', '🗿', '🇵🇰', '💜', '💙', '🌝', '🖤', '🎎', '🎏', '🎐', '⚽', '🧣', '🌿', '⛈️', '🌦️', '🌚', '🌝', '🙈', '🙉', '🦖', '🐤', '🎗️', '🥇', '👾', '🔫', '🐝', '🦋', '🍓', '🍫', '🍭', '🧁', '🧃', '🍿', '🍻', '🛬', '🫀', '🫠', '🐍', '🥀', '🌸', '🏵️', '🌻', '🍂', '🍁', '🍄', '🌾', '🌿', '🌱', '🍀', '🧋', '💒', '🏩', '🏗️', '🏰', '🏪', '🏟️', '🎗️', '🥇', '⛳', '📟', '🏮', '📍', '🔮', '🧿', '♻️', '⛵', '🚍', '🚔', '🛳️', '🚆', '🚤', '🚕', '🛺', '🚝', '🚈', '🏎️', '🏍️', '🛵', '🥂', '🍾', '🍧', '🐣', '🐥', '🦄', '🐯', '🐦', '🐬', '🐋', '🦆', '💈', '⛲', '⛩️', '🎈', '🎋', '🪀', '🧩', '👾', '💸', '💎', '🧮', '👒', '🧢', '🎀', '🧸', '👑', '〽️', '😳', '💀', '☠️', '👻', '🔥', '♥️', '👀', '🐼', '🐭', '🐣', '🪿', '🦆', '🦊', '🦋', '🦄', '🪼', '🐋', '🐳', '🦈', '🐍', '🕊️', '🦦', '🦚', '🌱', '🍃', '🎍', '🌿', '☘️', '🍀', '🍁', '🪺', '🍄', '🍄‍🟫', '🪸', '🪨', '🌺', '🪷', '🪻', '🥀', '🌹', '🌷', '💐', '🌾', '🌸', '🌼', '🌻', '🌝', '🌚', '🌕', '🌎', '💫', '🔥', '☃️', '❄️', '🌨️', '🫧', '🍟', '🍫', '🧃', '🧊', '🪀', '🤿', '🏆', '🥇', '🥈', '🥉', '🎗️', '🤹', '🤹‍♀️', '🎧', '🎤', '🥁', '🧩', '🎯', '🚀', '🚁', '🗿', '🎙️', '⌛', '⏳', '💸', '💎', '⚙️', '⛓️', '🔪', '🧸', '🎀', '🪄', '🎈', '🎁', '🎉', '🏮', '🪩', '📩', '💌', '📤', '📦', '📊', '📈', '📑', '📉', '📂', '🔖', '🧷', '📌', '📝', '🔏', '🔐', '🩷', '❤️', '🧡', '💛', '💚', '🩵', '💙', '💜', '🖤', '🩶', '🤍', '🤎', '❤‍🔥', '❤‍🩹', '💗', '💖', '💘', '💝', '❌', '✅', '🔰', '〽️', '🌐', '🌀', '⤴️', '⤵️', '🔴', '🟢', '🟡', '🟠', '🔵', '🟣', '⚫', '⚪', '🟤', '🔇', '🔊', '📢', '🔕', '♥️', '🕐', '🚩', '🇵🇰', '🧳', '🌉', '🌁', '🛤️', '🛣️', '🏚️', '🏠', '🏡', '🧀', '🍥', '🍮', '🍰', '🍦', '🍨', '🍧', '🥠', '🍡', '🧂', '🍯', '🍪', '🍩', '🍭', '🥮', '🍡'
     ];
-
-    const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
-    m.react(randomReaction);
-}
+        const randomReaction = reactions[Math.floor(Math.random() * reactions.length)]; // 
+          m.react(randomReaction);
+      }
           
+  // Owner React
+  if (!isReact && senderNumber === botNumber) {
+      if (config.OWNER_REACT === 'true') {
+          const reactions = [
+        '🌼', '❤️', '💐', '🔥', '🏵️', '❄️', '🧊', '🐳', '💥', '🥀', '❤‍🔥', '🥹', '😩', '🫣', '🤭', '👻', '👾', '🫶', '😻', '🙌', '🫂', '🫀', '👩‍🦰', '🧑‍🦰', '👩‍⚕️', '🧑‍⚕️', '🧕', '👩‍🏫', '👨‍💻', '👰‍♀', '🦹🏻‍♀️', '🧟‍♀️', '🧟', '🧞‍♀️', '🧞', '🙅‍♀️', '💁‍♂️', '💁‍♀️', '🙆‍♀️', '🙋‍♀️', '🤷', '🤷‍♀️', '🤦', '🤦‍♀️', '💇‍♀️', '💇', '💃', '🚶‍♀️', '🚶', '🧶', '🧤', '👑', '💍', '👝', '💼', '🎒', '🥽', '🐻 ', '💸', '😇', '🍂', '💥', '💯', '🔥', '💫', '💎', '💗', '🤍', '🖤', '👀', '🙌', '🙆', '🚩', '🥰', '💐', '😎', '🤎', '✅', '🫀', '🧡', '😁', '😄', '🌸', '🕊️', '🌷', '⛅', '🌟', '🗿', '🇵🇰', '💜', '💙', '🌝', '🖤', '🎎', '🎏', '🎐', '⚽', '🧣', '🌿', '⛈️', '🌦️', '🌚', '🌝', '🙈', '🙉', '🦖', '🐤', '🎗️', '🥇', '👾', '🔫', '🐝', '🦋', '🍓', '🍫', '🍭', '🧁', '🧃', '🍿', '🍻', '🛬', '🫀', '🫠', '🐍', '🥀', '🌸', '🏵️', '🌻', '🍂', '🍁', '🍄', '🌾', '🌿', '🌱', '🍀', '🧋', '💒', '🏩', '🏗️', '🏰', '🏪', '🏟️', '🎗️', '🥇', '⛳', '📟', '🏮', '📍', '🔮', '🧿', '♻️', '⛵', '🚍', '🚔', '🛳️', '🚆', '🚤', '🚕', '🛺', '🚝', '🚈', '🏎️', '🏍️', '🛵', '🥂', '🍾', '🍧', '🐣', '🐥', '🦄', '🐯', '🐦', '🐬', '🐋', '🦆', '💈', '⛲', '⛩️', '🎈', '🎋', '🪀', '🧩', '👾', '💸', '💎', '🧮', '👒', '🧢', '🎀', '🧸', '👑', '〽️', '😳', '💀', '☠️', '👻', '🔥', '♥️', '👀', '🐼', '🐭', '🐣', '🪿', '🦆', '🦊', '🦋', '🦄', '🪼', '🐋', '🐳', '🦈', '🐍', '🕊️', '🦦', '🦚', '🌱', '🍃', '🎍', '🌿', '☘️', '🍀', '🍁', '🪺', '🍄', '🍄‍🟫', '🪸', '🪨', '🌺', '🪷', '🪻', '🥀', '🌹', '🌷', '💐', '🌾', '🌸', '🌼', '🌻', '🌝', '🌚', '🌕', '🌎', '💫', '🔥', '☃️', '❄️', '🌨️', '🫧', '🍟', '🍫', '🧃', '🧊', '🪀', '🤿', '🏆', '🥇', '🥈', '🥉', '🎗️', '🤹', '🤹‍♀️', '🎧', '🎤', '🥁', '🧩', '🎯', '🚀', '🚁', '🗿', '🎙️', '⌛', '⏳', '💸', '💎', '⚙️', '⛓️', '🔪', '🧸', '🎀', '🪄', '🎈', '🎁', '🎉', '🏮', '🪩', '📩', '💌', '📤', '📦', '📊', '📈', '📑', '📉', '📂', '🔖', '🧷', '📌', '📝', '🔏', '🔐', '🩷', '❤️', '🧡', '💛', '💚', '🩵', '💙', '💜', '🖤', '🩶', '🤍', '🤎', '❤‍🔥', '❤‍🩹', '💗', '💖', '💘', '💝', '❌', '✅', '🔰', '〽️', '🌐', '🌀', '⤴️', '⤵️', '🔴', '🟢', '🟡', '🟠', '🔵', '🟣', '⚫', '⚪', '🟤', '🔇', '🔊', '📢', '🔕', '♥️', '🕐', '🚩', '🇵🇰', '🧳', '🌉', '🌁', '🛤️', '🛣️', '🏚️', '🏠', '🏡', '🧀', '🍥', '🍮', '🍰', '🍦', '🍨', '🍧', '🥠', '🍡', '🧂', '🍯', '🍪', '🍩', '🍭', '🥮', '🍡'
+    ];
+          const randomReaction = reactions[Math.floor(Math.random() * reactions.length)]; // 
+          m.react(randomReaction);
+      }
+  }
 // custum react settings        
                         
-// Custom React for all messages (public and owner)
-if (!isReact && config.CUSTOM_REACT === 'true') {
-    // Use custom emojis from the configuration (fallback to default if not set)
-    const reactions = (config.CUSTOM_REACT_EMOJIS || '🥲,😂,👍🏻,🙂,😔').split(',');
-    const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
-    m.react(randomReaction);
+if (!isReact && senderNumber !== botNumber) {
+    if (config.CUSTOM_REACT === 'true') {
+        // Use custom emojis from the configuration
+        const reactions = (config.CUSTOM_REACT_EMOJIS || '🥲,😂,🫩,🙂,😔').split(',');
+        const randomReaction = reactions[Math.floor(Math.random() * reactions.length)];
+        m.react(randomReaction);
+    }
 }
-        
-  //==========WORKTYPE============ 
-  if(!isOwner && config.MODE === "private") return
-  if(!isOwner && isGroup && config.MODE === "inbox") return
-  if(!isOwner && !isGroup && config.MODE === "groups") return
-   
-  // take commands 
+
+
+
+const bannedUsers = JSON.parse(fs.readFileSync('./lib/ban.json', 'utf-8'));
+const isBanned = bannedUsers.includes(sender);
+
+if (isBanned) return; // Ignore banned users completely
+	  
+  const { getConfig } = require('./lib/configdb'); // Adjust if path is different
+
+// ✅ Load AI_STATE from config
+let AI_STATE = { IB: "false", GC: "false" };
+try {
+  const state = getConfig("AI_STATE");
+  if (state) AI_STATE = JSON.parse(state);
+} catch (e) {
+  console.error("❌ Failed to load AI_STATE from DB:", e.message);
+}
+
+// ✅ Owner checks
+const ownerFile = JSON.parse(fs.readFileSync('./lib/owner.json', 'utf-8'));
+const ownerNumberFormatted = `923003588997@s.whatsapp.net`;
+
+const isFileOwner = ownerFile.includes(sender);
+const isRealOwner = sender === ownerNumberFormatted || isMe || isFileOwner;
+
+// ✅ Safely extract contextInfo
+const contextInfo = mek.message?.extendedTextMessage?.contextInfo;
+
+const isMentioned = contextInfo?.mentionedJid?.includes(botNumber2)
+                 || body.includes(botNumber2.split('@')[0]);
+
+const isReplyToBot = contextInfo?.participant === botNumber2;
+
+const aiInboxOn = AI_STATE?.IB === "true";
+const aiGroupOn = AI_STATE?.GC === "true";
+
+// 🔒 Control bot response access
+if (!(isRealOwner || isCreator)) {
+  if (config.MODE === "private") {
+    if (isGroup) return;
+    if (!(isMentioned || isReplyToBot) || !aiInboxOn) return;
+  }
+  if (config.MODE === "inbox" && isGroup) {
+    if (!(isMentioned || isReplyToBot) || !aiInboxOn) return;
+  }
+  if (config.MODE === "groups" && !isGroup) {
+    if (!(isMentioned || isReplyToBot) || !aiGroupOn) return;
+  }
+}
+
+// 🚫 Block mode mismatch
+if (!isRealOwner && isGroup && config.MODE === "inbox") return;
+if (!isRealOwner && !isGroup && config.MODE === "groups") return;
+ 
+	  
+	  // take commands 
                  
   const events = require('./command')
   const cmdName = isCmd ? body.slice(1).trim().split(" ")[0].toLowerCase() : false;
@@ -448,7 +621,7 @@ if (!isReact && config.CUSTOM_REACT === 'true') {
                   }
                   if (mime.split("/")[0] === "audio") {
                     return conn.sendMessage(jid, { audio: await getBuffer(url), caption: caption, mimetype: 'audio/mpeg', ...options }, { quoted: quoted, ...options })
-           }
+                  }
                 }
     //==========================================================
     conn.cMod = (jid, copy, text = '', sender = conn.user.id, options = {}) => {
@@ -742,7 +915,7 @@ if (!isReact && config.CUSTOM_REACT === 'true') {
                         global.email
                     }\nitem2.X-ABLabel:GitHub\nitem3.URL:https://github.com/${
                         global.github
-                    }/megalodon-md\nitem3.X-ABLabel:GitHub\nitem4.ADR:;;${
+                    }/xbot-md\nitem3.X-ABLabel:GitHub\nitem4.ADR:;;${
                         global.location
                     };;;;\nitem4.X-ABLabel:Region\nEND:VCARD`,
                 });
@@ -781,11 +954,117 @@ if (!isReact && config.CUSTOM_REACT === 'true') {
         };
     conn.serializeM = mek => sms(conn, mek, store);
   }
+app.get("/", (req, res) => {
+    res.send(`
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ALI MD | STATUS</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+        <style>
+          * {
+            box-sizing: border-box;
+          }
   
-  app.get("/", (req, res) => {
-  res.send("TEST-BOT STARTED ✅");
+          body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Roboto Mono', monospace;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+          }
+  
+          .card {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px 25px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(0, 255, 128, 0.3);
+            border: 1px solid #00ff99;
+            width: 90%;
+            max-width: 420px;
+            animation: fadeInUp 1.2s ease-out;
+          }
+  
+          .card h1 {
+            font-size: 1.8rem;
+            color: #00ff99;
+            margin-bottom: 10px;
+          }
+  
+          .card p {
+            font-size: 1rem;
+            color: #cccccc;
+          }
+
+          .status-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: #00ff99;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+            animation: pulse 1.2s infinite;
+          }
+  
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+  
+          @keyframes pulse {
+            0% {
+              transform: scale(1);
+              opacity: 1;
+            }
+            50% {
+              transform: scale(1.3);
+              opacity: 0.6;
+            }
+            100% {
+              transform: scale(1);
+              opacity: 1;
+            }
+          }
+  
+          @media (max-width: 480px) {
+            .card {
+              padding: 20px 15px;
+            }
+  
+            .card h1 {
+              font-size: 1.4rem;
+            }
+  
+            .card p {
+              font-size: 0.95rem;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h1><span class="status-dot"></span> ALI BOT IS RUNNING</h1>
+          <p>Powered by Ali.</p>
+        </div>
+      </body>
+      </html>
+    `);
   });
-  app.listen(port, () => console.log(`Server listening on port http://localhost:${port}`));
+  app.listen(port, () => console.log(`Service active and running 🙂`));
   setTimeout(() => {
   connectToWA()
-  }, 4000);                                                             
+  }, 4000);
