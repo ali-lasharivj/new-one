@@ -72,7 +72,6 @@ console.error = (...args) => {
   const { sms, downloadMediaMessage, AntiDelete } = require('./lib')
   const { registerAntiNewsletter } = require('./plugins/antinewsletter')
   const { registerGroupMessages } = require('./plugins/groupMessages')
-  const { setupLinkDetection } = require("./lib/events/antilinkDetection")
   const FileType = require('file-type');
   const { File } = require('megajs')
   const { fromBuffer } = require('file-type')
@@ -292,8 +291,6 @@ conn.ev.on('call', async (calls) => {
   });
 //==============
 registerGroupMessages(conn);
-
-setupLinkDetection(conn);
 	
 registerAntiNewsletter(conn);
            
