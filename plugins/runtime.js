@@ -21,7 +21,7 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
         const murl = 'https://whatsapp.com/channel/0029Vaan9TF9Bb62l8wpoD47';
         const img = 'https://i.imgur.com/vTs9acV.jpeg';
         const now = new Date();
-        const time = now.toLocaleTimeString("en-US", { hour12: true, timeZone: "Asia/Kabul" });
+        const time = now.toLocaleTimeString("en-US", { hour12: true, timeZone: "Asia/Karachi" });
         const date = now.toLocaleDateString("en-CA", { timeZone: "Asia/Karachi" });
         const runtimeMilliseconds = Date.now() - botStartTime;
         const runtimeSeconds = Math.floor((runtimeMilliseconds / 1000) % 60);
@@ -29,10 +29,10 @@ async (conn, mek, m, { from, quoted, body, isCmd, command, args, q, isGroup, sen
         const runtimeHours = Math.floor(runtimeMilliseconds / (1000 * 60 * 60));
 
         const formattedInfo = `
-👤 *ʜᴇʏ" ${pushname}
-🕒 *ᴛɪᴍᴇ*: ${time}
-📅 *ᴅᴀᴛᴇ*: ${date}
-⏳ *ᴜᴘᴛɪᴍᴇ*: ${runtimeHours} ʜᴏᴜʀs, ${runtimeMinutes} ᴍɪɴᴜᴛᴇs, ${runtimeSeconds} sᴇᴄᴏɴᴅs
+👤 *ʜᴇʏ* ${pushname}
+🕒 *ᴛɪᴍᴇ*: *${time}*
+📅 *ᴅᴀᴛᴇ*: *${date}*
+⏳ *ᴜᴘᴛɪᴍᴇ*: *${runtimeHours} ʜᴏᴜʀs, ${runtimeMinutes} ᴍɪɴᴜᴛᴇs, ${runtimeSeconds} sᴇᴄᴏɴᴅs*
 `.trim();
 
         // Constructing the contact message
