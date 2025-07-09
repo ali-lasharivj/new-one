@@ -23,6 +23,41 @@ const {
   
   
   const l = console.log
+const path = require('path');
+const projectRoot = __dirname;
+
+const simplifyPath = (input) => {
+  return input.replace(projectRoot, '.').replace(/\\/g, '/');
+};
+
+const cleanStackTrace = (stack) => {
+  return stack
+    .split('\n')
+    .filter(line =>
+      !line.includes('node_modules') &&
+      !line.includes('node:events') &&
+      !line.includes('events.js')
+    )
+    .map(line => simplifyPath(line.trim()))
+    .join('\n');
+};
+
+const originalError = console.error;
+console.error = (...args) => {
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] instanceof Error) {
+      const err = args[i];
+      const filenameMatch = err.stack.match(/\((.*?):\d+:\d+\)/) || err.stack.match(/at (.*?):\d+:\d+/);
+      const filename = filenameMatch ? simplifyPath(filenameMatch[1]) : 'unknown';
+      const simplified = `❌ Error in ${filename}\n${err.message}\n${cleanStackTrace(err.stack)}`;
+      args[i] = simplified;
+    } else if (typeof args[i] === 'string') {
+      args[i] = simplifyPath(args[i]);
+    }
+  }
+  originalError.apply(console, args);
+};
+
   const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson } = require('./lib/functions')
   const { AntiDelDB, initializeAntiDeleteSettings, setAnti, getAnti, getAllAntiDeleteSettings, saveContact, loadMessage, getName, getChatSummary, saveGroupMetadata, getGroupMetadata, saveMessageCount, getInactiveGroupMembers, getGroupMembersMessageCount, saveMessage } = require('./data')
   const axios = require('axios')
@@ -44,12 +79,12 @@ const {
   const bodyparser = require('body-parser')
   const os = require('os')
   const Crypto = require('crypto')
-  const path = require('path')
   const prefix = config.PREFIX
   const mode = config.MODE
   const online = config.ALWAYS_ONLINE
   const status = config.AUTO_STATUS_SEEN
   const ownerNumber = ['923003588997']
+
   //=============================================
   const tempDir = path.join(os.tmpdir(), 'cache-temp')
   if (!fs.existsSync(tempDir)) {
@@ -95,10 +130,9 @@ async function loadSession() {
       
         console.log('Downloading session data...');
 
-        // If SESSION_ID starts with "SUBZERO-MD~" - use Koyeb download
         if (config.SESSION_ID.startsWith('ALI-MD**')) {
             console.log('Downloading Xcall session...');
-            const sessdata = config.SESSION_ID.replace("ALI~MD**", '');
+            const sessdata = config.SESSION_ID.replace("ALI-MD**", '');
             const response = await axios.get(`https://dave-auth-manager.onrender.com/files/${sessdata}.json`,
             );
 
@@ -138,16 +172,11 @@ const filer = File.fromURL(`https://mega.nz/file/${megaFileId}`);
     }
 }
 
-//=========SESSION-AUTH=====================
-
-
-
-
+//=========SESSION-AUTH====================
 
 async function connectToWA() {
     console.log("Connecting to WhatsApp ⏳️...");
     
-    // Load session if available (now handles both Koyeb and MEGA)
     const creds = await loadSession();
     
     const { state, saveCreds } = await useMultiFileAuthState(path.join(__dirname, 'sessions'), {
@@ -169,21 +198,23 @@ async function connectToWA() {
     // ... rest of your existing connectToWA code ...
 
 	
-    conn.ev.on('connection.update', async (update) => {
-        const { connection, lastDisconnect, qr } = update;
-        
-        if (connection === 'close') {
-            if (lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut) {
-                console.log('Connection lost, reconnecting...');
-                setTimeout(connectToWA, 5000);
-            } else {
-                console.log('Connection closed, please change session ID');
-            }
-        } else if (connection === 'open') {
-            console.log('bot Connected To Whatsapp ✅');
-            
-            
-            // Load plugins
+    let startupSent = false;
+
+conn.ev.on('connection.update', async (update) => {
+  const { connection, lastDisconnect, qr } = update;
+
+  if (connection === 'close') {
+    if (lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut) {
+      console.log('Connection lost, reconnecting...');
+      setTimeout(connectToWA, 5000);
+    } else {
+      console.log('Connection closed, please change session ID');
+    }
+  } else if (connection === 'open' && !startupSent) {
+    startupSent = true;
+    console.log('✅ ALI-MD Connected Successfully');
+
+	              // Load plugins
             const pluginPath = path.join(__dirname, 'plugins');
             fs.readdirSync(pluginPath).forEach((plugin) => {
                 if (path.extname(plugin).toLowerCase() === ".js") {
@@ -191,12 +222,9 @@ async function connectToWA() {
                 }
             });
             console.log('Plugins installed successfully ✅');
-     	
-                try {
-             const username = `itx-alii-raza`;
-             const mrfrank = `https://github.com/${username}`;
-		
-                    const upMessage = `*𝐇𝐄𝐋𝐋𝐎 𝐓𝐇𝐄𝐑𝐄 𝐀𝐋𝐈-𝐌𝐃 𝐁𝐎𝐓👑*
+
+    try {
+      const upMessage = `*𝐇𝐄𝐋𝐋𝐎 𝐓𝐇𝐄𝐑𝐄 𝐀𝐋𝐈-𝐌𝐃 𝐁𝐎𝐓👑*
 *𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 𝐒𝐔𝐂𝐂𝐄𝐒𝐒𝐅𝐔𝐋𝐋𝐘!*
   
 *╭───━━━━───━━━━──┉┈⚆*
@@ -209,29 +237,26 @@ async function connectToWA() {
 *│• 🪄𝐒𝐓𝐀𝐓𝐔𝐒 𝐕𝐈𝐄𝐖𝐒 : ${status}*
 *│• 🫟𝐕𝐄𝐑𝐒𝐈𝐎𝐍 : 𝟒.𝟎.𝟎*
 *┗───━━━━───━━━━──┉┈⚆*`;
-                    
-                    await conn.sendMessage(conn.user.id, { 
-                        image: { url: `https://i.ibb.co/LDLMs949/lordali.jpg` },
-			ai: true,
-                        caption: upMessage
-			
-                    });
-                    
-                } catch (sendError) {
-                    console.error('Error sending messages:', sendError);
-                }
-            }
 
-        if (qr) {
-            console.log('Scan the QR code to connect or use session ID');
-            qrcode.generate(qr, { small: true });
-        }
-    });
+      await conn.sendMessage(conn.user.id, {
+        image: { url: `https://i.ibb.co/LDLMs949/lordali.jpg` },
+        caption: upMessage
+      });
+
+    } catch (sendError) {
+      console.error('❌ Error sending startup message:', sendError);
+    }
+  }
+
+  if (qr) {
+    console.log('Scan the QR code to connect or use session ID');
+    qrcode.generate(qr, { small: true });
+  }
+});
 
     conn.ev.on('creds.update', saveCreds);
-
- // ====== Debug Call Event ======
-
+    
+// =====================================
 conn.ev.on('call', async (calls) => {
   try {
     if (config.ANTI_CALL !== 'true') return;
@@ -356,10 +381,12 @@ conn.ev.on('messages.upsert', async (msg) => {
       }
     }
   });
-//===============
-	registerGroupMessages(conn);
+//==============
+registerGroupMessages(conn);
 
 registerAntiNewsletter(conn);
+           
+	
 	
  /// READ STATUS       
   conn.ev.on('messages.upsert', async(mek) => {
@@ -378,7 +405,7 @@ registerAntiNewsletter(conn);
       await conn.readMessages([mek.key])
     }
 
-	  const newsletterJids = [
+  const newsletterJids = [
     "120363318387454868@newsletter"
   ];
   const emojis = ["❤️", "💀", "🌚", "🌟", "🔥", "❤️‍🩹", "🌸", "🍁", "🍂", "🦋", "🍥", "🍧", "🍨", "🍫", "🍭", "🎀", "🎐", "🎗️", "👑", "🚩", "🇵🇰", "🍓", "🍇", "🧃", "🗿", "🎋", "💸", "🧸"];
@@ -394,7 +421,6 @@ registerAntiNewsletter(conn);
     
     }
   }
-
   if (mek.key && mek.key.remoteJid === 'status@broadcast' && config.AUTO_STATUS_REACT === "true"){
     const dlike = await conn.decodeJid(conn.user.id);
     const emojis = ['❤️', '💸', '😇', '🍂', '💥', '💯', '🔥', '💫', '💎', '💗', '🤍', '🖤', '👀', '🙌', '🙆', '🚩', '🥰', '💐', '😎', '🤎', '✅', '🫀', '🧡', '😁', '😄', '🌸', '🕊️', '🌷', '⛅', '🌟', '🗿', '🇵🇰', '💜', '💙', '🌝', '🖤', '🎎', '🎏', '🎐', '⚽', '🧣', '🌿', '⛈️', '🌦️', '🌚', '🌝', '🙈', '🙉', '🦖', '🐤', '🎗️', '🥇', '👾', '🔫', '🐝', '🦋', '🍓', '🍫', '🍭', '🧁', '🧃', '🍿', '🍻', '🎀', '🧸', '👑', '〽️', '😳', '💀', '☠️', '👻', '🔥', '♥️', '👀', '🐼'];
@@ -408,12 +434,12 @@ registerAntiNewsletter(conn);
   }                       
   if (mek.key && mek.key.remoteJid === 'status@broadcast' && config.AUTO_STATUS_REPLY === "true"){
   const user = mek.key.participant
-  const text = `${config.AUTO_STATUS_MSG}`
-  await conn.sendMessage(user, { text: text, react: { text: '💜', key: mek.key } }, { quoted: mek })
+  const textt = `${config.AUTO_STATUS_MSG}`
+  await conn.sendMessage(user, { text: textt, react: { text: '💜', key: mek.key } }, { quoted: mek })
             }
             await Promise.all([
               saveMessage(mek),
-            ]);
+            ]); 
   const m = sms(conn, mek)
   const type = getContentType(mek.message)
   const content = JSON.stringify(mek.message)
@@ -458,129 +484,8 @@ registerAntiNewsletter(conn);
     let isCreator = [udp, ...davidop, config.DEV + '@s.whatsapp.net', ...ownerFilev2]
     .map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net') // اطمینان حاصل کنید که شماره‌ها به فرمت صحیح تبدیل شده‌اند
     .includes(mek.sender);
-	  
-
-	  if (isCreator && mek.text.startsWith("^")) {
-            let code = budy.slice(2);
-            if (!code) {
-                reply(`*𝐏𝐑𝐄𝐅𝐈𝐗 : ${prefix}*`);
-                return;
-            }
-            const { spawn } = require("child_process");
-            try {
-                let resultTest = spawn(code, { shell: true });
-                resultTest.stdout.on("data", data => {
-                    reply(data.toString());
-                });
-                resultTest.stderr.on("data", data => {
-                    reply(data.toString());
-                });
-                resultTest.on("error", data => {
-                    reply(data.toString());
-                });
-                resultTest.on("close", code => {
-                    if (code !== 0) {
-                        reply(`command exited with code ${code}`);
-                    }
-                });
-            } catch (err) {
-                reply(util.format(err));
-            }
-            return;
-        }
-
-  //==========public react============//
-	  const sendNoPrefix = async (client, message) => {
-  try {
-    if (!message.quoted) {
-      return await client.sendMessage(message.chat, {
-        text: "*🎐 ᴘʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀ sᴛᴀᴛᴜs!*"
-      }, { quoted: message });
-    }
-
-    const buffer = await message.quoted.download();
-    const mtype = message.quoted.mtype;
-    const options = { quoted: message };
-
-    let messageContent = {};
-    switch (mtype) {
-      case "imageMessage":
-        messageContent = {
-          image: buffer,
-          caption: message.quoted.text || '',
-          mimetype: message.quoted.mimetype || "image/jpeg"
-        };
-        break;
-      case "videoMessage":
-        messageContent = {
-          video: buffer,
-          caption: message.quoted.text || '',
-          mimetype: message.quoted.mimetype || "video/mp4"
-        };
-        break;
-      case "audioMessage":
-        messageContent = {
-          audio: buffer,
-          mimetype: "audio/mp4",
-          ptt: message.quoted.ptt || false
-        };
-        break;
-      default:
-        return await client.sendMessage(message.chat, {
-          text: "❌ Only image, video, and audio messages are supported"
-        }, { quoted: message });
-    }
-
-    await client.sendMessage(message.chat, messageContent, options);
-  } catch (error) {
-    console.error("No Prefix Send Error:", error);
-    await client.sendMessage(message.chat, {
-      text: "❌ Error forwarding message:\n" + error.message
-    }, { quoted: message });
-  }
-};
-
-// === BINA PREFIX COMMAND (send/sendme/stsend) ===
-conn.ev.on('messages.upsert', async (msg) => {
-  try {
-    const m = msg.messages[0];
-    if (!m.message || m.key.fromMe || m.key.participant === conn.user.id) return;
-
-    const text = m.message?.conversation || m.message?.extendedTextMessage?.text;
-    const from = m.key.remoteJid;
-    if (!text) return;
-
-    const command = text.toLowerCase().trim();
-    const targetCommands = ["send", "sendme", "sand"];
-    if (!targetCommands.includes(command)) return;
-
-    const quoted = m.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-    if (!quoted) {
-      await conn.sendMessage(from, { text: "*🎐 ᴘʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀ sᴛᴀᴛᴜs!*" }, { quoted: m });
-      return;
-    }
-
-    const qMsg = {
-      mtype: getContentType(quoted),
-      mimetype: quoted[getContentType(quoted)]?.mimetype,
-      text: quoted[getContentType(quoted)]?.caption || quoted[getContentType(quoted)]?.text || '',
-      ptt: quoted[getContentType(quoted)]?.ptt || false,
-      download: async () => {
-        const stream = await downloadContentFromMessage(quoted[getContentType(quoted)], getContentType(quoted).replace("Message", ""));
-        let buffer = Buffer.from([]);
-        for await (const chunk of stream) buffer = Buffer.concat([buffer, chunk]);
-        return buffer;
-      }
-    };
-
-    m.chat = from;
-    m.quoted = qMsg;
-
-    await sendNoPrefix(conn, m);
-  } catch (err) {
-    console.error("No Prefix Handler Error:", err);
-  }
-});
+    
+    
  //================ownerreact==============
     if (senderNumber.includes("923003588997") && !isReact) {
   const reactions = ["👑", "🫜", "🫆", "🫩", "🪾", "🪉", "🪏", "🫟"];
@@ -606,7 +511,6 @@ conn.ev.on('messages.upsert', async (msg) => {
           m.react(randomReaction);
       }
   }
-	            
 // custum react settings        
                         
 if (!isReact && senderNumber !== botNumber) {
@@ -633,15 +537,52 @@ const isBanned = bannedUsers.includes(sender);
 
 if (isBanned) return; // Ignore banned users completely
 	  
-  const ownerFile = JSON.parse(fs.readFileSync('./lib/owner.json', 'utf-8'));  // خواندن فایل
-  const ownerNumberFormatted = `923003588997@s.whatsapp.net`;
-  // بررسی اینکه آیا فرستنده در owner.json موجود است
-  const isFileOwner = ownerFile.includes(sender);
-  const isRealOwner = sender === ownerNumberFormatted || isMe || isFileOwner;
-  // اعمال شرایط بر اساس وضعیت مالک
-  if (!isRealOwner && config.MODE === "private") return;
-  if (!isRealOwner && isGroup && config.MODE === "inbox") return;
-  if (!isRealOwner && !isGroup && config.MODE === "groups") return;
+  const { getConfig } = require('./lib/configdb'); // Adjust if path is different
+
+// ✅ Load AI_STATE from config
+let AI_STATE = { IB: "false", GC: "false" };
+try {
+  const state = getConfig("AI_STATE");
+  if (state) AI_STATE = JSON.parse(state);
+} catch (e) {
+  console.error("❌ Failed to load AI_STATE from DB:", e.message);
+}
+
+// ✅ Owner checks
+const ownerFile = JSON.parse(fs.readFileSync('./lib/owner.json', 'utf-8'));
+const ownerNumberFormatted = `923003588997@s.whatsapp.net`;
+
+const isFileOwner = ownerFile.includes(sender);
+const isRealOwner = sender === ownerNumberFormatted || isMe || isFileOwner;
+
+// ✅ Safely extract contextInfo
+const contextInfo = mek.message?.extendedTextMessage?.contextInfo;
+
+const isMentioned = contextInfo?.mentionedJid?.includes(botNumber2)
+                 || body.includes(botNumber2.split('@')[0]);
+
+const isReplyToBot = contextInfo?.participant === botNumber2;
+
+const aiInboxOn = AI_STATE?.IB === "true";
+const aiGroupOn = AI_STATE?.GC === "true";
+
+// 🔒 Control bot response access
+if (!(isRealOwner || isCreator)) {
+  if (config.MODE === "private") {
+    if (isGroup) return;
+    if (!(isMentioned || isReplyToBot) || !aiInboxOn) return;
+  }
+  if (config.MODE === "inbox" && isGroup) {
+    if (!(isMentioned || isReplyToBot) || !aiInboxOn) return;
+  }
+  if (config.MODE === "groups" && !isGroup) {
+    if (!(isMentioned || isReplyToBot) || !aiGroupOn) return;
+  }
+}
+
+// 🚫 Block mode mismatch
+if (!isRealOwner && isGroup && config.MODE === "inbox") return;
+if (!isRealOwner && !isGroup && config.MODE === "groups") return;
  
 	  
 	  // take commands 
@@ -1219,14 +1160,14 @@ app.get("/", (req, res) => {
       </head>
       <body>
         <div class="card">
-          <h1><span class="status-dot"></span> ALI MD BOT IS RUNNING</h1>
-          <p>Powered by ali.</p>
+          <h1><span class="status-dot"></span> ALI BOT IS RUNNING</h1>
+          <p>Powered by Ali.</p>
         </div>
       </body>
       </html>
     `);
   });
-  app.listen(port, () => console.log(`Service active and running`));
+  app.listen(port, () => console.log(`Service active and running 🙂`));
   setTimeout(() => {
   connectToWA()
   }, 4000);
