@@ -2,7 +2,7 @@ const { cmd } = require('../command');
 const config = require('../config');
 
 let bioInterval;
-const defaultBio = "αℓι-м∂ | σиℓιиє 💀🚩 {time}";
+const defaultBio = "αℓι-м∂ | σиℓιиє 💀🚩";
 const timeZone = 'Asia/Karachi';
 
 cmd({
@@ -33,7 +33,7 @@ cmd({
                 config.AUTO_BIO_TEXT = defaultBio;
             }
 
-            // Start updating bio
+            // Start updating bio you
             startAutoBio(conn, config.AUTO_BIO_TEXT);
             return reply(`*✅ αυтσ-вισ єиαвℓє∂*\n*¢υяяєит тєχт:* "${config.AUTO_BIO_TEXT}"`);
 
@@ -72,7 +72,7 @@ function startAutoBio(conn, bioText) {
         try {
             const now = new Date();
             const timeString = now.toLocaleTimeString('en-US', { timeZone });
-            const formattedBio = bioText.replace('{time}', timeString);
+            const formattedBio = bioText.replace('αℓι-м∂ | σиℓιиє 💀🚩', timeString);
             await conn.updateProfileStatus(formattedBio);
         } catch (error) {
             console.error('Bio update error:', error);
