@@ -77,19 +77,18 @@ cmd({
 
 
     // Send the message
-    const sentMessage = await conn.sendMessage(from,{image: { url: config.ALIVE_IMG },caption: messageText,
-    contextInfo: {
-                mentionedJid: ['923003588997@s.whatsapp.net'], // specify mentioned JID(s) if any
-                groupMentions: [],
-                forwardingScore: 1,
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: '120363318387454868@newsletter',
-                    newsletterName: config.BOT_NAME,
-                    serverMessageId: 999
-                }            
-            }
-     }, {quoted: mek});
+    const sentMessage = await conn.sendMessage(from,{image:{url: config.ALIVE_IMG},caption:messageText,
+                             contextInfo: {
+    mentionedJid: [m.sender],
+    forwardingScore: 999,
+    isForwarded: true,
+    forwardedNewsletterMessageInfo: {
+      newsletterJid: '120363318387454868@newsletter',
+      newsletterName: '𓆩ྀི͛𝐀ɭīī 𝐌Ɗ 𝚩❍𝐓 𝐌𝛆፝֟፝֟ƞ̽ʊྀི̊𓆪͛',
+      serverMessageId: 999
+    }
+  }
+}, { quoted: mek });
 
     // Event listener for message responses
     conn.ev.on('messages.upsert', async (update) => {
