@@ -22,6 +22,10 @@ WELCOME: process.env.WELCOME || "true",
 GOODBYE: process.env.GOODBYE || "true",
 // true if want goodbye msg in groups 
 ADMIN_EVENTS: process.env.ADMIN_EVENTS || "false",
+AUTO_BIO_TEXT: process.env.AUTO_BIO_TEXT || "ALI | MD ONLINE",
+//add your about bio       
+AUTO_BIO: process.env.AUTO_BIO || "false",
+//auto bio true/false 
 // make true to know who dismiss or promoted a member in group
 ANTI_LINK_KICK: process.env.ANTI_LINK_KICK || "false",
 ANTI_LINK_WARN: process.env.ANTI_LINK_WARN || "false",
