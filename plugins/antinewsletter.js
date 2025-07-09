@@ -15,7 +15,7 @@ cmd(
     alias: ["anti-channel","antichannel"],
     react: "🔐",
     desc: "Configure anti‑newsletter mode: delete, warn, kick, off",
-    category: "🪀 group 🪀",
+    category: "group",
     filename: __filename,
   },
   async (conn, mek, m, { from, args, reply, isGroup, isBotAdmins, isAdmins }) => {
