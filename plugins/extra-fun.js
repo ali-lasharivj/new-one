@@ -5,7 +5,7 @@ cmd({
   pattern: "compatibility",
   alias: ["friend", "fcheck"],
   desc: "Calculate the compatibility score between two users.",
-  category: "fun",
+  category: "fun-games",
   react: "💖",
   filename: __filename,
   use: "@tag1 @tag2",
@@ -44,7 +44,7 @@ cmd({
   cmd({
   pattern: "aura",
   desc: "Calculate aura score of a user.",
-  category: "fun",
+  category: "fun-games",
   react: "💀",
   filename: __filename,
   use: "@tag",
@@ -81,7 +81,7 @@ cmd({
 cmd({
     pattern: "roast",
     desc: "Roast someone in Hindi",
-    category: "fun",
+    category: "fun-games",
     react: "🔥",
     filename: __filename,
     use: "@tag"
@@ -175,7 +175,7 @@ cmd({
 cmd({
     pattern: "8ball",
     desc: "Magic 8-Ball gives answers",
-    category: "fun",
+    category: "fun-games",
     react: "🎱",
     filename: __filename
 }, 
@@ -196,7 +196,7 @@ async (conn, mek, m, { from, q, reply }) => {
 cmd({
     pattern: "compliment",
     desc: "Give a nice compliment",
-    category: "fun",
+    category: "fun-games",
     react: "😊",
     filename: __filename,
     use: "@tag (optional)"
@@ -239,7 +239,7 @@ cmd({
 cmd({
     pattern: "lovetest",
     desc: "Check love compatibility between two users",
-    category: "fun",
+    category: "fun-games",
     react: "❤️",
     filename: __filename,
     use: "@tag1 @tag2"
@@ -271,7 +271,7 @@ cmd(
     {
         pattern: "emoji",
         desc: "Convert text into emoji form.",
-        category: "fun",
+        category: "fun-games",
         react: "🙂",
         filename: __filename,
         use: "<text>"
